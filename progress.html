@@ -1,9 +1,0 @@
-<h1>Progress Dashboard</h1>
-<div id="stats"></div>
-
-<script>
-const data = JSON.parse(localStorage.getItem("courses")) || {};
-let total = Object.keys(data).length;
-
-document.getElementById("stats").innerHTML = "Total Journeys: " + total;
-</script>
