@@ -190,6 +190,18 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   .course-hero-top{flex-direction:column;}
   .tab{font-size:11px;padding:6px 8px;}
 }
+
+/* Resources panel */
+.res-section{margin-bottom:1.25rem;}
+.res-section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;padding-bottom:6px;border-bottom:.5px solid var(--border);}
+.res-link-list{display:flex;flex-direction:column;gap:0;}
+.res-link-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:.5px solid var(--border);}
+.res-link-item:last-child{border-bottom:none;}
+.res-link-index{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);min-width:24px;padding-top:2px;}
+.res-link-body{flex:1;min-width:0;}
+.res-link-body a{font-size:13px;font-weight:500;color:var(--blue-dark);text-decoration:none;}
+.res-link-body a:hover{text-decoration:underline;}
+.res-link-desc{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -246,6 +258,7 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   <button class="tab" onclick="showPanel('flashcards',this)">🃏 Flashcards</button>
   <button class="tab" onclick="showPanel('quiz',this)">✅ Quiz</button>
   <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
+  <button class="tab" onclick="showPanel('resources',this)">🔗 Resources</button>
   <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
 </div>
 
@@ -256,6 +269,7 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 <div id="panel-quiz" class="panel"></div>
 <div id="panel-ai" class="panel"></div>
 <div id="panel-exam" class="panel"></div>
+<div id="panel-resources" class="panel"></div>
 
 <div class="page-footer">Progress saved locally · <span id="sk-display">cj_powerbi-certified_v1</span> · No account needed · <a href="../../index.html">← All journeys</a></div>
 </div>
@@ -510,6 +524,96 @@ function renderExam(){
     </div>`;
 }
 
+function renderResources(){
+  document.getElementById('panel-resources').innerHTML=`
+    <div class="res-section">
+      <div class="res-section-title">📖 Core Reading</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">01</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/credentials/certifications/resources/study-guides/pl-300" target="_blank">PL-300 exam study guide (Microsoft)</a><div class="res-link-desc">Official domain weights: data prep 25%, modeling 25%, visuals 25%, analysis 25%.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">02</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/power-bi/" target="_blank">Power BI documentation</a><div class="res-link-desc">Primary reference — Desktop, Service, Gateway, dataflows.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">03</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/dax/" target="_blank">DAX reference (Microsoft)</a><div class="res-link-desc">DAX functions, calculated columns vs measures, context.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">04</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/powerquery-m/" target="_blank">Power Query M reference</a><div class="res-link-desc">M language for data transformation — know common transformations.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">✅ Practice & Assessment</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">05</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/credentials/certifications/power-bi-data-analyst-associate/practice/assessment" target="_blank">Microsoft free PL-300 practice assessment</a><div class="res-link-desc">Official practice questions — best predictor of exam style.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">06</span>
+          <div class="res-link-body"><a href="https://www.measureup.com/microsoft-pl-300-practice-test.html" target="_blank">Measure Up PL-300 practice exam</a><div class="res-link-desc">Microsoft's official practice test partner.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">07</span>
+          <div class="res-link-body"><a href="https://www.udemy.com/course/pl-300-microsoft-power-bi-data-analyst-practice-exams/" target="_blank">Udemy — PL-300 practice (Scott Duffy / Eshant Garg)</a><div class="res-link-desc">High-volume question bank with explanations.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🛠 Hands-On Resources</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">08</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/training/paths/get-started-power-bi/" target="_blank">Microsoft Learn — PL-300 learning paths</a><div class="res-link-desc">Structured modules mapped to exam objectives.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">09</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/power-bi/create-reports/sample-datasets" target="_blank">Power BI sample datasets & reports</a><div class="res-link-desc">Real datasets to practice in Power BI Desktop.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">10</span>
+          <div class="res-link-body"><a href="https://www.daxpatterns.com/" target="_blank">SQLBI — DAX patterns</a><div class="res-link-desc">Advanced DAX patterns — time intelligence, ranking, ratios.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">11</span>
+          <div class="res-link-body"><a href="https://enterprisedna.co/" target="_blank">Enterprise DNA — Power BI tutorials</a><div class="res-link-desc">Free + paid video tutorials covering Desktop to Service features.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🎓 Exam Registration</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">12</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/certifications/power-bi-data-analyst-associate/" target="_blank">Register for PL-300 ($165)</a><div class="res-link-desc">Pearson VUE — online or in-person. 60Q, 120 min. Free retake available.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">13</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/users/me/achievements" target="_blank">Microsoft Certification dashboard</a><div class="res-link-desc">Track your badges, transcripts, and schedule exams.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">⬆ Upgrade Path</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">14</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/certifications/fabric-analytics-engineer-associate/" target="_blank">DP-600 — Fabric Analytics Engineer</a><div class="res-link-desc">Natural next step — Microsoft Fabric, Lakehouse, notebooks.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">15</span>
+          <div class="res-link-body"><a href="https://learn.microsoft.com/certifications/azure-enterprise-data-analyst-associate/" target="_blank">DP-500 — Azure Enterprise Analytics</a><div class="res-link-desc">Advanced Azure Synapse + Power BI at enterprise scale.</div></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function showPanel(name,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -521,6 +625,7 @@ function showPanel(name,btn){
   if(name==='quiz')renderQuiz();
   if(name==='ai')renderAI();
   if(name==='exam')renderExam();
+  if(name==='resources')renderResources();
 }
 
 function renderAll(){
@@ -532,5 +637,8 @@ function renderAll(){
 loadState();
 renderAll();
 </script>
+
+<!-- Notes-to-Markdown sync -->
+<script src="../../notes-sync.js"></script>
 </body>
 </html>

@@ -190,6 +190,18 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   .course-hero-top{flex-direction:column;}
   .tab{font-size:11px;padding:6px 8px;}
 }
+
+/* Resources panel */
+.res-section{margin-bottom:1.25rem;}
+.res-section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;padding-bottom:6px;border-bottom:.5px solid var(--border);}
+.res-link-list{display:flex;flex-direction:column;gap:0;}
+.res-link-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:.5px solid var(--border);}
+.res-link-item:last-child{border-bottom:none;}
+.res-link-index{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);min-width:24px;padding-top:2px;}
+.res-link-body{flex:1;min-width:0;}
+.res-link-body a{font-size:13px;font-weight:500;color:var(--blue-dark);text-decoration:none;}
+.res-link-body a:hover{text-decoration:underline;}
+.res-link-desc{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -246,6 +258,7 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   <button class="tab" onclick="showPanel('flashcards',this)">🃏 Flashcards</button>
   <button class="tab" onclick="showPanel('quiz',this)">✅ Quiz</button>
   <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
+  <button class="tab" onclick="showPanel('resources',this)">🔗 Resources</button>
   <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
 </div>
 
@@ -256,6 +269,7 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 <div id="panel-quiz" class="panel"></div>
 <div id="panel-ai" class="panel"></div>
 <div id="panel-exam" class="panel"></div>
+<div id="panel-resources" class="panel"></div>
 
 <div class="page-footer">Progress saved locally · <span id="sk-display">cj_dlt-certified_v1</span> · No account needed · <a href="../../index.html">← All journeys</a></div>
 </div>
@@ -510,6 +524,83 @@ function renderExam(){
     </div>`;
 }
 
+function renderResources(){
+  document.getElementById('panel-resources').innerHTML=`
+    <div class="res-section">
+      <div class="res-section-title">📖 Core Reading</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">01</span>
+          <div class="res-link-body"><a href="https://dlthub.com/docs/intro" target="_blank">dlt documentation (official)</a><div class="res-link-desc">The primary source — covers sources, destinations, schemas, and transformations.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">02</span>
+          <div class="res-link-body"><a href="https://github.com/dlt-hub/dlt" target="_blank">dlt GitHub repository</a><div class="res-link-desc">Source code, issues, examples, and community PRs.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">03</span>
+          <div class="res-link-body"><a href="https://dlthub.com/docs/dlt-ecosystem/verified-sources/" target="_blank">dlt verified sources library</a><div class="res-link-desc">Pre-built connectors — study these for common ingestion patterns.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">04</span>
+          <div class="res-link-body"><a href="https://dlthub.com/docs/dlt-ecosystem/destinations/" target="_blank">dlt destinations reference</a><div class="res-link-desc">BigQuery, Snowflake, DuckDB, Postgres, Redshift configs.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🛠 Hands-On Resources</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">05</span>
+          <div class="res-link-body"><a href="https://dlthub.com/docs/tutorial/load-data-from-an-api" target="_blank">dlt Getting Started tutorial</a><div class="res-link-desc">Build your first pipeline in 15 minutes.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">06</span>
+          <div class="res-link-body"><a href="https://dlthub.com/community" target="_blank">dltHub community Slack</a><div class="res-link-desc">Active community — ask questions, see real-world use cases.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">07</span>
+          <div class="res-link-body"><a href="https://dlthub.com/docs/dlt-ecosystem/transformations/dbt/dbt" target="_blank">dlt + dbt integration guide</a><div class="res-link-desc">Full ELT pattern: dlt for load, dbt for transform.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">08</span>
+          <div class="res-link-body"><a href="https://dlthub.com/docs/dlt-ecosystem/verified-sources/rest_api/" target="_blank">dlt REST API source</a><div class="res-link-desc">Declarative config for any REST API — high exam topic.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🔧 Ecosystem & Tooling</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">09</span>
+          <div class="res-link-body"><a href="https://pypi.org/project/dlt/" target="_blank">PyPI — dlt package</a><div class="res-link-desc">Install with pip install dlt[duckdb] or dlt[bigquery].</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">10</span>
+          <div class="res-link-body"><a href="https://duckdb.org/docs/" target="_blank">DuckDB documentation</a><div class="res-link-desc">Default local destination for dlt — fast analytics on local files.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">11</span>
+          <div class="res-link-body"><a href="https://docs.getdbt.com/" target="_blank">dbt documentation</a><div class="res-link-desc">Transformation layer that pairs with dlt for full ELT stacks.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">⬆ Upgrade Path</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">12</span>
+          <div class="res-link-body"><a href="https://www.getdbt.com/certifications/analytics-engineer" target="_blank">dbt Core certification</a><div class="res-link-desc">Pair with dlt mastery for full modern data stack coverage.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">13</span>
+          <div class="res-link-body"><a href="https://docs.dagster.io/" target="_blank">Dagster / Airflow orchestration</a><div class="res-link-desc">Orchestrate dlt pipelines at scale.</div></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function showPanel(name,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -521,6 +612,7 @@ function showPanel(name,btn){
   if(name==='quiz')renderQuiz();
   if(name==='ai')renderAI();
   if(name==='exam')renderExam();
+  if(name==='resources')renderResources();
 }
 
 function renderAll(){
@@ -532,5 +624,8 @@ function renderAll(){
 loadState();
 renderAll();
 </script>
+
+<!-- Notes-to-Markdown sync -->
+<script src="../../notes-sync.js"></script>
 </body>
 </html>

@@ -190,6 +190,18 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   .course-hero-top{flex-direction:column;}
   .tab{font-size:11px;padding:6px 8px;}
 }
+
+/* Resources panel */
+.res-section{margin-bottom:1.25rem;}
+.res-section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;padding-bottom:6px;border-bottom:.5px solid var(--border);}
+.res-link-list{display:flex;flex-direction:column;gap:0;}
+.res-link-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:.5px solid var(--border);}
+.res-link-item:last-child{border-bottom:none;}
+.res-link-index{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);min-width:24px;padding-top:2px;}
+.res-link-body{flex:1;min-width:0;}
+.res-link-body a{font-size:13px;font-weight:500;color:var(--blue-dark);text-decoration:none;}
+.res-link-body a:hover{text-decoration:underline;}
+.res-link-desc{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -246,6 +258,7 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   <button class="tab" onclick="showPanel('flashcards',this)">🃏 Flashcards</button>
   <button class="tab" onclick="showPanel('quiz',this)">✅ Quiz</button>
   <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
+  <button class="tab" onclick="showPanel('resources',this)">🔗 Resources</button>
   <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
 </div>
 
@@ -256,6 +269,7 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 <div id="panel-quiz" class="panel"></div>
 <div id="panel-ai" class="panel"></div>
 <div id="panel-exam" class="panel"></div>
+<div id="panel-resources" class="panel"></div>
 
 <div class="page-footer">Progress saved locally · <span id="sk-display">cj_aws-ml-certified_v1</span> · No account needed · <a href="../../index.html">← All journeys</a></div>
 </div>
@@ -510,6 +524,100 @@ function renderExam(){
     </div>`;
 }
 
+function renderResources(){
+  document.getElementById('panel-resources').innerHTML=`
+    <div class="res-section">
+      <div class="res-section-title">📖 Core Reading</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">01</span>
+          <div class="res-link-body"><a href="https://aws.amazon.com/certification/certified-machine-learning-specialty/" target="_blank">AWS ML Specialty exam guide</a><div class="res-link-desc">Domain weights: EDA 24%, Modeling 36%, Data Eng 20%, Impl 20%.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">02</span>
+          <div class="res-link-body"><a href="https://docs.aws.amazon.com/sagemaker/" target="_blank">Amazon SageMaker documentation</a><div class="res-link-desc">Primary exam focus — know built-in algorithms, training, and deployment.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">03</span>
+          <div class="res-link-body"><a href="https://aws.amazon.com/blogs/machine-learning/" target="_blank">AWS Machine Learning blog</a><div class="res-link-desc">Real-world architecture patterns that appear as scenario questions.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">04</span>
+          <div class="res-link-body"><a href="https://aws.amazon.com/whitepapers/?whitepapers-main.q=machine+learning&whitepapers-main.q_operator=AND" target="_blank">AWS Whitepapers — ML</a><div class="res-link-desc">Architecting for ML and MLOps on AWS whitepapers.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">✅ Practice & Assessment</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">05</span>
+          <div class="res-link-body"><a href="https://aws.amazon.com/certification/certified-machine-learning-specialty/" target="_blank">AWS official practice exam ($40)</a><div class="res-link-desc">20Q official sample — buy once, use for calibration.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">06</span>
+          <div class="res-link-body"><a href="https://www.whizlabs.com/aws-certified-machine-learning-specialty/" target="_blank">Whizlabs AWS ML Specialty</a><div class="res-link-desc">Large question bank, well-aligned with current exam topics.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">07</span>
+          <div class="res-link-body"><a href="https://tutorialsdojo.com/aws-certified-machine-learning-specialty/" target="_blank">Tutorials Dojo ML Specialty cheat sheets</a><div class="res-link-desc">Compact service summaries + practice exam.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">08</span>
+          <div class="res-link-body"><a href="https://www.udemy.com/course/aws-certified-machine-learning-specialty-full-practice-exam/" target="_blank">Udemy — AWS ML Specialty practice (Jon Bonso)</a><div class="res-link-desc">Most popular third-party practice exam — high overlap with actual exam.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🔧 Key AWS Services to Master</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">09</span>
+          <div class="res-link-body"><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html" target="_blank">Amazon SageMaker (all features)</a><div class="res-link-desc">Core of the exam — autopilot, pipelines, feature store, model monitor.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">10</span>
+          <div class="res-link-body"><a href="https://aws.amazon.com/machine-learning/ai-services/" target="_blank">Amazon Rekognition, Comprehend, Textract</a><div class="res-link-desc">AI services layer — know when to use vs. custom SageMaker model.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">11</span>
+          <div class="res-link-body"><a href="https://docs.aws.amazon.com/streams/latest/dev/introduction.html" target="_blank">Amazon Kinesis Data Streams</a><div class="res-link-desc">Real-time ML pipelines — heavily tested in Data Engineering domain.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">12</span>
+          <div class="res-link-body"><a href="https://docs.aws.amazon.com/glue/" target="_blank">AWS Glue & Athena for ML data prep</a><div class="res-link-desc">ETL patterns that feed ML pipelines.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🎓 Exam Registration</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">13</span>
+          <div class="res-link-body"><a href="https://aws.amazon.com/certification/certified-machine-learning-specialty/" target="_blank">Register for AWS ML Specialty ($300)</a><div class="res-link-desc">Pearson VUE — online or test centre. 180 min, 65 questions.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">14</span>
+          <div class="res-link-body"><a href="https://www.aws.training/certification" target="_blank">AWS Certification account</a><div class="res-link-desc">Manage exam scheduling, history, and badge sharing.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">⬆ Upgrade Path</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">15</span>
+          <div class="res-link-body"><a href="https://aws.amazon.com/certification/certified-machine-learning-engineer-associate/" target="_blank">AWS ML Engineer Associate (2024)</a><div class="res-link-desc">Newer associate-level ML cert — good complement or next step.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">16</span>
+          <div class="res-link-body"><a href="https://aws.amazon.com/certification/certified-solutions-architect-professional/" target="_blank">AWS Solutions Architect Professional</a><div class="res-link-desc">Broad cloud architecture credential that complements ML Specialty.</div></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function showPanel(name,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -521,6 +629,7 @@ function showPanel(name,btn){
   if(name==='quiz')renderQuiz();
   if(name==='ai')renderAI();
   if(name==='exam')renderExam();
+  if(name==='resources')renderResources();
 }
 
 function renderAll(){
@@ -532,5 +641,8 @@ function renderAll(){
 loadState();
 renderAll();
 </script>
+
+<!-- Notes-to-Markdown sync -->
+<script src="../../notes-sync.js"></script>
 </body>
 </html>

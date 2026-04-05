@@ -3,634 +3,625 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>certified-journeys · Open-source certification trackers</title>
+<title>Professional Scrum Product Owner I · certified-journeys</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--green:#1D9E75;--green-light:#E8F8F2;--green-dark:#0F6E56;--blue:#378ADD;--blue-light:#EAF3FD;--blue-dark:#185FA5;--amber:#BA7517;--amber-light:#FDF3E3;--coral:#D85A30;--coral-light:#FAEDE8;--coral-dark:#993C1D;--purple:#7F77DD;--purple-light:#EEEDFE;--orange:#E8890C;--orange-light:#FEF3E2;--teal:#0891B2;--teal-light:#E0F5FA;--bg:#F5F4F0;--surface:#FFFFFF;--surface2:#EEECE5;--surface3:#E8E6DF;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.16);--text:#18181A;--text2:#52524E;--text3:#8C8B85;--radius:14px;--radius-sm:9px;--shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04);--shadow-md:0 4px 12px rgba(0,0,0,0.1),0 1px 3px rgba(0,0,0,0.06);}
-@media(prefers-color-scheme:dark){:root{--bg:#111113;--surface:#1C1C1F;--surface2:#252528;--surface3:#2E2E33;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);--text:#F0EFEA;--text2:#A09F9B;--text3:#5E5D58;--green-light:#0B3326;--blue-light:#061E38;--amber-light:#221900;--coral-light:#2A0E05;--purple-light:#161440;--orange-light:#1F1200;--teal-light:#021E26;}}
+
+:root{
+  --green:#1D9E75;--green-light:#E8F8F2;--green-dark:#0F6E56;
+  --blue:#378ADD;--blue-light:#EAF3FD;--blue-dark:#185FA5;
+  --amber:#BA7517;--amber-light:#FDF3E3;
+  --coral:#D85A30;--coral-light:#FAEDE8;--coral-dark:#993C1D;
+  --purple:#7F77DD;--purple-light:#EEEDFE;
+  --orange:#E8890C;--orange-light:#FEF3E2;
+  --teal:#0891B2;--teal-light:#E0F5FA;
+  --bg:#F5F4F0;--surface:#FFFFFF;--surface2:#EEECE5;--surface3:#E8E6DF;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.16);
+  --text:#18181A;--text2:#52524E;--text3:#8C8B85;
+  --radius:14px;--radius-sm:9px;--radius-xs:5px;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.1),0 1px 3px rgba(0,0,0,0.06);
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#111113;--surface:#1C1C1F;--surface2:#252528;--surface3:#2E2E33;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+  --text:#F0EFEA;--text2:#A09F9B;--text3:#5E5D58;
+  --green-light:#0B3326;--blue-light:#061E38;--amber-light:#221900;
+  --coral-light:#2A0E05;--purple-light:#161440;--orange-light:#1F1200;--teal-light:#021E26;
+}}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;}
 a{color:var(--blue-dark);text-decoration:none;}
 a:hover{text-decoration:underline;}
+button{cursor:pointer;font-family:inherit;}
+code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:0.9em;}
 
-/* ── Site nav ── */
-.site-nav{background:var(--surface);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
-.nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;gap:2rem;height:56px;}
-.nav-brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--text);letter-spacing:-0.01em;text-decoration:none;flex-shrink:0;}
-.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
-.nav-links{display:flex;gap:2px;flex:1;}
-.nav-link{font-size:13px;padding:6px 14px;border-radius:99px;cursor:pointer;color:var(--text2);background:none;border:none;font-family:inherit;transition:all 0.18s;}
-.nav-link:hover{color:var(--text);background:var(--surface2);}
-.nav-link.active{color:var(--text);background:var(--surface2);font-weight:500;}
-.nav-actions{margin-left:auto;display:flex;align-items:center;gap:8px;}
-.nav-gh-btn{font-size:12px;padding:6px 14px;border-radius:99px;border:0.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;text-decoration:none;display:flex;align-items:center;gap:5px;transition:all 0.18s;}
-.nav-gh-btn:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
-
-/* ── Layout ── */
-.page{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 5rem;}
+.app{max-width:860px;margin:0 auto;padding:0 1.25rem 4rem;}
+/* Breadcrumb */
+.breadcrumb{padding:1rem 0 0;font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px;}
+.breadcrumb a{color:var(--text3);text-decoration:none;}
+.breadcrumb a:hover{color:var(--text);}
+.breadcrumb-sep{color:var(--text3);}"
+/* Course Header */
+.course-hero{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin:1rem 0 1.25rem;box-shadow:var(--shadow);}
+.course-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+.course-icon-wrap{display:flex;align-items:center;gap:12px;}
+.course-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;letter-spacing:0.02em;}
+.course-title-block h1{font-size:22px;font-weight:600;letter-spacing:-0.02em;color:var(--text);line-height:1.2;}
+.course-title-block p{font-size:13px;color:var(--text2);margin-top:3px;}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.tag{font-size:11px;padding:3px 10px;border-radius:99px;background:var(--surface2);color:var(--text2);border:0.5px solid var(--border);}
+.hero-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.meta-item{background:var(--surface2);border-radius:var(--radius-sm);padding:10px 12px;}
+.meta-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;}
+.meta-val{font-size:14px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;}
+/* Progress */
+.prog-strip{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.25rem;}
+.prog-strip-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px;}
+.prog-label{font-size:13px;color:var(--text2);}
+.prog-pct{font-size:32px;font-weight:600;letter-spacing:-0.03em;color:var(--text);font-family:'DM Mono',monospace;line-height:1;}
+.bar-bg{background:var(--surface2);border-radius:99px;height:8px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:99px;background:var(--green);transition:width .7s cubic-bezier(.4,0,.2,1);}
+.readiness{margin-top:8px;font-size:13px;color:var(--text2);}
+.readiness span{font-weight:500;}
+.readiness.ready span{color:var(--green);}
+.readiness.close span{color:var(--amber);}
+.readiness.early span{color:var(--coral);}
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:1.25rem;}
+.stat{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:.9rem;}
+.stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.stat-val{font-size:20px;font-weight:600;color:var(--text);letter-spacing:-.02em;font-family:'DM Mono',monospace;}
+.stat-val.ok{color:var(--green);} .stat-val.warn{color:var(--amber);} .stat-val.danger{color:var(--coral);}
+/* Tabs */
+.tabs{display:flex;gap:2px;margin-bottom:1.25rem;background:var(--surface2);border-radius:99px;padding:4px;overflow-x:auto;}
+.tab{flex:1;min-width:max-content;font-size:12px;padding:7px 14px;cursor:pointer;color:var(--text2);border-radius:99px;border:none;background:none;font-family:inherit;font-weight:400;transition:all .2s;text-align:center;white-space:nowrap;}
+.tab.active{background:var(--surface);color:var(--text);font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
 .panel{display:none;} .panel.active{display:block;}
-
-/* ── HOME TAB ── */
-.hero{margin-bottom:2.5rem;padding:2.5rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);}
-.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;}
-.hero-brand{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.hero-brand-dot{width:10px;height:10px;border-radius:50%;background:var(--green);}
-.hero-brand-label{font-size:12px;font-weight:500;color:var(--green);letter-spacing:0.08em;text-transform:uppercase;}
-.hero h1{font-size:32px;font-weight:700;letter-spacing:-0.03em;color:var(--text);line-height:1.15;margin-bottom:10px;}
-.hero h1 span{color:var(--green);}
-.hero-desc{font-size:15px;color:var(--text2);line-height:1.7;max-width:560px;}
-.hero-stats{display:flex;gap:24px;flex-wrap:wrap;}
-.h-stat{text-align:center;}
-.h-stat-val{font-size:28px;font-weight:700;color:var(--text);letter-spacing:-0.02em;font-family:'DM Mono',monospace;}
-.h-stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;}
-.hero-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.25rem;}
-.btn{font-size:13px;padding:9px 20px;border-radius:99px;border:none;cursor:pointer;font-family:inherit;font-weight:500;transition:all 0.18s;display:inline-flex;align-items:center;gap:6px;}
-.btn-primary{background:var(--green);color:#fff;}
-.btn-primary:hover{background:var(--green-dark);}
-.btn-ghost{background:none;border:0.5px solid var(--border2);color:var(--text2);}
-.btn-ghost:hover{background:var(--surface2);color:var(--text);}
-
-/* Section headings */
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
-.section-title{font-size:16px;font-weight:600;color:var(--text);letter-spacing:-0.01em;}
-.section-sub{font-size:12px;color:var(--text3);margin-top:2px;}
-.section-action{font-size:12px;padding:5px 12px;border-radius:99px;border:0.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;}
-.section-action:hover{background:var(--surface2);color:var(--text);}
-
-/* Course grid */
-.course-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:2rem;}
-.course-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;transition:all 0.2s;position:relative;overflow:hidden;}
-.course-card:hover{box-shadow:var(--shadow-md);border-color:var(--border2);transform:translateY(-1px);}
-.course-card.inactive{opacity:0.55;}
-.cc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;}
-.cc-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;letter-spacing:0.02em;}
-.cc-status{font-size:10px;padding:3px 10px;border-radius:99px;font-weight:500;}
-.status-not-started{background:var(--surface2);color:var(--text3);}
-.status-in-progress{background:var(--blue-light);color:var(--blue-dark);}
-.status-completed{background:var(--green-light);color:var(--green-dark);}
-.cc-name{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px;}
-.cc-full{font-size:12px;color:var(--text2);line-height:1.4;margin-bottom:10px;}
-.cc-prog{margin-bottom:10px;}
-.cc-prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px;}
-.cc-bar{background:var(--surface2);border-radius:99px;height:4px;overflow:hidden;}
-.cc-bar-fill{height:100%;border-radius:99px;transition:width 0.7s;}
-.cc-meta{display:flex;gap:10px;font-size:11px;color:var(--text3);flex-wrap:wrap;}
-.cc-meta-item{display:flex;align-items:center;gap:3px;}
-.cc-actions{display:flex;gap:6px;margin-top:12px;}
-.cc-btn{font-size:12px;padding:6px 14px;border-radius:99px;border:0.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all 0.18s;text-decoration:none;display:inline-block;}
-.cc-btn:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
-.cc-btn-primary{background:var(--green);color:#fff;border-color:var(--green);}
-.cc-btn-primary:hover{background:var(--green-dark);}
-.cc-inactive-overlay{position:absolute;inset:0;background:var(--bg);opacity:0;pointer-events:none;}
-
-/* Manage modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:200;padding:1rem;}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--surface);border-radius:var(--radius);padding:1.5rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-md);}
-.modal-head{font-size:16px;font-weight:600;color:var(--text);margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;}
-.modal-close{font-size:18px;color:var(--text3);cursor:pointer;background:none;border:none;font-family:inherit;line-height:1;}
-.modal-close:hover{color:var(--text);}
-.manage-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border);}
-.manage-row:last-child{border-bottom:none;}
-.manage-info{display:flex;align-items:center;gap:10px;}
-.manage-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
-.manage-name{font-size:13px;font-weight:500;color:var(--text);}
-.manage-provider{font-size:11px;color:var(--text3);}
-.toggle-wrap{display:flex;align-items:center;gap:8px;}
-.toggle{width:38px;height:22px;border-radius:99px;background:var(--surface2);border:0.5px solid var(--border2);cursor:pointer;transition:background 0.2s;position:relative;}
-.toggle.on{background:var(--green);border-color:var(--green);}
-.toggle-thumb{width:16px;height:16px;border-radius:50%;background:var(--surface3);position:absolute;top:2px;left:2px;transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
-.toggle.on .toggle-thumb{left:18px;background:#fff;}
-
-/* ── LEARNING TOPICS TAB ── */
-.topics-table-wrap{overflow-x:auto;margin-bottom:1rem;}
-.topics-table{width:100%;border-collapse:collapse;}
-.topics-table th{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;padding:8px 12px;text-align:left;border-bottom:0.5px solid var(--border);}
-.topics-table td{padding:12px;border-bottom:0.5px solid var(--border);font-size:13px;color:var(--text2);vertical-align:middle;}
-.topics-table tr:last-child td{border-bottom:none;}
-.topics-table tr:hover td{background:var(--surface2);}
-.t-icon-cell{width:44px;}
-.t-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
-.t-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
-.t-provider{font-size:11px;color:var(--text3);}
-.t-status{font-size:11px;padding:3px 10px;border-radius:99px;font-weight:500;white-space:nowrap;}
-.t-link{font-size:12px;color:var(--blue-dark);}
-.t-progress-bar{background:var(--surface2);border-radius:99px;height:4px;width:80px;overflow:hidden;margin-bottom:2px;}
-.t-progress-fill{height:100%;border-radius:99px;}
-.t-progress-label{font-size:10px;color:var(--text3);}
-.t-tags{display:flex;gap:4px;flex-wrap:wrap;}
-.t-tag{font-size:10px;padding:2px 7px;border-radius:99px;background:var(--surface2);color:var(--text3);}
-.t-upgrade{font-size:11px;color:var(--text2);max-width:180px;line-height:1.4;}
-.sort-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:11px;padding:0;font-family:inherit;}
-.sort-btn:hover{color:var(--text);}
-
-/* ── PROGRESS TAB ── */
-.progress-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
-.ps-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem;}
-.ps-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
-.ps-val{font-size:26px;font-weight:700;color:var(--text);letter-spacing:-.02em;font-family:'DM Mono',monospace;}
-.ps-sub{font-size:12px;color:var(--text3);margin-top:2px;}
-.prog-section{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;}
-.prog-section h3{font-size:13px;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:.05em;margin-bottom:1rem;}
-.journey-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border);}
-.journey-row:last-child{border-bottom:none;}
-.j-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
-.j-name{flex:1;font-size:13px;font-weight:500;color:var(--text);}
-.j-prog-wrap{width:160px;}
-.j-bar{background:var(--surface2);border-radius:99px;height:5px;overflow:hidden;margin-bottom:3px;}
-.j-bar-fill{height:100%;border-radius:99px;}
-.j-pct{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;}
-.j-hours{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;min-width:50px;text-align:right;}
-/* Heatmap */
-.heatmap-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
-.heatmap-day{text-align:center;}
-.hm-label{font-size:10px;color:var(--text3);margin-bottom:4px;}
-.hm-bar{border-radius:4px;height:40px;background:var(--surface2);transition:height 0.3s;}
-.hm-count{font-size:10px;color:var(--text3);margin-top:3px;font-family:'DM Mono',monospace;}
-.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
-.tg-cell{background:var(--surface2);border-radius:var(--radius-sm);padding:10px;text-align:center;}
-.tg-label{font-size:11px;color:var(--text2);margin-bottom:4px;}
-.tg-bar-wrap{height:36px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:4px;}
-.tg-bar{width:24px;border-radius:3px 3px 0 0;background:var(--green);min-height:4px;}
-.tg-count{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
-.recent-list{display:flex;flex-direction:column;gap:0;}
-.recent-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--border);font-size:12px;}
-.recent-item:last-child{border-bottom:none;}
-.recent-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.recent-text{flex:1;color:var(--text2);}
-.recent-time{color:var(--text3);font-family:'DM Mono',monospace;}
-
-/* ── ABOUT TAB ── */
-.about-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;align-items:start;}
-.about-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;}
-.about-card h2{font-size:18px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:-.01em;}
-.about-card h3{font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px;margin-top:1rem;}
-.about-card h3:first-child{margin-top:0;}
-.about-card p{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:10px;}
-.about-card ul{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px;}
-.about-card ul li{font-size:13px;color:var(--text2);line-height:1.6;padding-left:16px;position:relative;}
-.about-card ul li::before{content:'·';position:absolute;left:0;color:var(--green);font-weight:600;}
-.repo-table{width:100%;border-collapse:collapse;margin-top:8px;}
-.repo-table th{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;padding:6px 8px;text-align:left;border-bottom:0.5px solid var(--border);}
-.repo-table td{font-size:12px;color:var(--text2);padding:8px;border-bottom:0.5px solid var(--border);}
-.repo-table tr:last-child td{border-bottom:none;}
-.repo-status-live{font-size:10px;padding:2px 8px;border-radius:99px;background:var(--green-light);color:var(--green-dark);}
-.repo-status-planned{font-size:10px;padding:2px 8px;border-radius:99px;background:var(--surface2);color:var(--text3);}
-
-/* Misc */
+/* Day cards */
+.day-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;transition:border-color .2s;}
+.day-card.completed{border-color:var(--green-dark);}
+.day-card.completed .day-num{background:var(--green);color:#fff;border-color:var(--green);}
+.day-header{display:flex;align-items:center;gap:12px;padding:.95rem 1.1rem;cursor:pointer;user-select:none;}
+.day-header:hover{background:var(--surface2);}
+.day-num{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--text2);flex-shrink:0;font-family:'DM Mono',monospace;transition:all .2s;}
+.day-meta{flex:1;min-width:0;}
+.day-title{font-size:14px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.day-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.day-badge{font-size:11px;padding:3px 10px;border-radius:99px;font-weight:500;flex-shrink:0;}
+.badge-learn{background:var(--green-light);color:var(--green-dark);}
+.badge-practice{background:var(--blue-light);color:var(--blue-dark);}
+.badge-review{background:var(--amber-light);color:var(--amber);}
+.badge-exam{background:var(--coral-light);color:var(--coral-dark);}
+.chevron{font-size:11px;color:var(--text3);flex-shrink:0;transition:transform .2s;}
+.day-card.open .chevron{transform:rotate(180deg);}
+.day-body{display:none;padding:0 1.1rem 1.1rem;border-top:.5px solid var(--border);}
+.day-card.open .day-body{display:block;}
+.tip-box{background:var(--green-light);border-left:3px solid var(--green);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:.7rem .9rem;margin:1rem 0 .75rem;}
+.tip-box p{font-size:13px;color:var(--green-dark);line-height:1.6;}
+.tip-box strong{font-weight:600;}
+.task-list{margin-bottom:.75rem;}
+.task{display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:13px;color:var(--text2);border-bottom:.5px solid var(--border);line-height:1.5;}
+.task:last-child{border-bottom:none;}
+.task-bullet{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:6px;}
+.resources-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.res-pill{font-size:11px;padding:4px 11px;border-radius:99px;background:var(--surface2);border:.5px solid var(--border);color:var(--text2);}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.score-row label{font-size:12px;color:var(--text2);}
+.score-row input{width:72px;font-size:13px;padding:5px 10px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;}
+.score-badge{font-size:12px;font-weight:500;padding:3px 10px;border-radius:99px;}
+.complete-btn{width:100%;font-size:13px;padding:9px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;font-weight:400;}
+.complete-btn:hover{background:var(--green-light);color:var(--green-dark);border-color:var(--green);}
+.complete-btn.done{background:var(--green-light);color:var(--green-dark);border-color:var(--green);font-weight:500;}
+/* Hours log */
+.hours-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text2);}
+.hours-row input{width:60px;font-size:13px;padding:4px 8px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;}
+/* Topics */
+.topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.topic-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;}
+.topic-card h4{font-size:13px;font-weight:500;color:var(--text);margin-bottom:10px;line-height:1.4;}
+.t-bar-bg{background:var(--surface2);border-radius:99px;height:5px;margin-bottom:4px;overflow:hidden;}
+.t-bar-fill{height:100%;border-radius:99px;transition:width .7s cubic-bezier(.4,0,.2,1);}
+.t-pct{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+/* Notes */
+.notes-wrap{display:flex;flex-direction:column;gap:10px;}
+.note-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;}
+.note-card-head{font-size:13px;font-weight:500;color:var(--text);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.note-card textarea{width:100%;min-height:100px;font-size:13px;line-height:1.7;padding:.7rem .9rem;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;resize:vertical;}
+.note-card textarea:focus{outline:none;border-color:var(--green);background:var(--surface);}
+.note-saved{font-size:11px;color:var(--green);display:none;}
+/* Quiz */
+.quiz-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;}
+.quiz-progress{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:1rem;}
+.quiz-q{font-size:15px;font-weight:500;color:var(--text);line-height:1.6;margin-bottom:1.25rem;}
+.quiz-opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;line-height:1.5;}
+.quiz-opt:hover{border-color:var(--border2);color:var(--text);background:var(--surface2);}
+.quiz-opt.correct{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+.quiz-opt.wrong{background:var(--coral-light);border-color:var(--coral);color:var(--coral-dark);}
+.opt-letter{font-weight:600;min-width:18px;font-family:'DM Mono',monospace;font-size:12px;margin-top:1px;}
+.quiz-exp{margin-top:1rem;padding:1rem;background:var(--surface2);border-radius:var(--radius-sm);font-size:13px;color:var(--text2);line-height:1.7;display:none;border-left:3px solid var(--green);}
+.quiz-exp.show{display:block;}
+.quiz-exp strong{color:var(--text);font-weight:500;}
+.next-btn{font-size:13px;padding:8px 18px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;margin-top:1rem;}
+.next-btn:hover{background:var(--surface2);}
+.quiz-score-wrap{text-align:center;padding:2rem 0;}
+.quiz-score-big{font-size:48px;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:-.03em;}
+.quiz-score-big.pass{color:var(--green);} .quiz-score-big.fail{color:var(--coral);}
+.quiz-score-label{font-size:14px;color:var(--text2);margin-top:6px;}
+.retake-btn{margin-top:1.25rem;font-size:13px;padding:9px 20px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;}
+/* Flashcards */
+.flashcard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
+.flashcard{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;cursor:pointer;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center;transition:all .2s;position:relative;}
+.flashcard:hover{box-shadow:var(--shadow-md);border-color:var(--border2);}
+.fc-front{font-size:13px;font-weight:500;color:var(--text);line-height:1.5;}
+.fc-back{font-size:12px;color:var(--green-dark);background:var(--green-light);border-radius:var(--radius-sm);padding:.7rem;display:none;width:100%;line-height:1.6;}
+.flashcard.flipped .fc-front{display:none;}
+.flashcard.flipped .fc-back{display:block;}
+.fc-hint{font-size:10px;color:var(--text3);position:absolute;bottom:8px;right:10px;}
+/* Exam prep */
+.exam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
+.exam-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;}
+.exam-card-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.exam-card-val{font-size:16px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;}
+.exam-card-sub{font-size:12px;color:var(--text2);margin-top:3px;line-height:1.5;}
 .info-box{background:var(--surface2);border-radius:var(--radius-sm);padding:.9rem 1rem;font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px;}
 .info-box strong{color:var(--text);font-weight:500;}
-@media(max-width:800px){.course-grid{grid-template-columns:repeat(2,1fr);}.progress-summary{grid-template-columns:repeat(2,1fr);}.about-grid{grid-template-columns:1fr;}}
-@media(max-width:560px){.course-grid{grid-template-columns:1fr;}.progress-summary{grid-template-columns:repeat(2,1fr);}.hero h1{font-size:24px;}.nav-links{display:none;}}
+/* AI tools */
+.ai-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;margin-bottom:10px;}
+.ai-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.ai-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ai-card-title{font-size:14px;font-weight:500;color:var(--text);}
+.ai-card-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.ai-card-body{font-size:13px;color:var(--text2);line-height:1.7;}
+.ai-prompt-box{background:var(--surface2);border:.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;margin-top:10px;font-size:12px;color:var(--text2);font-family:'DM Mono',monospace;line-height:1.7;white-space:pre-wrap;}
+.ai-link-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;padding:6px 14px;border-radius:99px;border:.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;text-decoration:none;}
+.ai-link-btn:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
+/* Footer */
+.page-footer{font-size:11px;color:var(--text3);text-align:center;margin-top:2rem;padding-top:1rem;border-top:.5px solid var(--border);}
+.page-footer span{color:var(--green);}
+/* Reset btn */
+.reset-btn{font-size:11px;color:var(--text3);background:none;border:.5px solid var(--border2);border-radius:99px;padding:5px 12px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.reset-btn:hover{color:var(--coral);border-color:var(--coral);}
+@media(max-width:600px){
+  .hero-meta{grid-template-columns:repeat(2,1fr);}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .topic-grid{grid-template-columns:1fr;}
+  .exam-grid{grid-template-columns:1fr;}
+  .flashcard-grid{grid-template-columns:1fr;}
+  .course-hero-top{flex-direction:column;}
+  .tab{font-size:11px;padding:6px 8px;}
+}
+
+/* Resources panel */
+.res-section{margin-bottom:1.25rem;}
+.res-section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;padding-bottom:6px;border-bottom:.5px solid var(--border);}
+.res-link-list{display:flex;flex-direction:column;gap:0;}
+.res-link-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:.5px solid var(--border);}
+.res-link-item:last-child{border-bottom:none;}
+.res-link-index{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);min-width:24px;padding-top:2px;}
+.res-link-body{flex:1;min-width:0;}
+.res-link-body a{font-size:13px;font-weight:500;color:var(--blue-dark);text-decoration:none;}
+.res-link-body a:hover{text-decoration:underline;}
+.res-link-desc{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5;}
 </style>
 </head>
 <body>
+<div class="app">
 
-<nav class="site-nav">
-  <div class="nav-inner">
-    <a class="nav-brand" href="#"><div class="brand-dot"></div>certified-journeys</a>
-    <div class="nav-links">
-      <button class="nav-link active" onclick="showTab('home',this)">Home</button>
-      <button class="nav-link" onclick="showTab('topics',this)">Learning Topics</button>
-      <button class="nav-link" onclick="showTab('progress',this)">Progress</button>
-      <button class="nav-link" onclick="showTab('about',this)">About</button>
-    </div>
-    <div class="nav-actions">
-      <a class="nav-gh-btn" href="https://github.com/certified-journeys" target="_blank">⭐ GitHub</a>
-    </div>
-  </div>
-</nav>
+<div class="breadcrumb">
+  <a href="../../index.html">certified-journeys</a>
+  <span class="breadcrumb-sep">›</span>
+  <a href="../../index.html#courses">All journeys</a>
+  <span class="breadcrumb-sep">›</span>
+  <span>PSPO I</span>
+</div>
 
-<div class="page">
-
-<!-- ══ HOME ══ -->
-<div id="tab-home" class="panel active">
-  <div class="hero">
-    <div class="hero-top">
-      <div>
-        <div class="hero-brand"><div class="hero-brand-dot"></div><span class="hero-brand-label">certified-journeys</span></div>
-        <h1>Learn in public.<br><span>Build your edge.</span></h1>
-        <p class="hero-desc">Free, open-source certification trackers for senior engineers. Every journey is a structured daily plan — no fluff, no paywalls, no sign-ups. Fork any repo and make it yours.</p>
-        <div class="hero-actions">
-          <button class="btn btn-primary" onclick="showTab('topics',document.querySelectorAll('.nav-link')[1])">Browse all journeys</button>
-          <a class="btn btn-ghost" href="https://github.com/certified-journeys" target="_blank">⭐ Star on GitHub</a>
-        </div>
-      </div>
-      <div class="hero-stats" id="hero-stats">
-        <div class="h-stat"><div class="h-stat-val" id="hs-total">6</div><div class="h-stat-label">Journeys</div></div>
-        <div class="h-stat"><div class="h-stat-val" id="hs-active">0</div><div class="h-stat-label">In progress</div></div>
-        <div class="h-stat"><div class="h-stat-val" id="hs-done">0</div><div class="h-stat-label">Completed</div></div>
-        <div class="h-stat"><div class="h-stat-val" id="hs-hours">0 h</div><div class="h-stat-label">Hours logged</div></div>
+<div class="course-hero">
+  <div class="course-hero-top">
+    <div class="course-icon-wrap">
+      <div class="course-icon" style="background:#E8F8F2;color:#1D9E75;">PO</div>
+      <div class="course-title-block">
+        <h1>Professional Scrum Product Owner I</h1>
+        <p>Scrum.org · Intermediate · 14 days</p>
+        <div class="tag-row"><span class="tag">Agile</span> <span class="tag">Scrum</span> <span class="tag">Product</span></div>
       </div>
     </div>
+    <button class="reset-btn" onclick="resetAll()">Reset progress</button>
   </div>
-
-  <div class="section-head" id="courses">
-    <div><div class="section-title">Certification journeys</div><div class="section-sub">Click any card to open the tracker · Progress synced from localStorage</div></div>
-    <button class="section-action" onclick="openManage()">⚙ Manage journeys</button>
-  </div>
-  <div class="course-grid" id="course-grid"><!-- rendered by JS --></div>
-
-  <div class="info-box">
-    <strong>How it works:</strong> Each journey is a standalone HTML tracker in its own folder. Your progress is saved in your browser — no account, no server, no tracking. Fork any repo on GitHub and it auto-configures to your username.
+  <div class="hero-meta">
+    <div class="meta-item"><div class="meta-label">Cost</div><div class="meta-val">$200</div></div>
+    <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-val">14 days</div></div>
+    <div class="meta-item"><div class="meta-label">Provider</div><div class="meta-val" style="font-size:12px;font-family:'DM Sans',system-ui;">Scrum.org</div></div>
+    <div class="meta-item"><div class="meta-label">Exam link</div><div class="meta-val" style="font-size:11px;font-family:'DM Sans',system-ui;"><a href="https://www.scrum.org/assessments/professional-scrum-product-owner-i-certification" target="_blank">Register →</a></div></div>
   </div>
 </div>
 
-<!-- ══ LEARNING TOPICS ══ -->
-<div id="tab-topics" class="panel">
-  <div class="section-head" style="margin-bottom:1.25rem;">
-    <div><div class="section-title">All certification journeys</div><div class="section-sub">Full backlog — click any row to open the tracker</div></div>
-    <div style="display:flex;gap:6px;">
-      <select id="filter-status" style="font-size:12px;padding:5px 10px;border-radius:var(--radius-sm);border:0.5px solid var(--border2);background:var(--surface);color:var(--text);font-family:inherit;cursor:pointer;" onchange="renderTopicsTable()">
-        <option value="">All statuses</option>
-        <option value="not_started">Not started</option>
-        <option value="in_progress">In progress</option>
-        <option value="completed">Completed</option>
-      </select>
-    </div>
+<div class="prog-strip">
+  <div class="prog-strip-top">
+    <div class="prog-label">Overall completion</div>
+    <div class="prog-pct" id="pct-display">0%</div>
   </div>
-  <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem;">
-    <div class="topics-table-wrap">
-      <table class="topics-table" id="topics-table">
-        <thead>
-          <tr>
-            <th class="t-icon-cell"></th>
-            <th>Journey <button class="sort-btn" onclick="sortTopics('name')">↕</button></th>
-            <th>Status</th>
-            <th>Progress</th>
-            <th>Start date</th>
-            <th>Last active</th>
-            <th>Hours</th>
-            <th>Cost</th>
-            <th>Tags</th>
-            <th>Upgrade path</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="topics-tbody"><!-- rendered by JS --></tbody>
-      </table>
-    </div>
-  </div>
-  <div class="info-box"><strong>Upgrade paths:</strong> Each journey links to the natural next certification or skill to build on. Plan your roadmap from the table above.</div>
+  <div class="bar-bg"><div class="bar-fill" id="main-bar" style="width:0%"></div></div>
+  <div class="readiness early" id="readiness-row">Status: <span id="status-txt">Not started</span></div>
 </div>
 
-<!-- ══ PROGRESS ══ -->
-<div id="tab-progress" class="panel">
-  <div class="section-head" style="margin-bottom:1.25rem;">
-    <div><div class="section-title">Personal learning dashboard</div><div class="section-sub">Aggregated from all your active journeys · Updates in real time</div></div>
-  </div>
-
-  <div class="progress-summary" id="progress-summary"><!-- rendered by JS --></div>
-
-  <div class="prog-section">
-    <h3>Journey progress breakdown</h3>
-    <div id="progress-journeys"><!-- rendered by JS --></div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
-    <div class="prog-section">
-      <h3>Study activity by day of week</h3>
-      <div class="heatmap-grid" id="heatmap-dow"><!-- rendered by JS --></div>
-    </div>
-    <div class="prog-section">
-      <h3>Study activity by time of day</h3>
-      <div class="time-grid" id="heatmap-tod"><!-- rendered by JS --></div>
-    </div>
-  </div>
-
-  <div class="prog-section">
-    <h3>Recent activity</h3>
-    <div class="recent-list" id="recent-activity"><!-- rendered by JS --></div>
-  </div>
+<div class="stats-grid">
+  <div class="stat"><div class="stat-label">Days done</div><div class="stat-val" id="days-done">0/14</div></div>
+  <div class="stat"><div class="stat-label">Avg score</div><div class="stat-val" id="avg-score">—</div></div>
+  <div class="stat"><div class="stat-label">Hours logged</div><div class="stat-val" id="hrs-logged">0 h</div></div>
+  <div class="stat"><div class="stat-label">Days left</div><div class="stat-val" id="days-left">14</div></div>
 </div>
 
-<!-- ══ ABOUT ══ -->
-<div id="tab-about" class="panel">
-  <div class="about-grid">
-    <div>
-      <div class="about-card">
-        <h2>What is certified-journeys?</h2>
-        <p>A collection of free, open-source certification trackers for senior engineers and data professionals. Every tracker is a single HTML file — no build tools, no frameworks, no sign-ups, no cost.</p>
-        <p>Each journey gives you a structured day-by-day study plan, progress tracking saved in your browser, practice quizzes, AI-powered study prompts, and exam prep details — all in one place.</p>
-        <h3>Why we built it</h3>
-        <ul>
-          <li>Free resources exist (docs, YouTube, open assessments) — but nobody built a structured daily plan</li>
-          <li>No existing repo says "here is exactly what to do on Day 1, 2, 3" with progress tracking</li>
-          <li>Avoid spending hours creating learning plans from scratch for every certification</li>
-          <li>Learn in public — if your journey worked, fork it, improve it, share it</li>
-        </ul>
-      </div>
-      <div class="about-card">
-        <h3>How to fork and deploy in 3 steps</h3>
-        <ul>
-          <li><strong>Fork on GitHub</strong> — go to github.com/certified-journeys, find the repo for your cert, click Fork</li>
-          <li><strong>Edit two arrays</strong> — open index.html, replace the <code>days</code> and <code>topics</code> arrays with your cert's plan</li>
-          <li><strong>Enable GitHub Pages</strong> — Settings → Pages → main branch → Save. Live in 2 minutes</li>
-        </ul>
-        <p>No configuration needed. Your username and repo name are auto-detected from the URL. Your localStorage key is automatically unique to your fork.</p>
-      </div>
-      <div class="about-card">
-        <h3>Principles</h3>
-        <ul>
-          <li>Single HTML file — no build tools, no node_modules, no CI needed</li>
-          <li>localStorage only — no server, no account, no tracking</li>
-          <li>MIT licensed — fork, modify, redistribute freely</li>
-          <li>Zero external dependencies except Google Fonts</li>
-          <li>No premium tier, no upsell, no email capture — ever</li>
-        </ul>
-      </div>
-    </div>
-    <div>
-      <div class="about-card">
-        <h3>Ecosystem roadmap</h3>
-        <table class="repo-table">
-          <thead><tr><th>Repo</th><th>Days</th><th>Status</th></tr></thead>
-          <tbody id="ecosystem-table"><!-- rendered by JS --></tbody>
-        </table>
-      </div>
-      <div class="about-card">
-        <h3>Contributing</h3>
-        <ul>
-          <li>Fork a repo and submit a PR with improvements to the study plan</li>
-          <li>Build a new tracker for a cert not yet covered</li>
-          <li>Share your score and learning notes in GitHub Discussions</li>
-        </ul>
-        <p style="margin-top:10px;">Hard rules: no tracking, no analytics, no paywalls, no external JS libraries.</p>
-      </div>
-      <div class="about-card">
-        <h3>Privacy</h3>
-        <p>All progress is stored locally in your browser via localStorage. Nothing is sent to any server. No cookies. No analytics. No tracking pixels. Clearing browser data resets your progress.</p>
-      </div>
-    </div>
-  </div>
+<div class="tabs">
+  <button class="tab active" onclick="showPanel('schedule',this)">📅 Daily Plan</button>
+  <button class="tab" onclick="showPanel('topics',this)">📚 Topics</button>
+  <button class="tab" onclick="showPanel('notes',this)">📝 Notes</button>
+  <button class="tab" onclick="showPanel('flashcards',this)">🃏 Flashcards</button>
+  <button class="tab" onclick="showPanel('quiz',this)">✅ Quiz</button>
+  <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
+  <button class="tab" onclick="showPanel('resources',this)">🔗 Resources</button>
+  <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
 </div>
 
-</div><!-- /page -->
+<div id="panel-schedule" class="panel active"></div>
+<div id="panel-topics" class="panel"></div>
+<div id="panel-notes" class="panel"></div>
+<div id="panel-flashcards" class="panel"></div>
+<div id="panel-quiz" class="panel"></div>
+<div id="panel-ai" class="panel"></div>
+<div id="panel-exam" class="panel"></div>
+<div id="panel-resources" class="panel"></div>
 
-<!-- Manage modal -->
-<div class="modal-overlay" id="manage-modal" onclick="closeManage(event)">
-  <div class="modal">
-    <div class="modal-head">
-      <span>Manage journeys</span>
-      <button class="modal-close" onclick="closeManage()">✕</button>
-    </div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.6;">Toggle journeys on or off. Inactive journeys are hidden from your home page but their progress is preserved.</p>
-    <div id="manage-list"><!-- rendered by JS --></div>
-  </div>
+<div class="page-footer">Progress saved locally · <span id="sk-display">cj_pspo-certified_v1</span> · No account needed · <a href="../../index.html">← All journeys</a></div>
 </div>
 
 <script>
-const COURSES = [
-  {id:'pspo-certified',name:'PSPO I',fullName:'Professional Scrum Product Owner I',icon:'PO',color:'#1D9E75',colorLight:'#E8F8F2',provider:'Scrum.org',cost:'$200',totalDays:14,difficulty:'Intermediate',tags:['Agile','Scrum','Product'],examLink:'https://www.scrum.org/assessments/professional-scrum-product-owner-i-certification',upgradeNote:'After PSPO I → PSPO II ($250, advanced scenarios)'},
-  {id:'aws-ml-certified',name:'AWS ML',fullName:'AWS Certified Machine Learning – Specialty',icon:'ML',color:'#E8890C',colorLight:'#FEF3E2',provider:'Amazon Web Services',cost:'$300',totalDays:21,difficulty:'Advanced',tags:['AWS','Cloud','MLOps'],examLink:'https://aws.amazon.com/certification/certified-machine-learning-specialty/',upgradeNote:'After AWS ML Specialty → AWS ML Engineer Associate (2024)'},
-  {id:'dlt-certified',name:'dlt',fullName:'dlt (data load tool) Practitioner',icon:'DL',color:'#378ADD',colorLight:'#EAF3FD',provider:'dltHub',cost:'Free',totalDays:10,difficulty:'Intermediate',tags:['Data Eng','Python','ETL'],examLink:'https://dlthub.com/docs/intro',upgradeNote:'Pair with dbt for full ELT mastery'},
-  {id:'polars-certified',name:'Polars',fullName:'Polars DataFrame Mastery',icon:'PL',color:'#0891B2',colorLight:'#E0F5FA',provider:'Self-paced',cost:'Free',totalDays:10,difficulty:'Intermediate',tags:['Python','Analytics','Performance'],examLink:'https://docs.pola.rs/',upgradeNote:'After Polars → Arrow + DuckDB for full in-process analytics'},
-  {id:'terraform-certified',name:'Terraform',fullName:'HashiCorp Terraform Associate (003)',icon:'TF',color:'#7F77DD',colorLight:'#EEEDFE',provider:'HashiCorp',cost:'$70',totalDays:14,difficulty:'Intermediate',tags:['IaC','DevOps','Cloud'],examLink:'https://developer.hashicorp.com/certifications/infrastructure-automation',upgradeNote:'After Associate → Terraform Professional (hands-on lab)'},
-  {id:'powerbi-certified',name:'Power BI',fullName:'Microsoft PL-300: Power BI Data Analyst',icon:'BI',color:'#D85A30',colorLight:'#FAEDE8',provider:'Microsoft',cost:'$165',totalDays:14,difficulty:'Intermediate',tags:['BI','Analytics','Microsoft'],examLink:'https://learn.microsoft.com/certifications/power-bi-data-analyst-associate/',upgradeNote:'After PL-300 → DP-600 Fabric Analytics Engineer'}
-];
+const COURSE_ID='pspo-certified';
+const STORAGE_KEY='cj_pspo-certified_v1';
+const TOTAL_DAYS=14;
+const days=[{"title": "Scrum Guide deep read #1", "badge": "learn", "sub": "Week 1 \u00b7 Foundation", "tasks": ["Read Scrum Guide 2020 cover to cover \u2014 approx 45 mins", "Highlight every sentence that mentions the Product Owner", "The guide uses 'Product Owner', never 'product manager' \u2014 exact language matters", "Do not skip the Scrum Values section \u2014 the exam tests these directly"], "resources": ["Scrum Guide PDF (scrumguides.org)", "Scrum Guide audio (YouTube)"], "tip": "Resist mapping this to how your company does Scrum. Read it like a legal document \u2014 every word is deliberate.", "hasScore": false}, {"title": "Scrum Guide read #2 + first open assessment", "badge": "practice", "sub": "Week 1 \u00b7 Foundation", "tasks": ["Re-read Scrum Guide focusing on artifacts and their commitments", "Take Scrum.org PSPO Open Assessment (free, no login)", "Log your score \u2014 don't worry about the number yet", "Read the explanation for every single wrong answer"], "resources": ["PSPO Open Assessment (scrum.org/open-assessments)", "Scrum.org Learning Path"], "tip": "The 3 commitments are heavily tested: Product Goal \u2192 Backlog, Sprint Goal \u2192 Sprint Backlog, DoD \u2192 Increment.", "hasScore": true}, {"title": "Product Owner accountabilities", "badge": "learn", "sub": "Week 1 \u00b7 Core concepts", "tasks": ["Study PO accountabilities in the Scrum Guide word for word", "Key rule: the PO is ONE person \u2014 never a committee", "PO can delegate backlog work but retains full accountability", "PO owns the 'why' \u2014 Developers own the 'how'"], "resources": ["Scrum Guide \u00a7Product Owner", "Mikhail Lapshin quiz (PO filter)"], "tip": "Classic exam trap: 'The team can help manage the backlog' \u2014 true, but the PO retains accountability.", "hasScore": false}, {"title": "Product Backlog mastery", "badge": "learn", "sub": "Week 1 \u00b7 Core concepts", "tasks": ["The backlog is 'ordered' \u2014 not 'prioritized'. Exact word matters", "PBIs contain: description, order, estimate, and value", "Refinement is ongoing \u2014 not a Scrum event \u2014 max 10% capacity", "Know what happens to the backlog when a Sprint is cancelled"], "resources": ["Scrum Guide \u00a7Product Backlog", "Mikhail Lapshin learning mode"], "tip": "If an exam answer says 'prioritized backlog' \u2014 that may be wrong. Scrum.org uses 'ordered' exclusively.", "hasScore": false}, {"title": "Sprint events and timebox rules", "badge": "learn", "sub": "Week 1 \u00b7 Events", "tasks": ["Memorize all 5 Scrum events and their exact timeboxes", "Sprint Review (4h max): PO presents backlog state to stakeholders", "Sprint Retrospective (3h max): Scrum Team inspects itself", "Sprint Planning (8h max): the Sprint Goal is created here"], "resources": ["Scrum Guide \u00a7Events", "Scrum.org open assessment"], "tip": "Sprint Review \u2260 Sprint Demo. The Review is about inspection and adaptation \u2014 not just showing completed work.", "hasScore": false}, {"title": "Product Vision and value delivery", "badge": "learn", "sub": "Week 1 \u00b7 Strategy", "tasks": ["Study the Product Goal \u2014 long-term objective for the product", "The Product Goal lives inside the Product Backlog", "The PO decides when to release \u2014 not the Scrum Team or stakeholders", "Study release planning and forecasting concepts for the PO"], "resources": ["Scrum Guide \u00a7Product Goal", "Professional Product Owner \u2014 McGreal ch.1\u20133"], "tip": "Value is subjective \u2014 the PO defines it, the Scrum Team maximizes it. Appears in many scenario questions.", "hasScore": false}, {"title": "Mid-week mock exam + gap analysis", "badge": "practice", "sub": "Week 1 \u00b7 Assessment", "tasks": ["Take Mikhail Lapshin PSPO quiz in Learning Mode (all 80 questions)", "Log your score below \u2014 target 80%+", "List every topic area where you got questions wrong", "Spend 1 hour re-reading those exact Scrum Guide sections"], "resources": ["Mikhail Lapshin PSPO quiz (mlapshin.com)", "Scrum Guide (targeted re-read)"], "tip": "Below 75% \u2014 focus on Product Backlog ordering and PO accountability questions \u2014 highest frequency.", "hasScore": true}, {"title": "Stakeholders, customers and business strategy", "badge": "learn", "sub": "Week 2 \u00b7 Advanced", "tasks": ["The PO manages stakeholders \u2014 not the Scrum Master", "PO collaborates with stakeholders but is NOT obligated to accept all feedback", "Business strategy: understand ROI and value-based backlog ordering", "Sprint Review is the primary stakeholder feedback loop in Scrum"], "resources": ["Scrum.org PSPO competency areas", "Mikhail Lapshin \u2014 stakeholder question set"], "tip": "The Scrum Master facilitates events but does not own stakeholder relationships \u2014 very common distractor.", "hasScore": false}, {"title": "Forecasting and release planning", "badge": "learn", "sub": "Week 2 \u00b7 Advanced", "tasks": ["Understand velocity, story points, and release forecasting concepts", "Burn-down and burn-up charts: the PO uses these to track progress", "Release planning: PO owns the when \u2014 Developers own the how", "Scaled: know the basic Nexus framework and scaled PO responsibilities"], "resources": ["Scrum.org PSPO competencies", "Scrum Guide \u00a7Sprint Review"], "tip": "Exam won't ask you to calculate velocity \u2014 it asks who is responsible for forecast visibility. That's the PO.", "hasScore": false}, {"title": "Scrum values and empiricism deep dive", "badge": "learn", "sub": "Week 2 \u00b7 Foundations", "tasks": ["5 Scrum Values: Commitment, Focus, Openness, Respect, Courage", "3 pillars: Transparency, Inspection, Adaptation", "How does each Scrum Value apply to the PO role?", "What breaks empiricism: hidden work, absent PO, no Definition of Done"], "resources": ["Scrum Guide \u00a7Values", "Scrum.org learning path \u2014 empiricism module"], "tip": "Values questions often have 2 plausible answers. Always pick the one that maximises transparency.", "hasScore": false}, {"title": "Full timed mock exam #1", "badge": "exam", "sub": "Week 2 \u00b7 Assessment", "tasks": ["Take Mikhail Lapshin PSPO quiz in Real Mode \u2014 80 questions, 60 min", "Simulate real conditions: no notes, no interruptions", "Log your score below \u2014 target 90%+", "Review every wrong answer and note the exact Scrum Guide section"], "resources": ["Mikhail Lapshin Real Mode", "Scrum Guide (post-exam targeted review)"], "tip": "Score below 85% \u2014 do not book the exam yet. Spend Days 12\u201313 on specific weak areas only.", "hasScore": true}, {"title": "Weak area intensive review", "badge": "review", "sub": "Week 2 \u00b7 Consolidation", "tasks": ["List your 3 weakest topic areas from Day 11 mock exam", "Re-read those Scrum Guide sections one final time", "Retake Scrum.org PSPO Open Assessment \u2014 target 100%", "Write a 1-page PO cheat sheet from memory, then verify against the Guide"], "resources": ["Scrum Guide (targeted)", "Scrum.org PSPO Open Assessment"], "tip": "Writing a cheat sheet from memory then verifying it is the most effective revision technique for this exam.", "hasScore": false}, {"title": "Full timed mock exam #2 + readiness check", "badge": "exam", "sub": "Week 2 \u00b7 Assessment", "tasks": ["Take a second full 80-question timed mock (PrepForScrum or Lapshin)", "Focus on pacing: ~45 seconds per question maximum", "Flag uncertain questions and return \u2014 never leave one blank", "Scoring 90%+ consistently across both mocks: you are ready"], "resources": ["PrepForScrum mock exam (prepforscrum.com)", "Mikhail Lapshin Real Mode"], "tip": "90%+ across two different mock providers is the gold standard. Different question sets expose blind spots.", "hasScore": true}, {"title": "Final light review + book the exam", "badge": "exam", "sub": "Week 2 \u00b7 Exam day", "tasks": ["Light re-read: PO section and artifacts only", "Do NOT try to learn anything new today \u2014 consolidate only", "Book PSPO I exam at scrum.org \u2014 $200 USD, password never expires", "Rest well. You are prepared."], "resources": ["scrum.org/assessments \u2014 exam booking page"], "tip": "The exam is technically open-book, but there's no time to look things up. Trust your preparation.", "hasScore": false}];
+const topics=[{"name": "Product Owner accountabilities", "color": "#1D9E75", "days": [2, 3, 7, 10]}, {"name": "Product Backlog management", "color": "#378ADD", "days": [3, 6, 11]}, {"name": "Product Goal and vision", "color": "#BA7517", "days": [5, 9, 10]}, {"name": "Scrum events and timeboxes", "color": "#D85A30", "days": [4, 8, 10]}, {"name": "Stakeholder management", "color": "#7F77DD", "days": [7, 9, 11]}, {"name": "Forecasting and release", "color": "#0F6E56", "days": [5, 8, 12]}, {"name": "Scrum values and empiricism", "color": "#639922", "days": [1, 9, 10, 11]}, {"name": "Business strategy and value", "color": "#993C1D", "days": [5, 7, 12]}];
+const quizzes=[{"q": "Who has the authority to cancel a Sprint?", "opts": ["The Scrum Master", "Only the Product Owner", "Any Scrum Team member", "The Product Owner with Developer agreement"], "correct": 1, "exp": "<strong>Only the Product Owner</strong> can cancel a Sprint \u2014 and only when the Sprint Goal has become obsolete. This is one of the PO's very few unilateral powers."}, {"q": "The Scrum Guide describes the Product Backlog as:", "opts": ["A prioritized list of features", "An ordered list of everything needed", "A ranked list approved by the sponsor", "A time-boxed plan for the Sprint"], "correct": 1, "exp": "<strong>Ordered</strong> is the precise term \u2014 not 'prioritized' or 'ranked'. This is a frequent exam trap."}, {"q": "Who is responsible for the ordering of the Product Backlog?", "opts": ["The Scrum Team collectively", "The Product Owner", "The Scrum Master", "The stakeholders"], "correct": 1, "exp": "The <strong>Product Owner</strong> is solely accountable for backlog content, availability, and ordering."}, {"q": "A stakeholder insists on adding an item to the Sprint Backlog mid-Sprint. What is correct?", "opts": ["Add it if the Scrum Master approves", "Only Developers can change the Sprint Backlog and only if it doesn't endanger the Sprint Goal", "Reject it \u2014 the Sprint Backlog cannot change", "The PO can add it since they own the backlog"], "correct": 1, "exp": "Only <strong>Developers</strong> can make changes to the Sprint Backlog \u2014 and only if they don't endanger the Sprint Goal."}, {"q": "Which statement about the Definition of Done is correct?", "opts": ["Created by PO as acceptance criteria per PBI", "Shared Scrum Team commitment describing done for every Increment", "Optional if team has high trust", "Can vary per PBI based on complexity"], "correct": 1, "exp": "The <strong>Definition of Done</strong> is a Scrum Team commitment that applies uniformly to every Increment."}];
+const exam={"questions": 80, "minutes": 60, "passScore": "85% (68/80)", "cost": "$200", "provider": "Scrum.org", "link": "https://www.scrum.org/assessments", "notes": "Password never expires. Open-book but no time to look things up. Taken online, no proctoring."};
 
-const HOME_SETTINGS_KEY='cj_home_settings_v1';
+let state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
 
-function getSettings(){
-  try{const s=localStorage.getItem(HOME_SETTINGS_KEY);return s?JSON.parse(s):{active:COURSES.map(c=>c.id)};}
-  catch(e){return{active:COURSES.map(c=>c.id)};}
+function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)state={...state,...JSON.parse(s)};}catch(e){}}
+function saveState(){
+  state.lastActivity=Date.now();
+  if(state.completed.length>0&&state.status==='not_started')state.status='in_progress';
+  if(state.completed.length>=TOTAL_DAYS)state.status='completed';
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}
+  broadcastStatus();
 }
-function saveSettings(s){try{localStorage.setItem(HOME_SETTINGS_KEY,JSON.stringify(s));}catch(e){}}
+function broadcastStatus(){
+  // Write a summary for the home page to read
+  const summary={id:COURSE_ID,status:state.status,completed:state.completed.length,total:TOTAL_DAYS,scores:Object.values(state.scores).filter(s=>s>0),totalHours:Object.values(state.hours).reduce((a,b)=>a+b,0),completedAt:state.completedAt,startDate:state.startDate,lastActivity:state.lastActivity};
+  try{localStorage.setItem('cj_summary_'+COURSE_ID,JSON.stringify(summary));}catch(e){}
+}
+function resetAll(){
+  if(!confirm('Reset all progress? This cannot be undone.'))return;
+  state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
+  quizCorrect=0;
+  saveState();renderAll();
+}
+function isCompleted(i){return state.completed.includes(i);}
+function toggleComplete(i){
+  if(isCompleted(i)){state.completed=state.completed.filter(x=>x!==i);delete state.completedAt[i];}
+  else{
+    state.completed.push(i);
+    state.completedAt[i]=Date.now();
+    if(!state.startDate)state.startDate=Date.now();
+  }
+  saveState();updateStats();renderSchedule();
+  if(document.getElementById('panel-topics').classList.contains('active'))renderTopics();
+}
+function toggleDay(i){state.openDay=state.openDay===i?null:i;saveState();renderSchedule();}
+function logScore(i,val){const v=parseInt(val);if(!isNaN(v)&&v>=0&&v<=100){state.scores[i]=v;saveState();updateStats();}}
+function logHours(i,val){const v=parseFloat(val);if(!isNaN(v)&&v>=0){state.hours[i]=v;saveState();updateStats();}}
+function scoreClass(s){return s>=90?'ok':s>=80?'warn':'danger';}
+function badgeClass(b){return{learn:'badge-learn',practice:'badge-practice',review:'badge-review',exam:'badge-exam'}[b];}
+function badgeLabel(b){return{learn:'Learn',practice:'Practice',review:'Review',exam:'Exam'}[b];}
 
-function getCourseProgress(courseId){
-  try{
-    const s=localStorage.getItem('cj_summary_'+courseId);
-    if(s)return JSON.parse(s);
-    // Try direct state key too
-    const direct=localStorage.getItem('cj_'+courseId+'_v1');
-    if(direct){
-      const d=JSON.parse(direct);
-      return{id:courseId,status:d.status||'not_started',completed:d.completed?d.completed.length:0,total:COURSES.find(c=>c.id===courseId)?.totalDays||14,scores:Object.values(d.scores||{}).filter(s=>s>0),totalHours:Object.values(d.hours||{}).reduce((a,b)=>a+b,0),completedAt:d.completedAt||{},startDate:d.startDate,lastActivity:d.lastActivity};
-    }
-  }catch(e){}
-  return{id:courseId,status:'not_started',completed:0,total:COURSES.find(c=>c.id===courseId)?.totalDays||14,scores:[],totalHours:0,completedAt:{},startDate:null,lastActivity:null};
+function updateStats(){
+  const done=state.completed.length,total=TOTAL_DAYS;
+  const pct=Math.round((done/total)*100);
+  document.getElementById('pct-display').textContent=pct+'%';
+  document.getElementById('main-bar').style.width=pct+'%';
+  document.getElementById('days-done').textContent=done+'/'+total;
+  document.getElementById('days-left').textContent=(total-done);
+  const sv=Object.values(state.scores).filter(s=>!isNaN(s)&&s>0);
+  const avgEl=document.getElementById('avg-score');
+  if(sv.length){const avg=Math.round(sv.reduce((a,b)=>a+b,0)/sv.length);avgEl.textContent=avg+'%';avgEl.className='stat-val '+scoreClass(avg);}
+  else{avgEl.textContent='—';avgEl.className='stat-val';}
+  const totalHrs=Object.values(state.hours).reduce((a,b)=>a+b,0);
+  document.getElementById('hrs-logged').textContent=totalHrs>0?totalHrs.toFixed(1)+' h':'0 h';
+  const rRow=document.getElementById('readiness-row'),sTxt=document.getElementById('status-txt');
+  if(done>=total){sTxt.textContent='Completed! 🎉';rRow.className='readiness ready';}
+  else if(done>=Math.floor(total*0.75)){sTxt.textContent='Almost there — final stretch';rRow.className='readiness close';}
+  else if(done>=Math.floor(total*0.4)){sTxt.textContent='On track — great progress';rRow.className='readiness close';}
+  else if(done>=1){sTxt.textContent='In progress — keep going';rRow.className='readiness early';}
+  else{sTxt.textContent='Not started yet';rRow.className='readiness early';}
 }
 
-function getAllProgress(){return COURSES.map(c=>({course:c,...getCourseProgress(c.id)}));}
-
-function statusLabel(s){return{not_started:'Not started',in_progress:'In progress',completed:'Completed'}[s]||'Not started';}
-function statusClass(s){return{not_started:'status-not-started',in_progress:'status-in-progress',completed:'status-completed'}[s]||'status-not-started';}
-
-function fmtDate(ts){if(!ts)return'—';const d=new Date(ts);return d.toLocaleDateString('en-CA',{month:'short',day:'numeric'});}
-function fmtDateFull(ts){if(!ts)return'—';const d=new Date(ts);return d.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'2-digit'});}
-function timeAgo(ts){if(!ts)return'—';const s=Math.floor((Date.now()-ts)/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}
-
-function renderHome(){
-  const settings=getSettings();
-  const allProg=getAllProgress();
-  const active=allProg.filter(p=>settings.active.includes(p.course.id));
-  const inProg=active.filter(p=>p.status==='in_progress').length;
-  const completed=active.filter(p=>p.status==='completed').length;
-  const totalHours=active.reduce((a,p)=>a+(p.totalHours||0),0);
-  document.getElementById('hs-total').textContent=COURSES.length;
-  document.getElementById('hs-active').textContent=inProg;
-  document.getElementById('hs-done').textContent=completed;
-  document.getElementById('hs-hours').textContent=totalHours>0?totalHours.toFixed(1)+' h':'0 h';
-
-  const grid=document.getElementById('course-grid');
-  grid.innerHTML=allProg.map(p=>{
-    const c=p.course,isActive=settings.active.includes(c.id);
-    const pct=Math.round((p.completed/p.total)*100);
-    const avgScore=p.scores.length?Math.round(p.scores.reduce((a,b)=>a+b,0)/p.scores.length):null;
-    return `<div class="course-card ${isActive?'':'inactive'}">
-      <div class="cc-top">
-        <div class="cc-icon" style="background:${c.colorLight};color:${c.color};">${c.icon}</div>
-        <span class="cc-status ${statusClass(p.status)}">${statusLabel(p.status)}</span>
+function renderSchedule(){
+  document.getElementById('panel-schedule').innerHTML=days.map((d,i)=>{
+    const comp=isCompleted(i),open=state.openDay===i,score=state.scores[i],hrs=state.hours[i];
+    return `<div class="day-card ${comp?'completed':''} ${open?'open':''}">
+      <div class="day-header" onclick="toggleDay(${i})">
+        <div class="day-num">${comp?'✓':(i+1)}</div>
+        <div class="day-meta"><div class="day-title">Day ${i+1}: ${d.title}</div><div class="day-sub">${d.sub}</div></div>
+        <span class="day-badge ${badgeClass(d.badge)}">${badgeLabel(d.badge)}</span>
+        <span class="chevron">▾</span>
       </div>
-      <div class="cc-name">${c.fullName}</div>
-      <div class="cc-full">${c.provider} · ${c.difficulty} · ${c.totalDays} days · ${c.cost}</div>
-      <div class="cc-prog">
-        <div class="cc-prog-row"><span>${p.completed}/${p.total} days</span><span>${pct}%</span></div>
-        <div class="cc-bar"><div class="cc-bar-fill" style="width:${pct}%;background:${c.color};"></div></div>
-      </div>
-      <div class="cc-meta">
-        ${p.startDate?`<span class="cc-meta-item">📅 Started ${fmtDate(p.startDate)}</span>`:''}
-        ${p.totalHours>0?`<span class="cc-meta-item">⏱ ${p.totalHours.toFixed(1)} h logged</span>`:''}
-        ${avgScore?`<span class="cc-meta-item">📊 Avg ${avgScore}%</span>`:''}
-        ${p.lastActivity&&p.status!=='not_started'?`<span class="cc-meta-item">🕐 ${timeAgo(p.lastActivity)}</span>`:''}
-      </div>
-      <div class="cc-actions">
-        ${isActive?`<a class="cc-btn cc-btn-primary" href="courses/${c.id}/index.html">${p.status==='not_started'?'Start journey →':p.status==='completed'?'Review →':'Continue →'}</a>`:'<span style="font-size:12px;color:var(--text3);">Hidden — enable in Manage</span>'}
-        <a class="cc-btn" href="${c.examLink}" target="_blank" style="margin-left:auto;">Exam info</a>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function renderTopicsTable(){
-  const filter=document.getElementById('filter-status').value;
-  const allProg=getAllProgress();
-  const rows=allProg.filter(p=>!filter||p.status===filter);
-  const tbody=document.getElementById('topics-tbody');
-  tbody.innerHTML=rows.map(p=>{
-    const c=p.course;
-    const pct=Math.round((p.completed/p.total)*100);
-    return `<tr onclick="window.location.href='courses/${c.id}/index.html'" style="cursor:pointer;">
-      <td class="t-icon-cell"><div class="t-icon" style="background:${c.colorLight};color:${c.color};">${c.icon}</div></td>
-      <td><div class="t-name">${c.fullName}</div><div class="t-provider">${c.provider}</div></td>
-      <td><span class="t-status ${statusClass(p.status)}">${statusLabel(p.status)}</span></td>
-      <td>
-        <div class="t-progress-bar"><div class="t-progress-fill" style="width:${pct}%;background:${c.color};"></div></div>
-        <div class="t-progress-label">${p.completed}/${p.total} days · ${pct}%</div>
-      </td>
-      <td>${fmtDateFull(p.startDate)}</td>
-      <td>${timeAgo(p.lastActivity)}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:12px;">${p.totalHours>0?p.totalHours.toFixed(1)+' h':'—'}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:12px;">${c.cost}</td>
-      <td><div class="t-tags">${c.tags.map(t=>`<span class="t-tag">${t}</span>`).join('')}</div></td>
-      <td><div class="t-upgrade">${c.upgradeNote}</div></td>
-      <td><a class="cc-btn" href="courses/${c.id}/index.html" onclick="event.stopPropagation()">Open →</a></td>
-    </tr>`;
-  }).join('');
-}
-
-let sortAsc=true;
-function sortTopics(field){
-  // simple toggle — re-render with sort applied
-  sortAsc=!sortAsc;
-  renderTopicsTable();
-}
-
-function renderProgress(){
-  const allProg=getAllProgress();
-  const hasAny=allProg.some(p=>p.status!=='not_started');
-  const totalHours=allProg.reduce((a,p)=>a+(p.totalHours||0),0);
-  const inProg=allProg.filter(p=>p.status==='in_progress').length;
-  const done=allProg.filter(p=>p.status==='completed').length;
-  const totalDays=allProg.reduce((a,p)=>a+p.completed,0);
-  document.getElementById('progress-summary').innerHTML=`
-    <div class="ps-card"><div class="ps-label">Journeys</div><div class="ps-val">${COURSES.length}</div><div class="ps-sub">${inProg} in progress · ${done} done</div></div>
-    <div class="ps-card"><div class="ps-label">Days completed</div><div class="ps-val">${totalDays}</div><div class="ps-sub">across all journeys</div></div>
-    <div class="ps-card"><div class="ps-label">Hours logged</div><div class="ps-val">${totalHours.toFixed(1)}</div><div class="ps-sub">total study time</div></div>
-    <div class="ps-card"><div class="ps-label">Avg score</div><div class="ps-val">${(()=>{const all=allProg.flatMap(p=>p.scores);return all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length)+'%':'—';})()}</div><div class="ps-sub">across all practice tests</div></div>`;
-
-  document.getElementById('progress-journeys').innerHTML=allProg.map(p=>{
-    const c=p.course;
-    const pct=Math.round((p.completed/p.total)*100);
-    return `<div class="journey-row">
-      <div class="j-icon" style="background:${c.colorLight};color:${c.color};">${c.icon}</div>
-      <div class="j-name">${c.name} <span style="font-size:11px;color:var(--text3);">${c.fullName}</span></div>
-      <span class="cc-status ${statusClass(p.status)}" style="font-size:10px;flex-shrink:0;">${statusLabel(p.status)}</span>
-      <div class="j-prog-wrap">
-        <div class="j-bar"><div class="j-bar-fill" style="width:${pct}%;background:${c.color};"></div></div>
-        <div class="j-pct">${pct}% · ${p.completed}/${p.total} days</div>
-      </div>
-      <div class="j-hours">${p.totalHours>0?p.totalHours.toFixed(1)+' h':'—'}</div>
-    </div>`;
-  }).join('');
-
-  // Day of week heatmap
-  const dowLabels=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const dowCounts=new Array(7).fill(0);
-  allProg.forEach(p=>{
-    Object.values(p.completedAt||{}).forEach(ts=>{
-      if(ts)dowCounts[new Date(ts).getDay()]++;
-    });
-  });
-  const maxDow=Math.max(...dowCounts,1);
-  document.getElementById('heatmap-dow').innerHTML=dowLabels.map((l,i)=>`
-    <div class="heatmap-day">
-      <div class="hm-label">${l}</div>
-      <div class="hm-bar" style="height:${Math.max(8,Math.round((dowCounts[i]/maxDow)*60))}px;background:${dowCounts[i]>0?'var(--green)':'var(--surface2)'};opacity:${dowCounts[i]>0?0.4+0.6*(dowCounts[i]/maxDow):1};"></div>
-      <div class="hm-count">${dowCounts[i]||'·'}</div>
-    </div>`).join('');
-
-  // Time of day
-  const todLabels=['Morning','Afternoon','Evening','Night'];
-  const todRanges=[[5,12],[12,17],[17,22],[22,5]];
-  const todCounts=new Array(4).fill(0);
-  allProg.forEach(p=>{
-    Object.values(p.completedAt||{}).forEach(ts=>{
-      if(!ts)return;
-      const h=new Date(ts).getHours();
-      if(h>=5&&h<12)todCounts[0]++;
-      else if(h>=12&&h<17)todCounts[1]++;
-      else if(h>=17&&h<22)todCounts[2]++;
-      else todCounts[3]++;
-    });
-  });
-  const maxTod=Math.max(...todCounts,1);
-  const todIcons=['🌅','☀️','🌆','🌙'];
-  document.getElementById('heatmap-tod').innerHTML=todLabels.map((l,i)=>`
-    <div class="tg-cell">
-      <div class="tg-label">${todIcons[i]} ${l}</div>
-      <div class="tg-bar-wrap"><div class="tg-bar" style="height:${Math.max(4,Math.round((todCounts[i]/maxTod)*36))}px;opacity:${todCounts[i]>0?0.4+0.6*(todCounts[i]/maxTod):0.2};"></div></div>
-      <div class="tg-count">${todCounts[i]} sessions</div>
-    </div>`).join('');
-
-  // Recent activity
-  const events=[];
-  allProg.forEach(p=>{
-    Object.entries(p.completedAt||{}).forEach(([day,ts])=>{
-      if(ts)events.push({ts,text:`Completed Day ${parseInt(day)+1} of ${p.course.name}`,color:p.course.color});
-    });
-  });
-  events.sort((a,b)=>b.ts-a.ts);
-  const recent=events.slice(0,8);
-  document.getElementById('recent-activity').innerHTML=recent.length?recent.map(e=>`
-    <div class="recent-item">
-      <div class="recent-dot" style="background:${e.color};"></div>
-      <div class="recent-text">${e.text}</div>
-      <div class="recent-time">${timeAgo(e.ts)}</div>
-    </div>`).join(''):'<div style="font-size:13px;color:var(--text3);padding:1rem 0;">No activity yet — start a journey to see your history here.</div>';
-}
-
-function renderAbout(){
-  document.getElementById('ecosystem-table').innerHTML=COURSES.map(c=>{
-    const p=getCourseProgress(c.id);
-    const isLive=true; // all are created
-    return `<tr><td style="font-family:'DM Mono',monospace;font-size:11px;">${c.id}</td><td>${c.totalDays}</td><td><span class="${isLive?'repo-status-live':'repo-status-planned'}">${isLive?'live':'planned'}</span></td></tr>`;
-  }).join('');
-}
-
-function openManage(){
-  const settings=getSettings();
-  document.getElementById('manage-list').innerHTML=COURSES.map(c=>{
-    const on=settings.active.includes(c.id);
-    return `<div class="manage-row">
-      <div class="manage-info">
-        <div class="manage-icon" style="background:${c.colorLight};color:${c.color};">${c.icon}</div>
-        <div><div class="manage-name">${c.name} — ${c.fullName}</div><div class="manage-provider">${c.provider} · ${c.cost} · ${c.totalDays} days</div></div>
-      </div>
-      <div class="toggle-wrap">
-        <div class="toggle ${on?'on':''}" id="toggle-${c.id}" onclick="toggleCourse('${c.id}')"><div class="toggle-thumb"></div></div>
+      <div class="day-body">
+        <div class="tip-box"><p><strong>💡 Tip:</strong> ${d.tip}</p></div>
+        <div class="task-list">${d.tasks.map(t=>`<div class="task"><div class="task-bullet"></div><span>${t}</span></div>`).join('')}</div>
+        <div class="resources-row">${d.resources.map(r=>`<span class="res-pill">📎 ${r}</span>`).join('')}</div>
+        ${d.hasScore?`<div class="score-row"><label>Practice score (%):</label><input type="number" min="0" max="100" placeholder="e.g. 84" value="${score||''}" onchange="logScore(${i},this.value)">${score?`<span class="score-badge ${scoreClass(score)==='ok'?'badge-learn':scoreClass(score)==='warn'?'badge-review':'badge-exam'}">${score}%</span>`:''}</div>`:''}
+        <div class="hours-row"><label>Hours spent today:</label><input type="number" min="0" max="24" step="0.5" placeholder="e.g. 2.5" value="${hrs||''}" onchange="logHours(${i},this.value)"><span style="font-size:11px;color:var(--text3);">hrs</span></div>
+        <button class="complete-btn ${comp?'done':''}" onclick="event.stopPropagation();toggleComplete(${i})">${comp?'✓ Completed':'Mark as complete'}</button>
       </div>
     </div>`;
   }).join('');
-  document.getElementById('manage-modal').classList.add('open');
-}
-function closeManage(e){
-  if(!e||e.target===document.getElementById('manage-modal'))document.getElementById('manage-modal').classList.remove('open');
-}
-function toggleCourse(id){
-  const settings=getSettings();
-  const idx=settings.active.indexOf(id);
-  if(idx>=0)settings.active.splice(idx,1);
-  else settings.active.push(id);
-  saveSettings(settings);
-  const toggle=document.getElementById('toggle-'+id);
-  if(toggle)toggle.classList.toggle('on',settings.active.includes(id));
-  renderHome();
 }
 
-function showTab(name,btn){
+function renderTopics(){
+  document.getElementById('panel-topics').innerHTML=`<div class="topic-grid">${
+    topics.map(t=>{
+      const cov=t.days.filter(d=>state.completed.includes(d)).length;
+      const pct=Math.round((cov/t.days.length)*100);
+      return `<div class="topic-card"><h4>${t.name}</h4><div class="t-bar-bg"><div class="t-bar-fill" style="width:${pct}%;background:${t.color}"></div></div><div class="t-pct">${pct}% covered · ${cov}/${t.days.length} sessions</div></div>`;
+    }).join('')
+  }</div>`;
+}
+
+function saveNote(key,val){
+  state.notes[key]=val;
+  saveState();
+  const indicator=document.getElementById('note-saved-'+key);
+  if(indicator){indicator.style.display='inline';setTimeout(()=>indicator.style.display='none',1500);}
+}
+
+function renderNotes(){
+  const generalNote=state.notes['general']||'';
+  const weekNotes=state.notes['week1']||'';
+  const week2Notes=state.notes['week2']||'';
+  const reflections=state.notes['reflections']||'';
+  document.getElementById('panel-notes').innerHTML=`
+    <div class="notes-wrap">
+      <div class="note-card">
+        <div class="note-card-head"><span>📓 General notes</span><span class="note-saved" id="note-saved-general">Saved ✓</span></div>
+        <textarea placeholder="Anything you want to remember — key concepts, mnemonics, questions to revisit..." oninput="saveNote('general',this.value)">${generalNote}</textarea>
+      </div>
+      <div class="note-card">
+        <div class="note-card-head"><span>📖 Week 1 notes</span><span class="note-saved" id="note-saved-week1">Saved ✓</span></div>
+        <textarea placeholder="Key learnings from Week 1..." oninput="saveNote('week1',this.value)">${weekNotes}</textarea>
+      </div>
+      <div class="note-card">
+        <div class="note-card-head"><span>📖 Week 2 notes</span><span class="note-saved" id="note-saved-week2">Saved ✓</span></div>
+        <textarea placeholder="Key learnings from Week 2..." oninput="saveNote('week2',this.value)">${week2Notes}</textarea>
+      </div>
+      ${days.map((d,i)=>`<div class="note-card">
+        <div class="note-card-head"><span>Day ${i+1}: ${d.title}</span><span class="note-saved" id="note-saved-day${i}">Saved ✓</span></div>
+        <textarea placeholder="Notes, questions, and takeaways for Day ${i+1}..." oninput="saveNote('day${i}',this.value)">${state.notes['day'+i]||''}</textarea>
+      </div>`).join('')}
+      <div class="note-card">
+        <div class="note-card-head"><span>💬 Reflections and lessons learned</span><span class="note-saved" id="note-saved-reflections">Saved ✓</span></div>
+        <textarea style="min-height:140px;" placeholder="What worked? What would you do differently? Advice for someone starting this journey..." oninput="saveNote('reflections',this.value)">${reflections}</textarea>
+      </div>
+    </div>`;
+}
+
+// Flashcards built from day tips + key concepts
+const flashcards=days.map((d,i)=>{return{front:`Day ${i+1} key concept:\n${d.title}`,back:d.tip}});
+
+function renderFlashcards(){
+  document.getElementById('panel-flashcards').innerHTML=`
+    <div class="info-box" style="margin-bottom:1rem;"><strong>How to use:</strong> Click any card to reveal the tip. Use these for spaced repetition — go through them daily until the concepts feel automatic.</div>
+    <div class="flashcard-grid">
+      ${flashcards.map((fc,i)=>`
+        <div class="flashcard" id="fc-${i}" onclick="flipCard(${i})">
+          <div class="fc-front">${fc.front}</div>
+          <div class="fc-back">${fc.back}</div>
+          <span class="fc-hint">tap to reveal</span>
+        </div>`).join('')}
+    </div>
+    <div class="info-box" style="margin-top:1rem;">
+      <strong>🎙 NotebookLM audio flashcards:</strong> Paste your Day notes into NotebookLM (notebooklm.google.com) and ask it to generate an audio podcast summarizing the topic. Works best with your Week 1 and Week 2 notes combined.
+    </div>`;
+}
+
+function flipCard(i){
+  const card=document.getElementById('fc-'+i);
+  card.classList.toggle('flipped');
+  const hint=card.querySelector('.fc-hint');
+  if(hint)hint.style.display=card.classList.contains('flipped')?'none':'block';
+}
+
+let quizCorrect=0,quizAnswered=false;
+function renderQuiz(){
+  const panel=document.getElementById('panel-quiz');
+  if(!quizzes||quizzes.length===0){panel.innerHTML='<div class="info-box">No quiz questions defined yet for this journey.</div>';return;}
+  if(state.quizIndex>=quizzes.length){
+    const pct=Math.round((quizCorrect/quizzes.length)*100);
+    panel.innerHTML=`<div class="quiz-wrap quiz-score-wrap"><div class="quiz-score-big ${pct>=70?'pass':'fail'}">${pct}%</div><div class="quiz-score-label">You got ${quizCorrect} of ${quizzes.length} correct${pct>=70?' — solid grasp of the core concepts!':' — review the topic sections and retake'}</div><button class="retake-btn" onclick="retakeQuiz()">Retake quiz</button></div>`;
+    return;
+  }
+  const q=quizzes[state.quizIndex],prev=state.quizAnswers[state.quizIndex];
+  quizAnswered=prev!==undefined;
+  panel.innerHTML=`<div class="quiz-wrap"><div class="quiz-progress">Question ${state.quizIndex+1} of ${quizzes.length}</div><div class="quiz-q">${q.q}</div>${q.opts.map((o,i)=>`<div class="quiz-opt ${quizAnswered?(i===q.correct?'correct':(i===prev&&prev!==q.correct?'wrong':'')):''}" onclick="answerQuiz(${i})"><span class="opt-letter">${String.fromCharCode(65+i)}</span><span>${o}</span></div>`).join('')}<div class="quiz-exp ${quizAnswered?'show':''}">${q.exp}</div><button class="next-btn" style="display:${quizAnswered?'inline-block':'none'}" onclick="nextQuiz()">Next question →</button></div>`;
+}
+function answerQuiz(i){if(quizAnswered)return;quizAnswered=true;state.quizAnswers[state.quizIndex]=i;if(i===quizzes[state.quizIndex].correct)quizCorrect++;saveState();renderQuiz();}
+function nextQuiz(){state.quizIndex++;saveState();renderQuiz();}
+function retakeQuiz(){state.quizIndex=0;state.quizAnswers={};quizCorrect=0;saveState();renderQuiz();}
+
+function renderAI(){
+  document.getElementById('panel-ai').innerHTML=`
+    <div class="ai-card">
+      <div class="ai-card-head">
+        <div class="ai-icon" style="background:#E8F0FE;">🎙</div>
+        <div><div class="ai-card-title">NotebookLM — Audio Podcast Summary</div><div class="ai-card-sub">Generate a personalized audio briefing of your learning journey</div></div>
+      </div>
+      <div class="ai-card-body">
+        Use Google's NotebookLM to create an audio podcast that summarizes what you're learning. Upload your notes from the Notes tab plus the topic descriptions below as sources, then ask it to generate a podcast episode.
+      </div>
+      <div class="ai-prompt-box">Prompt for NotebookLM Audio:
+"Create a 10-minute podcast episode for a senior engineer studying Professional Scrum Product Owner I. Cover: the most important concepts, common exam traps, and the 3 things they absolutely must know before exam day. Use a conversational tone, reference specific examples."</div>
+      <a class="ai-link-btn" href="https://notebooklm.google.com" target="_blank">→ Open NotebookLM</a>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-head">
+        <div class="ai-icon" style="background:#FEF3E2;">🃏</div>
+        <div><div class="ai-card-title">NotebookLM — AI Flashcards</div><div class="ai-card-sub">Generate a personalized quiz from your notes</div></div>
+      </div>
+      <div class="ai-card-body">
+        Upload your notes to NotebookLM and use the Study Guide feature to auto-generate flashcards and practice questions tailored to your notes.
+      </div>
+      <div class="ai-prompt-box">Prompt for NotebookLM Quiz:
+"Generate 20 flashcard-style Q&A pairs for a senior professional studying Professional Scrum Product Owner I. Focus on: concept distinctions, common misconceptions, and scenario-based questions. Format as: Q: [question] / A: [answer]"</div>
+      <a class="ai-link-btn" href="https://notebooklm.google.com" target="_blank">→ Open NotebookLM</a>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-head">
+        <div class="ai-icon" style="background:#E8F8F2;">💬</div>
+        <div><div class="ai-card-title">Claude — Deep Dive Prompts</div><div class="ai-card-sub">Use Claude to explore difficult concepts and get explanations</div></div>
+      </div>
+      <div class="ai-card-body">Paste these prompts into Claude when you encounter a topic that isn't clicking. These are optimized for senior-level explanations.</div>
+      <div class="ai-prompt-box">Prompt 1 — Explain like I'm a senior engineer:
+"I'm studying Professional Scrum Product Owner I. Explain [TOPIC] to me as if I'm a senior engineer with 5+ years of experience. Skip the basics, focus on nuance, edge cases, and why it matters in practice."
+
+Prompt 2 — Exam scenario:
+"Give me 3 realistic exam scenario questions about [TOPIC] for the Professional Scrum Product Owner I exam, with detailed explanations of why each answer is correct or incorrect."
+
+Prompt 3 — Gap analysis:
+"I just scored [SCORE]% on a practice exam for Professional Scrum Product Owner I. My weak areas are [AREAS]. Give me a focused 2-hour study plan targeting exactly those gaps."</div>
+    </div>`;
+}
+
+function renderExam(){
+  const e=exam;
+  const hasExam=e.questions!==null;
+  document.getElementById('panel-exam').innerHTML=`
+    <div class="exam-grid">
+      <div class="exam-card"><div class="exam-card-label">Cost</div><div class="exam-card-val">${e.cost}</div><div class="exam-card-sub">Scrum.org</div></div>
+      <div class="exam-card"><div class="exam-card-label">Questions</div><div class="exam-card-val">${e.questions||'N/A'}</div><div class="exam-card-sub">question format</div></div>
+      <div class="exam-card"><div class="exam-card-label">Time limit</div><div class="exam-card-val">${e.minutes?e.minutes+' min':'N/A'}</div><div class="exam-card-sub">exam duration</div></div>
+      <div class="exam-card"><div class="exam-card-label">Pass mark</div><div class="exam-card-val" style="font-size:13px;">${e.passScore}</div><div class="exam-card-sub">minimum to pass</div></div>
+    </div>
+    <div class="info-box"><strong>Notes:</strong> ${e.notes}</div>
+    <div class="info-box"><strong>Upgrade path:</strong> After PSPO I → consider PSPO II (advanced scenarios, $250)</div>
+    <div style="margin-top:12px;">
+      <a href="https://www.scrum.org/assessments/professional-scrum-product-owner-i-certification" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:10px 20px;border-radius:var(--radius-sm);background:var(--green);color:#fff;font-weight:500;text-decoration:none;">Register for exam →</a>
+    </div>
+    <div class="info-box" style="margin-top:12px;">
+      <strong>📋 Readiness checklist:</strong><br>
+      Before booking, make sure you:<br>
+      • Completed all ${TOTAL_DAYS} days of the study plan<br>
+      • Scored ${e.passScore} or higher on practice exams<br>
+      • Can explain every topic in the Topics tab without notes<br>
+      • Have written out a cheat sheet from memory and verified it<br>
+      • Are scoring consistently — not just lucky on one attempt
+    </div>`;
+}
+
+function renderResources(){
+  document.getElementById('panel-resources').innerHTML=`
+    <div class="res-section">
+      <div class="res-section-title">📖 Core Reading</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">01</span>
+          <div class="res-link-body"><a href="https://scrumguides.org/scrum-guide.html" target="_blank">Scrum Guide 2020 (PDF + online)</a><div class="res-link-desc">The only authoritative source. Read it 3x minimum.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">02</span>
+          <div class="res-link-body"><a href="https://www.scrum.org/pathway/professional-scrum-product-owner-learning-path" target="_blank">Scrum.org PSPO Learning Path</a><div class="res-link-desc">Official competency map — aligns with exam domains.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">03</span>
+          <div class="res-link-body"><a href="https://www.scrum.org/Resources/Scrum-Glossary" target="_blank">Scrum Glossary</a><div class="res-link-desc">Exact terminology used in exam questions.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">✅ Practice & Assessment</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">04</span>
+          <div class="res-link-body"><a href="https://www.scrum.org/open-assessments/product-owner-open" target="_blank">PSPO Open Assessment (free, Scrum.org)</a><div class="res-link-desc">Free official practice — retake until 100%.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">05</span>
+          <div class="res-link-body"><a href="https://www.scrum.org/open-assessments/scrum-open" target="_blank">Scrum Open Assessment (free, Scrum.org)</a><div class="res-link-desc">Overlaps with PSPO questions on Scrum events and roles.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">06</span>
+          <div class="res-link-body"><a href="https://mlapshin.com/index.php/scrum-quizzes/po-learning-mode/" target="_blank">Mikhail Lapshin PSPO Quiz — Learning Mode</a><div class="res-link-desc">80Q with explanations — best supplemental mock resource.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">07</span>
+          <div class="res-link-body"><a href="https://mlapshin.com/index.php/scrum-quizzes/po-real-mode/" target="_blank">Mikhail Lapshin PSPO Quiz — Real Mode</a><div class="res-link-desc">Timed exam simulation — use for final readiness check.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">08</span>
+          <div class="res-link-body"><a href="https://www.prepforscrum.com/" target="_blank">PrepForScrum mock exams</a><div class="res-link-desc">Different question pool — good for exposing blind spots.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🎓 Exam Registration</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">09</span>
+          <div class="res-link-body"><a href="https://www.scrum.org/assessments/professional-scrum-product-owner-i-certification" target="_blank">Register for PSPO I ($200)</a><div class="res-link-desc">Password never expires. No proctoring. Open-book (no time to look up).</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">10</span>
+          <div class="res-link-body"><a href="https://www.scrum.org/user/login" target="_blank">Scrum.org profile & credentials</a><div class="res-link-desc">Track your certifications and badge sharing.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">⬆ Upgrade Path</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">11</span>
+          <div class="res-link-body"><a href="https://www.scrum.org/assessments/professional-scrum-product-owner-ii-assessment" target="_blank">PSPO II — Advanced ($250)</a><div class="res-link-desc">Next step: advanced scenario questions and stakeholder complexity.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">12</span>
+          <div class="res-link-body"><a href="https://www.scrum.org/assessments/professional-agile-leadership-evidence-based-management-assessment" target="_blank">PAL-EBM — Evidence-Based Management</a><div class="res-link-desc">Complements PSPO with metrics and outcome-driven leadership.</div></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function showPanel(name,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
   if(btn)btn.classList.add('active');
-  if(name==='topics')renderTopicsTable();
-  if(name==='progress')renderProgress();
-  if(name==='about')renderAbout();
+  if(name==='topics')renderTopics();
+  if(name==='notes')renderNotes();
+  if(name==='flashcards')renderFlashcards();
+  if(name==='quiz')renderQuiz();
+  if(name==='ai')renderAI();
+  if(name==='exam')renderExam();
+  if(name==='resources')renderResources();
 }
 
-// Initial render
-renderHome();
-renderAbout();
+function renderAll(){
+  updateStats();
+  renderSchedule();
+  broadcastStatus();
+}
+
+loadState();
+renderAll();
 </script>
+
+<!-- Notes-to-Markdown sync -->
+<script src="../../notes-sync.js"></script>
 </body>
 </html>

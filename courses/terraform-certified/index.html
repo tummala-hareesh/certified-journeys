@@ -190,6 +190,18 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   .course-hero-top{flex-direction:column;}
   .tab{font-size:11px;padding:6px 8px;}
 }
+
+/* Resources panel */
+.res-section{margin-bottom:1.25rem;}
+.res-section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;padding-bottom:6px;border-bottom:.5px solid var(--border);}
+.res-link-list{display:flex;flex-direction:column;gap:0;}
+.res-link-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:.5px solid var(--border);}
+.res-link-item:last-child{border-bottom:none;}
+.res-link-index{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);min-width:24px;padding-top:2px;}
+.res-link-body{flex:1;min-width:0;}
+.res-link-body a{font-size:13px;font-weight:500;color:var(--blue-dark);text-decoration:none;}
+.res-link-body a:hover{text-decoration:underline;}
+.res-link-desc{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -246,6 +258,7 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   <button class="tab" onclick="showPanel('flashcards',this)">🃏 Flashcards</button>
   <button class="tab" onclick="showPanel('quiz',this)">✅ Quiz</button>
   <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
+  <button class="tab" onclick="showPanel('resources',this)">🔗 Resources</button>
   <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
 </div>
 
@@ -256,6 +269,7 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 <div id="panel-quiz" class="panel"></div>
 <div id="panel-ai" class="panel"></div>
 <div id="panel-exam" class="panel"></div>
+<div id="panel-resources" class="panel"></div>
 
 <div class="page-footer">Progress saved locally · <span id="sk-display">cj_terraform-certified_v1</span> · No account needed · <a href="../../index.html">← All journeys</a></div>
 </div>
@@ -510,6 +524,88 @@ function renderExam(){
     </div>`;
 }
 
+function renderResources(){
+  document.getElementById('panel-resources').innerHTML=`
+    <div class="res-section">
+      <div class="res-section-title">📖 Core Reading</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">01</span>
+          <div class="res-link-body"><a href="https://developer.hashicorp.com/terraform/docs" target="_blank">HashiCorp Terraform documentation</a><div class="res-link-desc">The only authoritative source — state, providers, modules, workspaces.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">02</span>
+          <div class="res-link-body"><a href="https://developer.hashicorp.com/certifications/infrastructure-automation" target="_blank">Terraform Associate (003) exam guide</a><div class="res-link-desc">Official objectives — study guide tied directly to domains.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">03</span>
+          <div class="res-link-body"><a href="https://registry.terraform.io/" target="_blank">Terraform Registry</a><div class="res-link-desc">Providers and modules — understand how the registry works.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">04</span>
+          <div class="res-link-body"><a href="https://github.com/hashicorp/terraform" target="_blank">HashiCorp Terraform GitHub</a><div class="res-link-desc">Source code, issues, and community discussions.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">✅ Practice & Assessment</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">05</span>
+          <div class="res-link-body"><a href="https://developer.hashicorp.com/certifications/infrastructure-automation" target="_blank">HashiCorp free practice exam</a><div class="res-link-desc">Official sample questions — always start here.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">06</span>
+          <div class="res-link-body"><a href="https://www.udemy.com/course/terraform-associate-practice-exam/" target="_blank">Bryan Krausen Terraform Associate practice (Udemy)</a><div class="res-link-desc">Most popular third-party practice exam — high accuracy.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">07</span>
+          <div class="res-link-body"><a href="https://www.whizlabs.com/hashicorp-certified-terraform-associate/" target="_blank">Whizlabs Terraform Associate</a><div class="res-link-desc">Large question bank — good coverage of edge cases.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🔧 Hands-On Resources</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">08</span>
+          <div class="res-link-body"><a href="https://developer.hashicorp.com/terraform/tutorials" target="_blank">HashiCorp Learn — Terraform tutorials</a><div class="res-link-desc">Official hands-on tutorials — categorized by provider and use case.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">09</span>
+          <div class="res-link-body"><a href="https://registry.terraform.io/providers/hashicorp/aws/latest/docs" target="_blank">Terraform AWS provider docs</a><div class="res-link-desc">Most commonly referenced provider in exam scenarios.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">10</span>
+          <div class="res-link-body"><a href="https://app.terraform.io/" target="_blank">Terraform Cloud free tier</a><div class="res-link-desc">Practice remote state, workspaces, and Sentinel policies.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🎓 Exam Registration</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">11</span>
+          <div class="res-link-body"><a href="https://developer.hashicorp.com/certifications/infrastructure-automation" target="_blank">Register for Terraform Associate 003 ($70)</a><div class="res-link-desc">Pearson VUE — online or in-person. 57Q, 60 min. Retake after 2 weeks.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">⬆ Upgrade Path</div>
+      <div class="res-link-list">
+        <div class="res-link-item">
+          <span class="res-link-index">12</span>
+          <div class="res-link-body"><a href="https://www.hashicorp.com/certification/terraform-associate" target="_blank">HashiCorp Terraform Professional</a><div class="res-link-desc">Hands-on lab exam — advanced modules, Sentinel, Terraform Cloud.</div></div>
+        </div>
+        <div class="res-link-item">
+          <span class="res-link-index">13</span>
+          <div class="res-link-body"><a href="https://aws.amazon.com/certification/certified-solutions-architect-associate/" target="_blank">AWS Solutions Architect Associate</a><div class="res-link-desc">Natural complement — IaC expertise + cloud architecture knowledge.</div></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function showPanel(name,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -521,6 +617,7 @@ function showPanel(name,btn){
   if(name==='quiz')renderQuiz();
   if(name==='ai')renderAI();
   if(name==='exam')renderExam();
+  if(name==='resources')renderResources();
 }
 
 function renderAll(){
@@ -532,5 +629,8 @@ function renderAll(){
 loadState();
 renderAll();
 </script>
+
+<!-- Notes-to-Markdown sync -->
+<script src="../../notes-sync.js"></script>
 </body>
 </html>
