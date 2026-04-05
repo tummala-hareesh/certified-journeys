@@ -365,21 +365,59 @@ renderAll();
 
 ### Format
 
-Valid nbformat 4 JSON. All cells must use the standard structure:
+Valid **nbformat 4.5** JSON. The top-level structure must be:
 
 ```json
 {
-  "cell_type": "markdown" | "code",
+  "nbformat": 4,
+  "nbformat_minor": 5,
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python",
+      "version": "3.10.0"
+    },
+    "colab": {
+      "provenance": []
+    }
+  },
+  "cells": [ ... ]
+}
+```
+
+> **`language_info` is required.** Without it, VS Code and JupyterLab cannot identify the kernel and will refuse to load the notebook.
+
+Every **markdown cell** must use this exact structure:
+
+```json
+{
+  "cell_type": "markdown",
+  "id": "a1b2c3d4",
   "metadata": {},
   "source": ["line 1\n", "line 2\n"]
 }
 ```
 
-For code cells also include:
+Every **code cell** must use this exact structure:
+
 ```json
-"execution_count": null,
-"outputs": []
+{
+  "cell_type": "code",
+  "id": "e5f6a7b8",
+  "metadata": {},
+  "execution_count": null,
+  "outputs": [],
+  "source": ["line 1\n", "line 2\n"]
+}
 ```
+
+> **`id` is required on every cell** (nbformat 4.5 spec). Use a unique 8-character hex string per cell (e.g. `uuid.uuid4().hex[:8]`). Missing `id` fields cause VS Code and Colab to refuse to open the notebook with "error loading this notebook".
+
+> **`outputs` and `execution_count` are required on every code cell**, even when empty/null. Omitting them also causes load errors in some Jupyter environments.
 
 ### Required cell sequence (every notebook must follow this order)
 
@@ -474,6 +512,10 @@ For the final day (capstone), replace "What's next" with a completion message an
 - [ ] Dark mode CSS variables are set
 
 **Notebooks**
+- [ ] `nbformat: 4`, `nbformat_minor: 5` at the top level
+- [ ] `metadata.language_info.name` is `"python"` — required for VS Code / JupyterLab kernel detection
+- [ ] Every cell has a unique `"id"` field (8-char hex) — required by nbformat 4.5; missing ids cause "error loading this notebook"
+- [ ] Every code cell has `"outputs": []` and `"execution_count": null` — required even when empty
 - [ ] Every notebook has the Colab badge with the correct GitHub URL
 - [ ] Every notebook ends with a link back to `../index.html`
 - [ ] Notebook filenames match `NOTEBOOKS` array in `index.html` exactly
@@ -508,4 +550,4 @@ Output each file preceded by a markdown header:
 
 ---
 
-*certified-journeys prompt template v1 · generated for the dlt-certified course pattern*
+*certified-journeys prompt template v2 · updated after dlt-certified notebook load fix (cell id, language_info, code cell fields)*
