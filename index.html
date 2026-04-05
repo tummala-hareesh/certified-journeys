@@ -44,52 +44,97 @@ a:hover { text-decoration: underline; }
 /* Nav */
 nav {
   position: sticky; top: 0; z-index: 10;
-  background: var(--surface);
+  background: rgba(255,255,255,0.85);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+@media (prefers-color-scheme: dark) {
+  nav { background: rgba(26,26,26,0.85); }
 }
 .nav-inner {
   max-width: 1060px; margin: 0 auto; padding: 0 1.5rem;
-  display: flex; align-items: center; justify-content: space-between; height: 52px;
+  display: flex; align-items: center; justify-content: space-between; height: 56px;
 }
 .nav-brand {
-  display: flex; align-items: center; gap: 8px;
-  font-weight: 600; font-size: 14px; color: var(--text); text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700; font-size: 15px; letter-spacing: -0.025em;
+  color: var(--text); text-decoration: none;
 }
-.brand-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+.nav-brand:hover { text-decoration: none; opacity: 0.85; }
+.brand-mark {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--green); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.01em; flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(22,163,127,0.35);
+}
+.nav-right { display: flex; align-items: center; gap: 8px; }
 .nav-gh {
-  font-size: 12px; padding: 5px 14px; border-radius: 99px;
+  font-size: 12px; padding: 6px 14px; border-radius: 99px;
   border: 1px solid var(--border2); color: var(--text2);
   display: flex; align-items: center; gap: 5px; transition: all 0.15s;
-  text-decoration: none;
+  text-decoration: none; font-weight: 500;
 }
 .nav-gh:hover { background: var(--surface2); color: var(--text); text-decoration: none; }
 
 /* Layout */
-.page { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; }
+.page { max-width: 1060px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
 
-/* Hero */
-.hero { margin-bottom: 2.5rem; }
-.hero h1 { font-size: 30px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 10px; }
+/* Hero banner */
+.hero {
+  position: relative; overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem 2.5rem 2rem;
+  margin-bottom: 2rem;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(22,163,127,0.10) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: -40px; left: 30%;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(22,163,127,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; color: var(--green);
+  background: var(--green-dim); padding: 4px 12px; border-radius: 99px;
+  margin-bottom: 1.1rem; letter-spacing: 0.04em; text-transform: uppercase;
+  border: 1px solid rgba(22,163,127,0.2);
+}
+.hero h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.18; margin-bottom: 12px; }
 .hero h1 em { font-style: normal; color: var(--green); }
-.hero p { font-size: 14px; color: var(--text2); max-width: 500px; line-height: 1.75; margin-bottom: 1.25rem; }
+.hero p { font-size: 14px; color: var(--text2); max-width: 520px; line-height: 1.75; margin-bottom: 1.5rem; }
 .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .btn {
-  font-size: 13px; padding: 8px 18px; border-radius: 99px; border: none;
+  font-size: 13px; padding: 9px 20px; border-radius: 99px; border: none;
   cursor: pointer; font-family: inherit; font-weight: 500;
   display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s;
   text-decoration: none;
 }
-.btn-primary { background: var(--green); color: #fff; }
-.btn-primary:hover { opacity: 0.88; text-decoration: none; }
+.btn-primary { background: var(--green); color: #fff; box-shadow: 0 1px 6px rgba(22,163,127,0.3); }
+.btn-primary:hover { opacity: 0.88; text-decoration: none; transform: translateY(-1px); }
 .btn-ghost { background: none; border: 1px solid var(--border2); color: var(--text2); }
 .btn-ghost:hover { background: var(--surface2); color: var(--text); text-decoration: none; }
 
 /* Stats row */
-.stats-row { display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
-.stat { display: flex; flex-direction: column; }
+.stats-row {
+  display: flex; gap: 0; margin-top: 2rem; flex-wrap: wrap;
+  border-top: 1px solid var(--border); padding-top: 1.5rem;
+}
+.stat { display: flex; flex-direction: column; padding-right: 2rem; }
+.stat + .stat { padding-left: 2rem; border-left: 1px solid var(--border); }
 .stat-val { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', monospace; letter-spacing: -0.02em; }
-.stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; }
+.stat-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
 
 /* Grid */
 .grid-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
@@ -153,16 +198,19 @@ nav {
 <nav>
   <div class="nav-inner">
     <a class="nav-brand" href="#">
-      <div class="brand-dot"></div>
+      <div class="brand-mark">CJ</div>
       certified-journeys
     </a>
-    <a class="nav-gh" href="https://github.com/certified-journeys" target="_blank">⭐ GitHub</a>
+    <div class="nav-right">
+      <a class="nav-gh" href="https://github.com/certified-journeys" target="_blank">⭐ GitHub</a>
+    </div>
   </div>
 </nav>
 
 <div class="page">
 
   <div class="hero">
+    <span class="hero-eyebrow">✦ Open-source · Free · No sign-up</span>
     <h1>Learn in public.<br><em>Build your edge.</em></h1>
     <p>Free, open-source certification trackers for engineers. Structured daily plans — no fluff, no paywalls, no sign-ups. Fork any repo and make it yours.</p>
     <div class="hero-actions">
