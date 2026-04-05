@@ -106,7 +106,7 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 .task-list{margin-bottom:.75rem;}
 .task{display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:13px;color:var(--text2);border-bottom:.5px solid var(--border);line-height:1.5;}
 .task:last-child{border-bottom:none;}
-.task-bullet{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:6px;}
+.task-tick{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:2px;background:none;padding:0;}.task-tick:hover{border-color:var(--green);}.task-tick.ticked{background:var(--green);border-color:var(--green);}.task-tick.ticked::after{content:"✓";font-size:10px;color:#fff;font-weight:700;line-height:1;}.task.task-done>span{text-decoration:line-through;color:var(--text3);}.task-progress{height:3px;border-radius:99px;background:var(--surface2);margin-bottom:8px;overflow:hidden;}.task-progress-fill{height:100%;background:var(--green);border-radius:99px;transition:width .3s;}
 .resources-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
 .res-pill{font-size:11px;padding:4px 11px;border-radius:99px;background:var(--surface2);border:.5px solid var(--border);color:var(--text2);}a.res-pill{text-decoration:none;cursor:pointer;}a.res-pill:hover{background:var(--surface3);border-color:var(--border2);color:var(--text);}.task-link{color:var(--blue-dark);font-size:11px;margin-left:6px;flex-shrink:0;opacity:0.7;line-height:1.5;}.task-link:hover{opacity:1;text-decoration:none;}
 .score-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
@@ -241,7 +241,7 @@ const days=[{"title":"Scrum Guide deep read #1","badge":"learn","sub":"Week 1 ·
 const topics=[{"name": "Product Owner accountabilities", "color": "#1D9E75", "days": [2, 3, 7, 10]}, {"name": "Product Backlog management", "color": "#378ADD", "days": [3, 6, 11]}, {"name": "Product Goal and vision", "color": "#BA7517", "days": [5, 9, 10]}, {"name": "Scrum events and timeboxes", "color": "#D85A30", "days": [4, 8, 10]}, {"name": "Stakeholder management", "color": "#7F77DD", "days": [7, 9, 11]}, {"name": "Forecasting and release", "color": "#0F6E56", "days": [5, 8, 12]}, {"name": "Scrum values and empiricism", "color": "#639922", "days": [1, 9, 10, 11]}, {"name": "Business strategy and value", "color": "#993C1D", "days": [5, 7, 12]}];
 const exam={"questions": 80, "minutes": 60, "passScore": "85% (68/80)", "cost": "$200", "provider": "Scrum.org", "link": "https://www.scrum.org/assessments", "notes": "Password never expires. Open-book but no time to look things up. Taken online, no proctoring."};
 
-let state={completed:[],scores:{},hours:{},completedAt:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
+let state={completed:[],scores:{},hours:{},completedAt:{},tasksDone:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
 
 function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)state={...state,...JSON.parse(s)};}catch(e){}}
 function saveState(){
@@ -288,7 +288,18 @@ function goToDay(i){
     if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
   },50);
 }
-function renderTask(t){if(typeof t==='string')return`<div class="task"><div class="task-bullet"></div><span>${t}</span></div>`;return`<div class="task"><div class="task-bullet"></div><span>${t.text}</span>${t.url?`<a class="task-link" href="${t.url}" target="_blank" rel="noopener">↗</a>`:''}</div>`;}
+function renderTask(t,di,ti){const done=(state.tasksDone[di]||[]).includes(ti);const text=typeof t==='string'?t:t.text;const link=(typeof t==='object'&&t.url)?`<a class="task-link" href="${t.url}" target="_blank" rel="noopener">↗</a>`:'';return`<div class="task${done?' task-done':''}"><button class="task-tick${done?' ticked':''}" onclick="event.stopPropagation();tickTask(${di},${ti})"></button><span>${text}</span>${link}</div>`;}
+
+function tickTask(di,ti){
+  const arr=state.tasksDone[di]||(state.tasksDone[di]=[]);
+  const idx=arr.indexOf(ti);
+  if(idx===-1)arr.push(ti);else arr.splice(idx,1);
+  const total=days[di].tasks.length;
+  const done=arr.length;
+  if(done===total&&!isCompleted(di)){toggleComplete(di);return;}
+  if(done<total&&isCompleted(di)){state.completed=state.completed.filter(x=>x!==di);delete state.completedAt[di];}
+  saveState();renderSchedule();
+}
 function renderRes(r){if(typeof r==='string')return`<span class="res-pill">📎 ${r}</span>`;return r.url?`<a class="res-pill" href="${r.url}" target="_blank" rel="noopener">📎 ${r.text}</a>`:`<span class="res-pill">📎 ${r.text}</span>`;}
 
 function updateStats(){
@@ -326,7 +337,8 @@ function renderSchedule(){
 <div class="nb-row"><a class="nb-btn" href="https://github.com/certified-journeys/certified-journeys.github.io/edit/main/courses/${COURSE_ID}/notes/day-${String(i+1).padStart(2,'0')}.md" target="_blank">📝 notes/day-${String(i+1).padStart(2,'0')}.md</a></div>
         <div class="tip-box"><p><strong>💡 Tip:</strong> ${d.tip}</p></div>
         ${(dayTopics[i]||[]).length?`<div class="day-topic-pills">${(dayTopics[i]||[]).map(t=>`<span class="day-topic-pill" style="background:${t.color}18;color:${t.color};border-color:${t.color}40" onclick="event.stopPropagation();showPanel('topics',document.querySelectorAll('.tab')[1])" title="View topic in Topics tab">${t.name}</span>`).join('')}</div>`:''}
-        <div class="task-list">${d.tasks.map(renderTask).join('')}</div>
+        ${(()=>{const tot=d.tasks.length;const done=(state.tasksDone[i]||[]).length;return tot?`<div class="task-progress"><div class="task-progress-fill" style="width:${Math.round(done/tot*100)}%"></div></div>`:''})()}
+        <div class="task-list">${d.tasks.map((t,j)=>renderTask(t,i,j)).join('')}</div>
         <div class="resources-row">${d.resources.map(renderRes).join('')}</div>
         ${d.hasScore?`<div class="score-row"><label>Practice score (%):</label><input type="number" min="0" max="100" placeholder="e.g. 84" value="${score||''}" onchange="logScore(${i},this.value)">${score?`<span class="score-badge ${scoreClass(score)==='ok'?'badge-learn':scoreClass(score)==='warn'?'badge-review':'badge-exam'}">${score}%</span>`:''}</div>`:''}
         <div class="hours-row"><label>Hours spent today:</label><input type="number" min="0" max="24" step="0.5" placeholder="e.g. 2.5" value="${hrs||''}" onchange="logHours(${i},this.value)"><span style="font-size:11px;color:var(--text3);">hrs</span></div>
