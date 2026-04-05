@@ -129,34 +129,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 .note-card textarea{width:100%;min-height:100px;font-size:13px;line-height:1.7;padding:.7rem .9rem;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;resize:vertical;}
 .note-card textarea:focus{outline:none;border-color:var(--green);background:var(--surface);}
 .note-saved{font-size:11px;color:var(--green);display:none;}
-/* Quiz */
-.quiz-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;}
-.quiz-progress{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:1rem;}
-.quiz-q{font-size:15px;font-weight:500;color:var(--text);line-height:1.6;margin-bottom:1.25rem;}
-.quiz-opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;line-height:1.5;}
-.quiz-opt:hover{border-color:var(--border2);color:var(--text);background:var(--surface2);}
-.quiz-opt.correct{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
-.quiz-opt.wrong{background:var(--coral-light);border-color:var(--coral);color:var(--coral-dark);}
-.opt-letter{font-weight:600;min-width:18px;font-family:'DM Mono',monospace;font-size:12px;margin-top:1px;}
-.quiz-exp{margin-top:1rem;padding:1rem;background:var(--surface2);border-radius:var(--radius-sm);font-size:13px;color:var(--text2);line-height:1.7;display:none;border-left:3px solid var(--green);}
-.quiz-exp.show{display:block;}
-.quiz-exp strong{color:var(--text);font-weight:500;}
-.next-btn{font-size:13px;padding:8px 18px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;margin-top:1rem;}
-.next-btn:hover{background:var(--surface2);}
-.quiz-score-wrap{text-align:center;padding:2rem 0;}
-.quiz-score-big{font-size:48px;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:-.03em;}
-.quiz-score-big.pass{color:var(--green);} .quiz-score-big.fail{color:var(--coral);}
-.quiz-score-label{font-size:14px;color:var(--text2);margin-top:6px;}
-.retake-btn{margin-top:1.25rem;font-size:13px;padding:9px 20px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;}
-/* Flashcards */
-.flashcard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
-.flashcard{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;cursor:pointer;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center;transition:all .2s;position:relative;}
-.flashcard:hover{box-shadow:var(--shadow-md);border-color:var(--border2);}
-.fc-front{font-size:13px;font-weight:500;color:var(--text);line-height:1.5;}
-.fc-back{font-size:12px;color:var(--green-dark);background:var(--green-light);border-radius:var(--radius-sm);padding:.7rem;display:none;width:100%;line-height:1.6;}
-.flashcard.flipped .fc-front{display:none;}
-.flashcard.flipped .fc-back{display:block;}
-.fc-hint{font-size:10px;color:var(--text3);position:absolute;bottom:8px;right:10px;}
 /* Exam prep */
 .exam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
 .exam-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;}
@@ -186,7 +158,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   .stats-grid{grid-template-columns:repeat(2,1fr);}
   .topic-grid{grid-template-columns:1fr;}
   .exam-grid{grid-template-columns:1fr;}
-  .flashcard-grid{grid-template-columns:1fr;}
   .course-hero-top{flex-direction:column;}
   .tab{font-size:11px;padding:6px 8px;}
 }
@@ -255,8 +226,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   <button class="tab active" onclick="showPanel('schedule',this)">📅 Daily Plan</button>
   <button class="tab" onclick="showPanel('topics',this)">📚 Topics</button>
   <button class="tab" onclick="showPanel('notes',this)">📝 Notes</button>
-  <button class="tab" onclick="showPanel('flashcards',this)">🃏 Flashcards</button>
-  <button class="tab" onclick="showPanel('quiz',this)">✅ Quiz</button>
   <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
   <button class="tab" onclick="showPanel('resources',this)">🔗 Resources</button>
   <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
@@ -265,8 +234,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 <div id="panel-schedule" class="panel active"></div>
 <div id="panel-topics" class="panel"></div>
 <div id="panel-notes" class="panel"></div>
-<div id="panel-flashcards" class="panel"></div>
-<div id="panel-quiz" class="panel"></div>
 <div id="panel-ai" class="panel"></div>
 <div id="panel-exam" class="panel"></div>
 <div id="panel-resources" class="panel"></div>
@@ -280,10 +247,9 @@ const STORAGE_KEY='cj_powerbi-certified_v1';
 const TOTAL_DAYS=14;
 const days=[{"title": "Power BI ecosystem and exam overview", "badge": "learn", "sub": "Week 1 \u00b7 Foundation", "tasks": ["Study exam domains: Prepare data 25%, Model data 30%, Visualize 20%, Analyze 15%, Deploy 10%", "Install Power BI Desktop (free) and Power BI Service account", "Watch the Microsoft PL-300 exam overview video", "Complete the Microsoft Learn PL-300 learning path overview"], "resources": ["learn.microsoft.com/certifications/power-bi-data-analyst", "Power BI Desktop download (powerbi.microsoft.com)"], "tip": "Modeling is 30% of the exam. Invest most time in DAX and data model design \u2014 it pays the highest returns.", "hasScore": false}, {"title": "Data connectivity and Power Query", "badge": "learn", "sub": "Week 1 \u00b7 Get Data", "tasks": ["Connect to Excel, SQL, CSV, SharePoint, and REST APIs", "Study Power Query M language basics", "Data transformation: split, merge, unpivot, custom columns", "Query folding: understanding when transformations run in source"], "resources": ["Power Query docs (learn.microsoft.com)", "Power Query M language reference"], "tip": "Query folding is frequently tested. Know which transformations fold and which break folding.", "hasScore": false}, {"title": "Data model design \u2014 star schema mastery", "badge": "learn", "sub": "Week 1 \u00b7 Model", "tasks": ["Build a star schema: fact tables and dimension tables", "Study cardinality: one-to-many, many-to-many, one-to-one", "Understand bidirectional cross-filtering \u2014 when to use and avoid", "Create a date dimension table using CALENDARAUTO() or CALENDAR()"], "resources": ["Microsoft data modeling docs", "SQLBI \u2014 star schema best practices"], "tip": "The PL-300 exam consistently tests star schema vs flat table design. Always normalize into a proper star schema.", "hasScore": false}, {"title": "DAX fundamentals \u2014 calculated columns vs measures", "badge": "learn", "sub": "Week 1 \u00b7 DAX", "tasks": ["Understand evaluation context: row context vs filter context", "Calculated columns: computed at refresh time, stored in model", "Measures: computed at query time, respect visual filters", "Practice: SUM, COUNT, AVERAGE, DIVIDE, IF, SWITCH basics"], "resources": ["DAX Guide (dax.guide)", "SQLBI \u2014 DAX Patterns book (free online)"], "tip": "Calculated columns expand model size. Measures do not. Always prefer measures for aggregations.", "hasScore": false}, {"title": "DAX advanced \u2014 CALCULATE, FILTER, ALL", "badge": "learn", "sub": "Week 1 \u00b7 Advanced DAX", "tasks": ["CALCULATE: modifying filter context \u2014 the most important DAX function", "ALL, ALLEXCEPT, ALLSELECTED \u2014 context manipulation", "Time intelligence: TOTALYTD, DATEADD, SAMEPERIODLASTYEAR", "RANKX, TOPN, HASONEVALUE for advanced scenarios"], "resources": ["SQLBI \u2014 Understanding CALCULATE", "DAX Patterns: time intelligence (daxpatterns.com)"], "tip": "CALCULATE is on almost every PL-300 exam. Know exactly what it does to the filter context.", "hasScore": true}, {"title": "Relationships, role-playing dimensions and security", "badge": "learn", "sub": "Week 2 \u00b7 Relationships", "tasks": ["Active vs inactive relationships \u2014 USERELATIONSHIP", "Role-playing dimensions: multiple date roles in one date table", "Row-Level Security (RLS): static and dynamic security rules", "Object-Level Security (OLS) in Power BI Premium"], "resources": ["Power BI RLS docs", "SQLBI \u2014 role-playing dimensions guide"], "tip": "RLS is frequently tested. Know the difference between static RLS (fixed roles) and dynamic RLS (USERNAME()).", "hasScore": false}, {"title": "Visualizations \u2014 choosing the right visual", "badge": "learn", "sub": "Week 2 \u00b7 Visuals", "tasks": ["Know when to use: bar, column, line, scatter, map, matrix, card", "Conditional formatting: rules, color scale, data bars", "Drill-through and cross-filtering between visuals", "Tooltips: default, report page tooltips, and custom tooltips"], "resources": ["Power BI visualization docs", "Microsoft PL-300 visualization module (Learn)"], "tip": "The exam has scenario questions: 'which visual best shows X?' Know the specific use case for each visual type.", "hasScore": false}, {"title": "Power BI Service \u2014 workspaces and apps", "badge": "learn", "sub": "Week 2 \u00b7 Service", "tasks": ["Publish a report from Desktop to Service", "Workspaces: personal, shared, Premium \u2014 know the differences", "Apps: package and distribute to a large audience", "Dataflows: self-service ETL in Power BI Service"], "resources": ["Power BI Service docs", "Microsoft Learn \u2014 Deploy and maintain deliverables module"], "tip": "Know the difference between a workspace and an app. Apps are for distribution; workspaces are for collaboration.", "hasScore": false}, {"title": "Mock exam #1 + gap analysis", "badge": "practice", "sub": "Week 2 \u00b7 Assessment", "tasks": ["Take a 60-question PL-300 practice exam", "Target score: 75%+", "Flag all DAX and deployment questions", "Review Microsoft Learn modules for flagged areas"], "resources": ["MeasureUp PL-300 practice exam", "Whizlabs PL-300 practice tests"], "tip": "Microsoft Learn has free practice assessments. Use them \u2014 they closely mirror the actual exam style.", "hasScore": true}, {"title": "Power BI dataflows, datasets and semantic models", "badge": "learn", "sub": "Week 2 \u00b7 Data Architecture", "tasks": ["Dataflows: reusable Power Query transformations across workspaces", "Shared datasets: one source of truth for multiple reports", "Study DirectQuery vs Import vs Dual storage modes", "Composite models: combine DirectQuery and Import in one model"], "resources": ["Power BI dataflows docs", "Power BI storage modes comparison"], "tip": "Storage mode is heavily tested. Know the tradeoffs: Import (fast, stale), DirectQuery (live, slow), Dual (best of both).", "hasScore": false}, {"title": "Power BI governance, deployment pipelines and Premium", "badge": "learn", "sub": "Week 2 \u00b7 Governance", "tasks": ["Deployment pipelines: dev \u2192 test \u2192 prod promotion", "Power BI Premium vs Pro \u2014 feature differences", "Sensitivity labels and Microsoft Purview integration", "Endorsement: certified vs promoted datasets"], "resources": ["Power BI deployment pipelines docs", "Power BI Premium docs"], "tip": "Deployment pipelines are frequently tested. Know each stage and what can be customized between stages.", "hasScore": false}, {"title": "Performance optimization and troubleshooting", "badge": "learn", "sub": "Week 2 \u00b7 Performance", "tasks": ["Use Performance Analyzer to find slow visuals", "DAX Studio for query profiling (free tool)", "Study common DAX anti-patterns: many calculated columns, FILTER(ALL())", "Report optimization: reduce visuals per page, use bookmarks intelligently"], "resources": ["DAX Studio download (daxstudio.org)", "SQLBI \u2014 optimize DAX models"], "tip": "Performance Analyzer is built into Power BI Desktop. Use it to identify which DAX queries are slowest.", "hasScore": false}, {"title": "Final mock exam + readiness check", "badge": "exam", "sub": "Week 2 \u00b7 Exam", "tasks": ["Take a second full timed practice exam", "Must score 80%+ before booking", "Book exam: $165 USD at Pearson VUE or online proctored", "Exam: 60 questions, 120 minutes, 70% to pass (~42/60)"], "resources": ["Microsoft certification portal (learn.microsoft.com)", "Pearson VUE \u2014 online proctoring options"], "tip": "Microsoft exams have case studies \u2014 longer scenarios with multiple questions. Practice reading them efficiently.", "hasScore": true}, {"title": "Exam day prep + final review", "badge": "exam", "sub": "Week 2 \u00b7 Final", "tasks": ["Final review: DAX CALCULATE, RLS, storage modes, deployment pipelines", "Review your DAX cheat sheet one more time", "Know the exam format: ~60 questions, 120 min, case studies included", "Rest. Your Power BI knowledge is solid."], "resources": ["Your personal cheat sheet", "Microsoft PL-300 skills measured document"], "tip": "Read each question carefully \u2014 Microsoft exams often test the 'best' answer, not just a correct one.", "hasScore": false}];
 const topics=[{"name": "Power Query & M", "color": "#D85A30", "days": [1, 2]}, {"name": "Data Modeling & Star Schema", "color": "#1D9E75", "days": [2, 5, 9]}, {"name": "DAX \u2014 Core", "color": "#378ADD", "days": [3, 4, 11]}, {"name": "Visualizations", "color": "#BA7517", "days": [6, 7]}, {"name": "Service & Deployment", "color": "#7F77DD", "days": [7, 8, 10]}, {"name": "Governance & Security", "color": "#E8890C", "days": [5, 10, 11]}];
-const quizzes=[{"q": "What is the key difference between a calculated column and a measure in DAX?", "opts": ["Calculated columns are faster", "Calculated columns are stored in the model; measures are computed at query time", "Measures cannot use CALCULATE", "Calculated columns cannot reference other tables"], "correct": 1, "exp": "<strong>Calculated columns</strong> are computed at refresh and stored in the model (increasing size). <strong>Measures</strong> are computed at query time and respect visual context."}, {"q": "What does CALCULATE do to the filter context?", "opts": ["Ignores all existing filters", "Adds, modifies, or removes filter context and evaluates an expression", "Calculates only for the current row", "Removes filter context permanently"], "correct": 1, "exp": "<strong>CALCULATE</strong> modifies the filter context \u2014 it can add new filters, override existing ones, or remove them using ALL()."}, {"q": "Which storage mode combines DirectQuery and Import in one model?", "opts": ["Dual mode", "Composite model", "Pass-through", "Mixed mode"], "correct": 1, "exp": "A <strong>Composite model</strong> allows tables to use different storage modes \u2014 some Import (fast), some DirectQuery (live)."}, {"q": "How do you implement dynamic Row-Level Security in Power BI?", "opts": ["Use USERNAME() in the RLS DAX filter", "Use a static role with hardcoded usernames", "Apply sensitivity labels to the dataset", "Configure workspace roles"], "correct": 0, "exp": "<strong>Dynamic RLS</strong> uses <strong>USERNAME()</strong> or USERPRINCIPALNAME() in the DAX filter to match the logged-in user to a security table."}, {"q": "What is query folding in Power Query?", "opts": ["Merging multiple queries into one", "Pushing transformation steps to the data source as native queries", "Caching query results in memory", "Collapsing all steps into a single M expression"], "correct": 1, "exp": "<strong>Query folding</strong> means Power Query pushes transformation steps to the source (e.g., SQL) for better performance."}];
 const exam={"questions": 60, "minutes": 120, "passScore": "70% (700/1000)", "cost": "$165", "provider": "Pearson VUE / Microsoft", "link": "https://learn.microsoft.com/certifications", "notes": "Includes case study questions. Online proctored or in-person. Microsoft has a free retake policy after purchase."};
 
-let state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
+let state={completed:[],scores:{},hours:{},completedAt:{},notes:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
 
 function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)state={...state,...JSON.parse(s)};}catch(e){}}
 function saveState(){
@@ -300,8 +266,7 @@ function broadcastStatus(){
 }
 function resetAll(){
   if(!confirm('Reset all progress? This cannot be undone.'))return;
-  state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
-  quizCorrect=0;
+  state={completed:[],scores:{},hours:{},completedAt:{},notes:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
   saveState();renderAll();
 }
 function isCompleted(i){return state.completed.includes(i);}
@@ -411,49 +376,6 @@ function renderNotes(){
       </div>
     </div>`;
 }
-
-// Flashcards built from day tips + key concepts
-const flashcards=days.map((d,i)=>{return{front:`Day ${i+1} key concept:\n${d.title}`,back:d.tip}});
-
-function renderFlashcards(){
-  document.getElementById('panel-flashcards').innerHTML=`
-    <div class="info-box" style="margin-bottom:1rem;"><strong>How to use:</strong> Click any card to reveal the tip. Use these for spaced repetition — go through them daily until the concepts feel automatic.</div>
-    <div class="flashcard-grid">
-      ${flashcards.map((fc,i)=>`
-        <div class="flashcard" id="fc-${i}" onclick="flipCard(${i})">
-          <div class="fc-front">${fc.front}</div>
-          <div class="fc-back">${fc.back}</div>
-          <span class="fc-hint">tap to reveal</span>
-        </div>`).join('')}
-    </div>
-    <div class="info-box" style="margin-top:1rem;">
-      <strong>🎙 NotebookLM audio flashcards:</strong> Paste your Day notes into NotebookLM (notebooklm.google.com) and ask it to generate an audio podcast summarizing the topic. Works best with your Week 1 and Week 2 notes combined.
-    </div>`;
-}
-
-function flipCard(i){
-  const card=document.getElementById('fc-'+i);
-  card.classList.toggle('flipped');
-  const hint=card.querySelector('.fc-hint');
-  if(hint)hint.style.display=card.classList.contains('flipped')?'none':'block';
-}
-
-let quizCorrect=0,quizAnswered=false;
-function renderQuiz(){
-  const panel=document.getElementById('panel-quiz');
-  if(!quizzes||quizzes.length===0){panel.innerHTML='<div class="info-box">No quiz questions defined yet for this journey.</div>';return;}
-  if(state.quizIndex>=quizzes.length){
-    const pct=Math.round((quizCorrect/quizzes.length)*100);
-    panel.innerHTML=`<div class="quiz-wrap quiz-score-wrap"><div class="quiz-score-big ${pct>=70?'pass':'fail'}">${pct}%</div><div class="quiz-score-label">You got ${quizCorrect} of ${quizzes.length} correct${pct>=70?' — solid grasp of the core concepts!':' — review the topic sections and retake'}</div><button class="retake-btn" onclick="retakeQuiz()">Retake quiz</button></div>`;
-    return;
-  }
-  const q=quizzes[state.quizIndex],prev=state.quizAnswers[state.quizIndex];
-  quizAnswered=prev!==undefined;
-  panel.innerHTML=`<div class="quiz-wrap"><div class="quiz-progress">Question ${state.quizIndex+1} of ${quizzes.length}</div><div class="quiz-q">${q.q}</div>${q.opts.map((o,i)=>`<div class="quiz-opt ${quizAnswered?(i===q.correct?'correct':(i===prev&&prev!==q.correct?'wrong':'')):''}" onclick="answerQuiz(${i})"><span class="opt-letter">${String.fromCharCode(65+i)}</span><span>${o}</span></div>`).join('')}<div class="quiz-exp ${quizAnswered?'show':''}">${q.exp}</div><button class="next-btn" style="display:${quizAnswered?'inline-block':'none'}" onclick="nextQuiz()">Next question →</button></div>`;
-}
-function answerQuiz(i){if(quizAnswered)return;quizAnswered=true;state.quizAnswers[state.quizIndex]=i;if(i===quizzes[state.quizIndex].correct)quizCorrect++;saveState();renderQuiz();}
-function nextQuiz(){state.quizIndex++;saveState();renderQuiz();}
-function retakeQuiz(){state.quizIndex=0;state.quizAnswers={};quizCorrect=0;saveState();renderQuiz();}
 
 function renderAI(){
   document.getElementById('panel-ai').innerHTML=`
@@ -621,8 +543,6 @@ function showPanel(name,btn){
   if(btn)btn.classList.add('active');
   if(name==='topics')renderTopics();
   if(name==='notes')renderNotes();
-  if(name==='flashcards')renderFlashcards();
-  if(name==='quiz')renderQuiz();
   if(name==='ai')renderAI();
   if(name==='exam')renderExam();
   if(name==='resources')renderResources();

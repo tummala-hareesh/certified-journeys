@@ -129,34 +129,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 .note-card textarea{width:100%;min-height:100px;font-size:13px;line-height:1.7;padding:.7rem .9rem;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;resize:vertical;}
 .note-card textarea:focus{outline:none;border-color:var(--green);background:var(--surface);}
 .note-saved{font-size:11px;color:var(--green);display:none;}
-/* Quiz */
-.quiz-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;}
-.quiz-progress{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:1rem;}
-.quiz-q{font-size:15px;font-weight:500;color:var(--text);line-height:1.6;margin-bottom:1.25rem;}
-.quiz-opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;line-height:1.5;}
-.quiz-opt:hover{border-color:var(--border2);color:var(--text);background:var(--surface2);}
-.quiz-opt.correct{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
-.quiz-opt.wrong{background:var(--coral-light);border-color:var(--coral);color:var(--coral-dark);}
-.opt-letter{font-weight:600;min-width:18px;font-family:'DM Mono',monospace;font-size:12px;margin-top:1px;}
-.quiz-exp{margin-top:1rem;padding:1rem;background:var(--surface2);border-radius:var(--radius-sm);font-size:13px;color:var(--text2);line-height:1.7;display:none;border-left:3px solid var(--green);}
-.quiz-exp.show{display:block;}
-.quiz-exp strong{color:var(--text);font-weight:500;}
-.next-btn{font-size:13px;padding:8px 18px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;margin-top:1rem;}
-.next-btn:hover{background:var(--surface2);}
-.quiz-score-wrap{text-align:center;padding:2rem 0;}
-.quiz-score-big{font-size:48px;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:-.03em;}
-.quiz-score-big.pass{color:var(--green);} .quiz-score-big.fail{color:var(--coral);}
-.quiz-score-label{font-size:14px;color:var(--text2);margin-top:6px;}
-.retake-btn{margin-top:1.25rem;font-size:13px;padding:9px 20px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;}
-/* Flashcards */
-.flashcard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
-.flashcard{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;cursor:pointer;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center;transition:all .2s;position:relative;}
-.flashcard:hover{box-shadow:var(--shadow-md);border-color:var(--border2);}
-.fc-front{font-size:13px;font-weight:500;color:var(--text);line-height:1.5;}
-.fc-back{font-size:12px;color:var(--green-dark);background:var(--green-light);border-radius:var(--radius-sm);padding:.7rem;display:none;width:100%;line-height:1.6;}
-.flashcard.flipped .fc-front{display:none;}
-.flashcard.flipped .fc-back{display:block;}
-.fc-hint{font-size:10px;color:var(--text3);position:absolute;bottom:8px;right:10px;}
 /* Exam prep */
 .exam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
 .exam-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;}
@@ -186,7 +158,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   .stats-grid{grid-template-columns:repeat(2,1fr);}
   .topic-grid{grid-template-columns:1fr;}
   .exam-grid{grid-template-columns:1fr;}
-  .flashcard-grid{grid-template-columns:1fr;}
   .course-hero-top{flex-direction:column;}
   .tab{font-size:11px;padding:6px 8px;}
 }
@@ -255,8 +226,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   <button class="tab active" onclick="showPanel('schedule',this)">📅 Daily Plan</button>
   <button class="tab" onclick="showPanel('topics',this)">📚 Topics</button>
   <button class="tab" onclick="showPanel('notes',this)">📝 Notes</button>
-  <button class="tab" onclick="showPanel('flashcards',this)">🃏 Flashcards</button>
-  <button class="tab" onclick="showPanel('quiz',this)">✅ Quiz</button>
   <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
   <button class="tab" onclick="showPanel('resources',this)">🔗 Resources</button>
   <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
@@ -265,8 +234,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 <div id="panel-schedule" class="panel active"></div>
 <div id="panel-topics" class="panel"></div>
 <div id="panel-notes" class="panel"></div>
-<div id="panel-flashcards" class="panel"></div>
-<div id="panel-quiz" class="panel"></div>
 <div id="panel-ai" class="panel"></div>
 <div id="panel-exam" class="panel"></div>
 <div id="panel-resources" class="panel"></div>
@@ -280,10 +247,9 @@ const STORAGE_KEY='cj_aws-ml-certified_v1';
 const TOTAL_DAYS=21;
 const days=[{"title": "AWS ML Specialty overview + exam structure", "badge": "learn", "sub": "Week 1 \u00b7 Foundation", "tasks": ["Study the 5 exam domains: Data Engineering 20%, EDA 24%, Modeling 36%, ML Impl 20%", "Set up AWS Free Tier account if you don't have one", "Install AWS CLI and configure credentials", "Review the exam guide PDF from AWS training site"], "resources": ["AWS ML Specialty Exam Guide (aws.training)", "A Cloud Guru or Udemy AWS ML course overview"], "tip": "Domain 3 (Modeling) is 36% of the exam. Prioritize SageMaker, algorithm selection, and hyperparameter tuning.", "hasScore": false}, {"title": "Data Engineering on AWS", "badge": "learn", "sub": "Week 1 \u00b7 Data", "tasks": ["Study S3 as the ML data lake foundation", "Understand Kinesis Data Streams vs Firehose vs Analytics", "Study AWS Glue for ETL and data cataloging", "Practice: create an S3 \u2192 Glue \u2192 Athena pipeline"], "resources": ["AWS Glue docs", "Kinesis whitepaper", "A Cloud Guru lab: Data Engineering"], "tip": "Know the difference between Kinesis Data Streams (real-time) and Firehose (near-real-time delivery). This is tested.", "hasScore": false}, {"title": "Exploratory Data Analysis + Feature Engineering", "badge": "learn", "sub": "Week 1 \u00b7 EDA", "tasks": ["Study SageMaker Data Wrangler for EDA", "Understand feature engineering techniques: encoding, scaling, imputation", "Study class imbalance techniques: SMOTE, oversampling, class weights", "Practice: use SageMaker Studio for EDA on a dataset"], "resources": ["SageMaker Data Wrangler docs", "AWS EDA whitepaper"], "tip": "EDA is 24% of the exam. Know which imputation method suits which data type.", "hasScore": false}, {"title": "SageMaker core services deep dive", "badge": "learn", "sub": "Week 1 \u00b7 SageMaker", "tasks": ["SageMaker Training: built-in algorithms, custom containers", "SageMaker endpoints: real-time, batch transform, async inference", "SageMaker Pipelines for ML workflow orchestration", "SageMaker Model Monitor for drift detection"], "resources": ["SageMaker Developer Guide", "SageMaker immersion day labs"], "tip": "Know when to use real-time vs batch transform vs async inference \u2014 common scenario question pattern.", "hasScore": false}, {"title": "Built-in algorithms mastery", "badge": "learn", "sub": "Week 2 \u00b7 Algorithms", "tasks": ["Linear Learner: regression and classification", "XGBoost: gradient boosting, most commonly tested", "BlazingText: NLP, Word2Vec, text classification", "DeepAR: time series forecasting \u2014 know when to use it", "K-Means: unsupervised clustering in SageMaker"], "resources": ["SageMaker built-in algorithms guide", "AWS re:Invent algorithm selection talks"], "tip": "For every algorithm know: input format, use case, key hyperparameters, and output format.", "hasScore": false}, {"title": "Deep learning on AWS", "badge": "learn", "sub": "Week 2 \u00b7 Deep Learning", "tasks": ["Study AWS Deep Learning AMIs and containers", "SageMaker support for TensorFlow, PyTorch, MXNet", "Understand distributed training: data parallelism vs model parallelism", "Study Amazon Rekognition, Comprehend, Textract (managed services)"], "resources": ["AWS Deep Learning Containers docs", "SageMaker distributed training guide"], "tip": "Managed AI services (Rekognition, Comprehend, Textract) are frequently tested \u2014 no ML expertise required.", "hasScore": false}, {"title": "Mock exam #1 + gap analysis", "badge": "practice", "sub": "Week 2 \u00b7 Assessment", "tasks": ["Take a 65-question practice exam (Whizlabs or Tutorials Dojo)", "Log your score \u2014 target 70%+ at this stage", "Identify weak domains and flag them", "Re-read AWS docs for flagged areas"], "resources": ["Tutorials Dojo AWS ML Specialty practice exams", "Whizlabs AWS ML practice tests"], "tip": "Tutorials Dojo explanations are excellent \u2014 read them even for questions you got right.", "hasScore": true}, {"title": "Hyperparameter tuning and model optimization", "badge": "learn", "sub": "Week 2 \u00b7 Optimization", "tasks": ["SageMaker Automatic Model Tuning (Bayesian optimization)", "Understand overfitting vs underfitting \u2014 L1/L2 regularization", "Dropout, batch normalization for deep learning", "Study bias/variance tradeoff with worked examples"], "resources": ["SageMaker Hyperparameter Tuning docs", "AWS ML University \u2014 optimization module"], "tip": "For SageMaker HPO: know what ranges to specify for each hyperparameter type (integer, continuous, categorical).", "hasScore": false}, {"title": "ML Security, Compliance and Governance", "badge": "learn", "sub": "Week 3 \u00b7 Security", "tasks": ["SageMaker VPC configuration for private training", "IAM roles for SageMaker execution \u2014 principle of least privilege", "Data encryption: S3 at rest (SSE-S3, SSE-KMS), in transit (TLS)", "SageMaker Model Cards and ML governance concepts"], "resources": ["SageMaker Security Best Practices", "AWS ML Governance whitepaper"], "tip": "Security questions are 20% of the exam. Know which encryption option suits which scenario.", "hasScore": false}, {"title": "MLOps on AWS", "badge": "learn", "sub": "Week 3 \u00b7 MLOps", "tasks": ["SageMaker Pipelines: orchestrate end-to-end ML workflows", "SageMaker Model Registry: versioning, approval workflow", "SageMaker Experiments: track training runs", "CI/CD for ML: CodePipeline + SageMaker integration"], "resources": ["SageMaker MLOps docs", "AWS MLOps framework whitepaper"], "tip": "Know the full MLOps loop: data \u2192 train \u2192 evaluate \u2192 register \u2192 deploy \u2192 monitor \u2192 retrain.", "hasScore": false}, {"title": "Evaluation metrics and model selection", "badge": "learn", "sub": "Week 3 \u00b7 Evaluation", "tasks": ["Classification: accuracy, precision, recall, F1, AUC-ROC", "Regression: RMSE, MAE, MAPE", "Know when to prioritize precision vs recall (fraud, medical diagnosis)", "Confusion matrix interpretation and threshold tuning"], "resources": ["AWS ML Specialty study guide \u2014 evaluation chapter", "Hands-on: evaluate a SageMaker model with Clarify"], "tip": "The AUC-ROC vs precision-recall question appears in almost every practice exam. Know the difference cold.", "hasScore": false}, {"title": "Cost optimization and operational best practices", "badge": "learn", "sub": "Week 3 \u00b7 Operations", "tasks": ["SageMaker Savings Plans and Managed Spot Training", "Right-sizing training instances: compute vs GPU", "SageMaker Serverless Inference for low-traffic endpoints", "Cost monitoring: AWS Cost Explorer for ML workloads"], "resources": ["SageMaker cost optimization guide", "AWS Well-Architected ML Lens"], "tip": "Spot training can save 60\u201390% on training costs. Know the checkpoint strategy to handle interruptions.", "hasScore": false}, {"title": "Full timed mock exam #2", "badge": "exam", "sub": "Week 3 \u00b7 Assessment", "tasks": ["Take a full 65-question timed mock \u2014 3 hours", "No notes. Exam-like conditions.", "Log your score \u2014 target 80%+", "Review every wrong answer in detail"], "resources": ["Tutorials Dojo AWS ML Specialty \u2014 Timed Mode", "Whizlabs final practice exam"], "tip": "If scoring below 75%, spend one more day on your weakest domain before booking.", "hasScore": true}, {"title": "SageMaker Clarify and responsible AI", "badge": "learn", "sub": "Week 3 \u00b7 Advanced", "tasks": ["SageMaker Clarify: bias detection and explainability", "SHAP values for model explainability", "Pre-training vs post-training bias metrics", "Study AI fairness definitions: demographic parity, equal opportunity"], "resources": ["SageMaker Clarify docs", "AWS responsible AI whitepaper"], "tip": "Clarify is increasingly tested. Know pre-training bias metrics (CI, DPL) vs post-training (DPPL, DI).", "hasScore": false}, {"title": "Generative AI and LLMs on AWS", "badge": "learn", "sub": "Week 3 \u00b7 GenAI", "tasks": ["Amazon Bedrock: foundation models, model selection", "SageMaker JumpStart: pre-trained models and fine-tuning", "RAG architecture on AWS (Bedrock + Knowledge Bases)", "Prompt engineering concepts tested in new exam versions"], "resources": ["Amazon Bedrock docs", "AWS GenAI Learning Path"], "tip": "GenAI content is being added to the ML Specialty. Know Bedrock vs SageMaker JumpStart use cases.", "hasScore": false}, {"title": "Comprehensive review + weak areas", "badge": "review", "sub": "Week 3 \u00b7 Consolidation", "tasks": ["Review all flagged questions from both mock exams", "Re-read AWS docs for any domain below 75%", "Create a one-pager: SageMaker services \u2192 use cases", "Write out the ML workflow from scratch from memory"], "resources": ["Your flagged questions list", "AWS ML Specialty exam guide (final review)"], "tip": "The exam is 3 hours for 65 questions \u2014 you have ~2.7 min per question. Pace is manageable.", "hasScore": false}, {"title": "Final mock exam + book", "badge": "exam", "sub": "Week 3 \u00b7 Exam day", "tasks": ["Take one final timed practice exam", "Must score 80%+ to feel confident about booking", "Book exam: $300 USD, available at Pearson VUE or in-person", "Exam is 65 questions, 180 minutes, ~72% to pass"], "resources": ["aws.training \u2014 schedule exam", "Pearson VUE test centre locator"], "tip": "The AWS exam is more nuanced than practice exams suggest. Read every option before selecting.", "hasScore": true}, {"title": "AWS ML study deep dive \u2014 SageMaker Studio", "badge": "learn", "sub": "Week 3 \u00b7 Lab", "tasks": ["Complete the SageMaker Immersion Day labs", "Build an end-to-end ML pipeline in SageMaker Studio", "Deploy a model endpoint and test with boto3", "Add Model Monitor and review drift reports"], "resources": ["SageMaker Immersion Day (aws.amazon.com/getting-started)", "SageMaker example notebooks on GitHub"], "tip": "Hands-on time in SageMaker Studio is invaluable. The exam has scenario questions only practice can prepare you for.", "hasScore": false}, {"title": "Computer Vision and NLP on AWS", "badge": "learn", "sub": "Week 3 \u00b7 Domains", "tasks": ["Rekognition: image labels, faces, custom labels", "Textract vs Comprehend vs Translate \u2014 know which service for which task", "SageMaker Object Detection and Image Classification algorithms", "Hugging Face on SageMaker for NLP fine-tuning"], "resources": ["AWS AI Services overview", "SageMaker NLP examples"], "tip": "For managed AI services: know the input/output format, pricing model, and when NOT to use them.", "hasScore": false}, {"title": "Time series and anomaly detection", "badge": "learn", "sub": "Week 3 \u00b7 Specialized", "tasks": ["DeepAR for time series forecasting \u2014 know hyperparameters", "Amazon Forecast vs DeepAR in SageMaker", "Random Cut Forest for anomaly detection", "Lookout for Metrics for business anomaly detection"], "resources": ["Amazon Forecast docs", "SageMaker DeepAR algorithm guide"], "tip": "Time series questions usually involve choosing between DeepAR, Forecast, and traditional methods.", "hasScore": false}, {"title": "Final review + exam day prep", "badge": "exam", "sub": "Week 3 \u00b7 Final", "tasks": ["Final scan of exam guide: confirm all domains are covered", "Review your algorithm cheat sheet one last time", "Know exam logistics: 65 questions, 180 min, 72% pass (~47/65)", "Rest well. Deep knowledge built over 3 weeks."], "resources": ["AWS exam readiness checklist", "Your personal notes and cheat sheets"], "tip": "The exam rewards deep AWS service knowledge over generic ML theory. Trust your AWS experience.", "hasScore": false}];
 const topics=[{"name": "Data Engineering (20%)", "color": "#E8890C", "days": [1, 2, 7, 12]}, {"name": "Exploratory Data Analysis (24%)", "color": "#378ADD", "days": [3, 11, 16]}, {"name": "Modeling \u2014 SageMaker (36%)", "color": "#1D9E75", "days": [4, 5, 6, 9, 10, 13, 14, 18, 19, 20]}, {"name": "ML Implementation (20%)", "color": "#7F77DD", "days": [8, 9, 10, 11]}, {"name": "Security & Compliance", "color": "#D85A30", "days": [9, 12]}, {"name": "MLOps & Pipelines", "color": "#0891B2", "days": [10, 17]}, {"name": "GenAI & Bedrock", "color": "#BA7517", "days": [15, 18]}, {"name": "Responsible AI", "color": "#993C1D", "days": [14, 16]}];
-const quizzes=[{"q": "Which SageMaker inference type is best for low-traffic, cost-sensitive workloads?", "opts": ["Real-time inference", "Batch transform", "Serverless inference", "Async inference"], "correct": 2, "exp": "<strong>Serverless inference</strong> scales to zero when idle and charges per inference \u2014 ideal for low, sporadic traffic."}, {"q": "An ML model has high accuracy but poor performance on the minority class. Best fix:", "opts": ["Increase model complexity", "Apply SMOTE or class weights to address imbalance", "Reduce training data", "Use L2 regularization"], "correct": 1, "exp": "<strong>SMOTE</strong> or adjusting <strong>class weights</strong> directly addresses class imbalance without changing model architecture."}, {"q": "Which metric is best for evaluating a fraud detection model?", "opts": ["Accuracy", "RMSE", "Precision-Recall AUC", "R-squared"], "correct": 2, "exp": "Fraud is rare (imbalanced classes) \u2014 <strong>PR-AUC</strong> is superior to ROC-AUC and accuracy in this scenario."}, {"q": "What is the primary benefit of SageMaker Pipelines?", "opts": ["Faster training with GPUs", "Orchestrating and automating ML workflows", "Real-time inference at low latency", "Storing model artifacts"], "correct": 1, "exp": "<strong>SageMaker Pipelines</strong> provides workflow orchestration \u2014 defining, automating, and reusing ML steps."}, {"q": "Which service should you use to extract text from scanned PDFs at scale?", "opts": ["Rekognition", "Comprehend", "Textract", "Transcribe"], "correct": 2, "exp": "<strong>Textract</strong> is purpose-built for extracting text, forms, and tables from documents including scanned PDFs."}];
 const exam={"questions": 65, "minutes": 180, "passScore": "~72% (approx 47/65)", "cost": "$300", "provider": "Pearson VUE / AWS", "link": "https://aws.amazon.com/certification", "notes": "Available online proctored or in-person. 50 USD voucher often available via practice exam programs."};
 
-let state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
+let state={completed:[],scores:{},hours:{},completedAt:{},notes:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
 
 function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)state={...state,...JSON.parse(s)};}catch(e){}}
 function saveState(){
@@ -300,8 +266,7 @@ function broadcastStatus(){
 }
 function resetAll(){
   if(!confirm('Reset all progress? This cannot be undone.'))return;
-  state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
-  quizCorrect=0;
+  state={completed:[],scores:{},hours:{},completedAt:{},notes:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
   saveState();renderAll();
 }
 function isCompleted(i){return state.completed.includes(i);}
@@ -411,49 +376,6 @@ function renderNotes(){
       </div>
     </div>`;
 }
-
-// Flashcards built from day tips + key concepts
-const flashcards=days.map((d,i)=>{return{front:`Day ${i+1} key concept:\n${d.title}`,back:d.tip}});
-
-function renderFlashcards(){
-  document.getElementById('panel-flashcards').innerHTML=`
-    <div class="info-box" style="margin-bottom:1rem;"><strong>How to use:</strong> Click any card to reveal the tip. Use these for spaced repetition — go through them daily until the concepts feel automatic.</div>
-    <div class="flashcard-grid">
-      ${flashcards.map((fc,i)=>`
-        <div class="flashcard" id="fc-${i}" onclick="flipCard(${i})">
-          <div class="fc-front">${fc.front}</div>
-          <div class="fc-back">${fc.back}</div>
-          <span class="fc-hint">tap to reveal</span>
-        </div>`).join('')}
-    </div>
-    <div class="info-box" style="margin-top:1rem;">
-      <strong>🎙 NotebookLM audio flashcards:</strong> Paste your Day notes into NotebookLM (notebooklm.google.com) and ask it to generate an audio podcast summarizing the topic. Works best with your Week 1 and Week 2 notes combined.
-    </div>`;
-}
-
-function flipCard(i){
-  const card=document.getElementById('fc-'+i);
-  card.classList.toggle('flipped');
-  const hint=card.querySelector('.fc-hint');
-  if(hint)hint.style.display=card.classList.contains('flipped')?'none':'block';
-}
-
-let quizCorrect=0,quizAnswered=false;
-function renderQuiz(){
-  const panel=document.getElementById('panel-quiz');
-  if(!quizzes||quizzes.length===0){panel.innerHTML='<div class="info-box">No quiz questions defined yet for this journey.</div>';return;}
-  if(state.quizIndex>=quizzes.length){
-    const pct=Math.round((quizCorrect/quizzes.length)*100);
-    panel.innerHTML=`<div class="quiz-wrap quiz-score-wrap"><div class="quiz-score-big ${pct>=70?'pass':'fail'}">${pct}%</div><div class="quiz-score-label">You got ${quizCorrect} of ${quizzes.length} correct${pct>=70?' — solid grasp of the core concepts!':' — review the topic sections and retake'}</div><button class="retake-btn" onclick="retakeQuiz()">Retake quiz</button></div>`;
-    return;
-  }
-  const q=quizzes[state.quizIndex],prev=state.quizAnswers[state.quizIndex];
-  quizAnswered=prev!==undefined;
-  panel.innerHTML=`<div class="quiz-wrap"><div class="quiz-progress">Question ${state.quizIndex+1} of ${quizzes.length}</div><div class="quiz-q">${q.q}</div>${q.opts.map((o,i)=>`<div class="quiz-opt ${quizAnswered?(i===q.correct?'correct':(i===prev&&prev!==q.correct?'wrong':'')):''}" onclick="answerQuiz(${i})"><span class="opt-letter">${String.fromCharCode(65+i)}</span><span>${o}</span></div>`).join('')}<div class="quiz-exp ${quizAnswered?'show':''}">${q.exp}</div><button class="next-btn" style="display:${quizAnswered?'inline-block':'none'}" onclick="nextQuiz()">Next question →</button></div>`;
-}
-function answerQuiz(i){if(quizAnswered)return;quizAnswered=true;state.quizAnswers[state.quizIndex]=i;if(i===quizzes[state.quizIndex].correct)quizCorrect++;saveState();renderQuiz();}
-function nextQuiz(){state.quizIndex++;saveState();renderQuiz();}
-function retakeQuiz(){state.quizIndex=0;state.quizAnswers={};quizCorrect=0;saveState();renderQuiz();}
 
 function renderAI(){
   document.getElementById('panel-ai').innerHTML=`
@@ -625,8 +547,6 @@ function showPanel(name,btn){
   if(btn)btn.classList.add('active');
   if(name==='topics')renderTopics();
   if(name==='notes')renderNotes();
-  if(name==='flashcards')renderFlashcards();
-  if(name==='quiz')renderQuiz();
   if(name==='ai')renderAI();
   if(name==='exam')renderExam();
   if(name==='resources')renderResources();

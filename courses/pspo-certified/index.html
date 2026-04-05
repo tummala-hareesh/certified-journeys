@@ -129,34 +129,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 .note-card textarea{width:100%;min-height:100px;font-size:13px;line-height:1.7;padding:.7rem .9rem;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;resize:vertical;}
 .note-card textarea:focus{outline:none;border-color:var(--green);background:var(--surface);}
 .note-saved{font-size:11px;color:var(--green);display:none;}
-/* Quiz */
-.quiz-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;}
-.quiz-progress{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:1rem;}
-.quiz-q{font-size:15px;font-weight:500;color:var(--text);line-height:1.6;margin-bottom:1.25rem;}
-.quiz-opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;line-height:1.5;}
-.quiz-opt:hover{border-color:var(--border2);color:var(--text);background:var(--surface2);}
-.quiz-opt.correct{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
-.quiz-opt.wrong{background:var(--coral-light);border-color:var(--coral);color:var(--coral-dark);}
-.opt-letter{font-weight:600;min-width:18px;font-family:'DM Mono',monospace;font-size:12px;margin-top:1px;}
-.quiz-exp{margin-top:1rem;padding:1rem;background:var(--surface2);border-radius:var(--radius-sm);font-size:13px;color:var(--text2);line-height:1.7;display:none;border-left:3px solid var(--green);}
-.quiz-exp.show{display:block;}
-.quiz-exp strong{color:var(--text);font-weight:500;}
-.next-btn{font-size:13px;padding:8px 18px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;margin-top:1rem;}
-.next-btn:hover{background:var(--surface2);}
-.quiz-score-wrap{text-align:center;padding:2rem 0;}
-.quiz-score-big{font-size:48px;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:-.03em;}
-.quiz-score-big.pass{color:var(--green);} .quiz-score-big.fail{color:var(--coral);}
-.quiz-score-label{font-size:14px;color:var(--text2);margin-top:6px;}
-.retake-btn{margin-top:1.25rem;font-size:13px;padding:9px 20px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;}
-/* Flashcards */
-.flashcard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
-.flashcard{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;cursor:pointer;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center;transition:all .2s;position:relative;}
-.flashcard:hover{box-shadow:var(--shadow-md);border-color:var(--border2);}
-.fc-front{font-size:13px;font-weight:500;color:var(--text);line-height:1.5;}
-.fc-back{font-size:12px;color:var(--green-dark);background:var(--green-light);border-radius:var(--radius-sm);padding:.7rem;display:none;width:100%;line-height:1.6;}
-.flashcard.flipped .fc-front{display:none;}
-.flashcard.flipped .fc-back{display:block;}
-.fc-hint{font-size:10px;color:var(--text3);position:absolute;bottom:8px;right:10px;}
 /* Exam prep */
 .exam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
 .exam-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;}
@@ -186,7 +158,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   .stats-grid{grid-template-columns:repeat(2,1fr);}
   .topic-grid{grid-template-columns:1fr;}
   .exam-grid{grid-template-columns:1fr;}
-  .flashcard-grid{grid-template-columns:1fr;}
   .course-hero-top{flex-direction:column;}
   .tab{font-size:11px;padding:6px 8px;}
 }
@@ -243,8 +214,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   <button class="tab active" onclick="showPanel('schedule',this)">📅 Daily Plan</button>
   <button class="tab" onclick="showPanel('topics',this)">📚 Topics</button>
   <button class="tab" onclick="showPanel('notes',this)">📝 Notes</button>
-  <button class="tab" onclick="showPanel('flashcards',this)">🃏 Flashcards</button>
-  <button class="tab" onclick="showPanel('quiz',this)">✅ Quiz</button>
   <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
   <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
 </div>
@@ -252,8 +221,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 <div id="panel-schedule" class="panel active"></div>
 <div id="panel-topics" class="panel"></div>
 <div id="panel-notes" class="panel"></div>
-<div id="panel-flashcards" class="panel"></div>
-<div id="panel-quiz" class="panel"></div>
 <div id="panel-ai" class="panel"></div>
 <div id="panel-exam" class="panel"></div>
 
@@ -266,10 +233,9 @@ const STORAGE_KEY='cj_pspo-certified_v1';
 const TOTAL_DAYS=14;
 const days=[{"title": "Scrum Guide deep read #1", "badge": "learn", "sub": "Week 1 \u00b7 Foundation", "tasks": ["Read Scrum Guide 2020 cover to cover \u2014 approx 45 mins", "Highlight every sentence that mentions the Product Owner", "The guide uses 'Product Owner', never 'product manager' \u2014 exact language matters", "Do not skip the Scrum Values section \u2014 the exam tests these directly"], "resources": ["Scrum Guide PDF (scrumguides.org)", "Scrum Guide audio (YouTube)"], "tip": "Resist mapping this to how your company does Scrum. Read it like a legal document \u2014 every word is deliberate.", "hasScore": false}, {"title": "Scrum Guide read #2 + first open assessment", "badge": "practice", "sub": "Week 1 \u00b7 Foundation", "tasks": ["Re-read Scrum Guide focusing on artifacts and their commitments", "Take Scrum.org PSPO Open Assessment (free, no login)", "Log your score \u2014 don't worry about the number yet", "Read the explanation for every single wrong answer"], "resources": ["PSPO Open Assessment (scrum.org/open-assessments)", "Scrum.org Learning Path"], "tip": "The 3 commitments are heavily tested: Product Goal \u2192 Backlog, Sprint Goal \u2192 Sprint Backlog, DoD \u2192 Increment.", "hasScore": true}, {"title": "Product Owner accountabilities", "badge": "learn", "sub": "Week 1 \u00b7 Core concepts", "tasks": ["Study PO accountabilities in the Scrum Guide word for word", "Key rule: the PO is ONE person \u2014 never a committee", "PO can delegate backlog work but retains full accountability", "PO owns the 'why' \u2014 Developers own the 'how'"], "resources": ["Scrum Guide \u00a7Product Owner", "Mikhail Lapshin quiz (PO filter)"], "tip": "Classic exam trap: 'The team can help manage the backlog' \u2014 true, but the PO retains accountability.", "hasScore": false}, {"title": "Product Backlog mastery", "badge": "learn", "sub": "Week 1 \u00b7 Core concepts", "tasks": ["The backlog is 'ordered' \u2014 not 'prioritized'. Exact word matters", "PBIs contain: description, order, estimate, and value", "Refinement is ongoing \u2014 not a Scrum event \u2014 max 10% capacity", "Know what happens to the backlog when a Sprint is cancelled"], "resources": ["Scrum Guide \u00a7Product Backlog", "Mikhail Lapshin learning mode"], "tip": "If an exam answer says 'prioritized backlog' \u2014 that may be wrong. Scrum.org uses 'ordered' exclusively.", "hasScore": false}, {"title": "Sprint events and timebox rules", "badge": "learn", "sub": "Week 1 \u00b7 Events", "tasks": ["Memorize all 5 Scrum events and their exact timeboxes", "Sprint Review (4h max): PO presents backlog state to stakeholders", "Sprint Retrospective (3h max): Scrum Team inspects itself", "Sprint Planning (8h max): the Sprint Goal is created here"], "resources": ["Scrum Guide \u00a7Events", "Scrum.org open assessment"], "tip": "Sprint Review \u2260 Sprint Demo. The Review is about inspection and adaptation \u2014 not just showing completed work.", "hasScore": false}, {"title": "Product Vision and value delivery", "badge": "learn", "sub": "Week 1 \u00b7 Strategy", "tasks": ["Study the Product Goal \u2014 long-term objective for the product", "The Product Goal lives inside the Product Backlog", "The PO decides when to release \u2014 not the Scrum Team or stakeholders", "Study release planning and forecasting concepts for the PO"], "resources": ["Scrum Guide \u00a7Product Goal", "Professional Product Owner \u2014 McGreal ch.1\u20133"], "tip": "Value is subjective \u2014 the PO defines it, the Scrum Team maximizes it. Appears in many scenario questions.", "hasScore": false}, {"title": "Mid-week mock exam + gap analysis", "badge": "practice", "sub": "Week 1 \u00b7 Assessment", "tasks": ["Take Mikhail Lapshin PSPO quiz in Learning Mode (all 80 questions)", "Log your score below \u2014 target 80%+", "List every topic area where you got questions wrong", "Spend 1 hour re-reading those exact Scrum Guide sections"], "resources": ["Mikhail Lapshin PSPO quiz (mlapshin.com)", "Scrum Guide (targeted re-read)"], "tip": "Below 75% \u2014 focus on Product Backlog ordering and PO accountability questions \u2014 highest frequency.", "hasScore": true}, {"title": "Stakeholders, customers and business strategy", "badge": "learn", "sub": "Week 2 \u00b7 Advanced", "tasks": ["The PO manages stakeholders \u2014 not the Scrum Master", "PO collaborates with stakeholders but is NOT obligated to accept all feedback", "Business strategy: understand ROI and value-based backlog ordering", "Sprint Review is the primary stakeholder feedback loop in Scrum"], "resources": ["Scrum.org PSPO competency areas", "Mikhail Lapshin \u2014 stakeholder question set"], "tip": "The Scrum Master facilitates events but does not own stakeholder relationships \u2014 very common distractor.", "hasScore": false}, {"title": "Forecasting and release planning", "badge": "learn", "sub": "Week 2 \u00b7 Advanced", "tasks": ["Understand velocity, story points, and release forecasting concepts", "Burn-down and burn-up charts: the PO uses these to track progress", "Release planning: PO owns the when \u2014 Developers own the how", "Scaled: know the basic Nexus framework and scaled PO responsibilities"], "resources": ["Scrum.org PSPO competencies", "Scrum Guide \u00a7Sprint Review"], "tip": "Exam won't ask you to calculate velocity \u2014 it asks who is responsible for forecast visibility. That's the PO.", "hasScore": false}, {"title": "Scrum values and empiricism deep dive", "badge": "learn", "sub": "Week 2 \u00b7 Foundations", "tasks": ["5 Scrum Values: Commitment, Focus, Openness, Respect, Courage", "3 pillars: Transparency, Inspection, Adaptation", "How does each Scrum Value apply to the PO role?", "What breaks empiricism: hidden work, absent PO, no Definition of Done"], "resources": ["Scrum Guide \u00a7Values", "Scrum.org learning path \u2014 empiricism module"], "tip": "Values questions often have 2 plausible answers. Always pick the one that maximises transparency.", "hasScore": false}, {"title": "Full timed mock exam #1", "badge": "exam", "sub": "Week 2 \u00b7 Assessment", "tasks": ["Take Mikhail Lapshin PSPO quiz in Real Mode \u2014 80 questions, 60 min", "Simulate real conditions: no notes, no interruptions", "Log your score below \u2014 target 90%+", "Review every wrong answer and note the exact Scrum Guide section"], "resources": ["Mikhail Lapshin Real Mode", "Scrum Guide (post-exam targeted review)"], "tip": "Score below 85% \u2014 do not book the exam yet. Spend Days 12\u201313 on specific weak areas only.", "hasScore": true}, {"title": "Weak area intensive review", "badge": "review", "sub": "Week 2 \u00b7 Consolidation", "tasks": ["List your 3 weakest topic areas from Day 11 mock exam", "Re-read those Scrum Guide sections one final time", "Retake Scrum.org PSPO Open Assessment \u2014 target 100%", "Write a 1-page PO cheat sheet from memory, then verify against the Guide"], "resources": ["Scrum Guide (targeted)", "Scrum.org PSPO Open Assessment"], "tip": "Writing a cheat sheet from memory then verifying it is the most effective revision technique for this exam.", "hasScore": false}, {"title": "Full timed mock exam #2 + readiness check", "badge": "exam", "sub": "Week 2 \u00b7 Assessment", "tasks": ["Take a second full 80-question timed mock (PrepForScrum or Lapshin)", "Focus on pacing: ~45 seconds per question maximum", "Flag uncertain questions and return \u2014 never leave one blank", "Scoring 90%+ consistently across both mocks: you are ready"], "resources": ["PrepForScrum mock exam (prepforscrum.com)", "Mikhail Lapshin Real Mode"], "tip": "90%+ across two different mock providers is the gold standard. Different question sets expose blind spots.", "hasScore": true}, {"title": "Final light review + book the exam", "badge": "exam", "sub": "Week 2 \u00b7 Exam day", "tasks": ["Light re-read: PO section and artifacts only", "Do NOT try to learn anything new today \u2014 consolidate only", "Book PSPO I exam at scrum.org \u2014 $200 USD, password never expires", "Rest well. You are prepared."], "resources": ["scrum.org/assessments \u2014 exam booking page"], "tip": "The exam is technically open-book, but there's no time to look things up. Trust your preparation.", "hasScore": false}];
 const topics=[{"name": "Product Owner accountabilities", "color": "#1D9E75", "days": [2, 3, 7, 10]}, {"name": "Product Backlog management", "color": "#378ADD", "days": [3, 6, 11]}, {"name": "Product Goal and vision", "color": "#BA7517", "days": [5, 9, 10]}, {"name": "Scrum events and timeboxes", "color": "#D85A30", "days": [4, 8, 10]}, {"name": "Stakeholder management", "color": "#7F77DD", "days": [7, 9, 11]}, {"name": "Forecasting and release", "color": "#0F6E56", "days": [5, 8, 12]}, {"name": "Scrum values and empiricism", "color": "#639922", "days": [1, 9, 10, 11]}, {"name": "Business strategy and value", "color": "#993C1D", "days": [5, 7, 12]}];
-const quizzes=[{"q": "Who has the authority to cancel a Sprint?", "opts": ["The Scrum Master", "Only the Product Owner", "Any Scrum Team member", "The Product Owner with Developer agreement"], "correct": 1, "exp": "<strong>Only the Product Owner</strong> can cancel a Sprint \u2014 and only when the Sprint Goal has become obsolete. This is one of the PO's very few unilateral powers."}, {"q": "The Scrum Guide describes the Product Backlog as:", "opts": ["A prioritized list of features", "An ordered list of everything needed", "A ranked list approved by the sponsor", "A time-boxed plan for the Sprint"], "correct": 1, "exp": "<strong>Ordered</strong> is the precise term \u2014 not 'prioritized' or 'ranked'. This is a frequent exam trap."}, {"q": "Who is responsible for the ordering of the Product Backlog?", "opts": ["The Scrum Team collectively", "The Product Owner", "The Scrum Master", "The stakeholders"], "correct": 1, "exp": "The <strong>Product Owner</strong> is solely accountable for backlog content, availability, and ordering."}, {"q": "A stakeholder insists on adding an item to the Sprint Backlog mid-Sprint. What is correct?", "opts": ["Add it if the Scrum Master approves", "Only Developers can change the Sprint Backlog and only if it doesn't endanger the Sprint Goal", "Reject it \u2014 the Sprint Backlog cannot change", "The PO can add it since they own the backlog"], "correct": 1, "exp": "Only <strong>Developers</strong> can make changes to the Sprint Backlog \u2014 and only if they don't endanger the Sprint Goal."}, {"q": "Which statement about the Definition of Done is correct?", "opts": ["Created by PO as acceptance criteria per PBI", "Shared Scrum Team commitment describing done for every Increment", "Optional if team has high trust", "Can vary per PBI based on complexity"], "correct": 1, "exp": "The <strong>Definition of Done</strong> is a Scrum Team commitment that applies uniformly to every Increment."}];
 const exam={"questions": 80, "minutes": 60, "passScore": "85% (68/80)", "cost": "$200", "provider": "Scrum.org", "link": "https://www.scrum.org/assessments", "notes": "Password never expires. Open-book but no time to look things up. Taken online, no proctoring."};
 
-let state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
+let state={completed:[],scores:{},hours:{},completedAt:{},notes:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
 
 function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)state={...state,...JSON.parse(s)};}catch(e){}}
 function saveState(){
@@ -286,8 +252,7 @@ function broadcastStatus(){
 }
 function resetAll(){
   if(!confirm('Reset all progress? This cannot be undone.'))return;
-  state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
-  quizCorrect=0;
+  state={completed:[],scores:{},hours:{},completedAt:{},notes:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
   saveState();renderAll();
 }
 function isCompleted(i){return state.completed.includes(i);}
@@ -398,49 +363,6 @@ function renderNotes(){
     </div>`;
 }
 
-// Flashcards built from day tips + key concepts
-const flashcards=days.map((d,i)=>{return{front:`Day ${i+1} key concept:\n${d.title}`,back:d.tip}});
-
-function renderFlashcards(){
-  document.getElementById('panel-flashcards').innerHTML=`
-    <div class="info-box" style="margin-bottom:1rem;"><strong>How to use:</strong> Click any card to reveal the tip. Use these for spaced repetition — go through them daily until the concepts feel automatic.</div>
-    <div class="flashcard-grid">
-      ${flashcards.map((fc,i)=>`
-        <div class="flashcard" id="fc-${i}" onclick="flipCard(${i})">
-          <div class="fc-front">${fc.front}</div>
-          <div class="fc-back">${fc.back}</div>
-          <span class="fc-hint">tap to reveal</span>
-        </div>`).join('')}
-    </div>
-    <div class="info-box" style="margin-top:1rem;">
-      <strong>🎙 NotebookLM audio flashcards:</strong> Paste your Day notes into NotebookLM (notebooklm.google.com) and ask it to generate an audio podcast summarizing the topic. Works best with your Week 1 and Week 2 notes combined.
-    </div>`;
-}
-
-function flipCard(i){
-  const card=document.getElementById('fc-'+i);
-  card.classList.toggle('flipped');
-  const hint=card.querySelector('.fc-hint');
-  if(hint)hint.style.display=card.classList.contains('flipped')?'none':'block';
-}
-
-let quizCorrect=0,quizAnswered=false;
-function renderQuiz(){
-  const panel=document.getElementById('panel-quiz');
-  if(!quizzes||quizzes.length===0){panel.innerHTML='<div class="info-box">No quiz questions defined yet for this journey.</div>';return;}
-  if(state.quizIndex>=quizzes.length){
-    const pct=Math.round((quizCorrect/quizzes.length)*100);
-    panel.innerHTML=`<div class="quiz-wrap quiz-score-wrap"><div class="quiz-score-big ${pct>=70?'pass':'fail'}">${pct}%</div><div class="quiz-score-label">You got ${quizCorrect} of ${quizzes.length} correct${pct>=70?' — solid grasp of the core concepts!':' — review the topic sections and retake'}</div><button class="retake-btn" onclick="retakeQuiz()">Retake quiz</button></div>`;
-    return;
-  }
-  const q=quizzes[state.quizIndex],prev=state.quizAnswers[state.quizIndex];
-  quizAnswered=prev!==undefined;
-  panel.innerHTML=`<div class="quiz-wrap"><div class="quiz-progress">Question ${state.quizIndex+1} of ${quizzes.length}</div><div class="quiz-q">${q.q}</div>${q.opts.map((o,i)=>`<div class="quiz-opt ${quizAnswered?(i===q.correct?'correct':(i===prev&&prev!==q.correct?'wrong':'')):''}" onclick="answerQuiz(${i})"><span class="opt-letter">${String.fromCharCode(65+i)}</span><span>${o}</span></div>`).join('')}<div class="quiz-exp ${quizAnswered?'show':''}">${q.exp}</div><button class="next-btn" style="display:${quizAnswered?'inline-block':'none'}" onclick="nextQuiz()">Next question →</button></div>`;
-}
-function answerQuiz(i){if(quizAnswered)return;quizAnswered=true;state.quizAnswers[state.quizIndex]=i;if(i===quizzes[state.quizIndex].correct)quizCorrect++;saveState();renderQuiz();}
-function nextQuiz(){state.quizIndex++;saveState();renderQuiz();}
-function retakeQuiz(){state.quizIndex=0;state.quizAnswers={};quizCorrect=0;saveState();renderQuiz();}
-
 function renderAI(){
   document.getElementById('panel-ai').innerHTML=`
     <div class="ai-card">
@@ -517,8 +439,6 @@ function showPanel(name,btn){
   if(btn)btn.classList.add('active');
   if(name==='topics')renderTopics();
   if(name==='notes')renderNotes();
-  if(name==='flashcards')renderFlashcards();
-  if(name==='quiz')renderQuiz();
   if(name==='ai')renderAI();
   if(name==='exam')renderExam();
 }

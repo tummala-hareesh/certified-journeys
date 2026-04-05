@@ -129,34 +129,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 .note-card textarea{width:100%;min-height:100px;font-size:13px;line-height:1.7;padding:.7rem .9rem;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;resize:vertical;}
 .note-card textarea:focus{outline:none;border-color:var(--green);background:var(--surface);}
 .note-saved{font-size:11px;color:var(--green);display:none;}
-/* Quiz */
-.quiz-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;}
-.quiz-progress{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:1rem;}
-.quiz-q{font-size:15px;font-weight:500;color:var(--text);line-height:1.6;margin-bottom:1.25rem;}
-.quiz-opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;line-height:1.5;}
-.quiz-opt:hover{border-color:var(--border2);color:var(--text);background:var(--surface2);}
-.quiz-opt.correct{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
-.quiz-opt.wrong{background:var(--coral-light);border-color:var(--coral);color:var(--coral-dark);}
-.opt-letter{font-weight:600;min-width:18px;font-family:'DM Mono',monospace;font-size:12px;margin-top:1px;}
-.quiz-exp{margin-top:1rem;padding:1rem;background:var(--surface2);border-radius:var(--radius-sm);font-size:13px;color:var(--text2);line-height:1.7;display:none;border-left:3px solid var(--green);}
-.quiz-exp.show{display:block;}
-.quiz-exp strong{color:var(--text);font-weight:500;}
-.next-btn{font-size:13px;padding:8px 18px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;margin-top:1rem;}
-.next-btn:hover{background:var(--surface2);}
-.quiz-score-wrap{text-align:center;padding:2rem 0;}
-.quiz-score-big{font-size:48px;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:-.03em;}
-.quiz-score-big.pass{color:var(--green);} .quiz-score-big.fail{color:var(--coral);}
-.quiz-score-label{font-size:14px;color:var(--text2);margin-top:6px;}
-.retake-btn{margin-top:1.25rem;font-size:13px;padding:9px 20px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;}
-/* Flashcards */
-.flashcard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
-.flashcard{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;cursor:pointer;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center;transition:all .2s;position:relative;}
-.flashcard:hover{box-shadow:var(--shadow-md);border-color:var(--border2);}
-.fc-front{font-size:13px;font-weight:500;color:var(--text);line-height:1.5;}
-.fc-back{font-size:12px;color:var(--green-dark);background:var(--green-light);border-radius:var(--radius-sm);padding:.7rem;display:none;width:100%;line-height:1.6;}
-.flashcard.flipped .fc-front{display:none;}
-.flashcard.flipped .fc-back{display:block;}
-.fc-hint{font-size:10px;color:var(--text3);position:absolute;bottom:8px;right:10px;}
 /* Exam prep */
 .exam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
 .exam-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;}
@@ -186,7 +158,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   .stats-grid{grid-template-columns:repeat(2,1fr);}
   .topic-grid{grid-template-columns:1fr;}
   .exam-grid{grid-template-columns:1fr;}
-  .flashcard-grid{grid-template-columns:1fr;}
   .course-hero-top{flex-direction:column;}
   .tab{font-size:11px;padding:6px 8px;}
 }
@@ -255,8 +226,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
   <button class="tab active" onclick="showPanel('schedule',this)">📅 Daily Plan</button>
   <button class="tab" onclick="showPanel('topics',this)">📚 Topics</button>
   <button class="tab" onclick="showPanel('notes',this)">📝 Notes</button>
-  <button class="tab" onclick="showPanel('flashcards',this)">🃏 Flashcards</button>
-  <button class="tab" onclick="showPanel('quiz',this)">✅ Quiz</button>
   <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
   <button class="tab" onclick="showPanel('resources',this)">🔗 Resources</button>
   <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
@@ -265,8 +234,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 <div id="panel-schedule" class="panel active"></div>
 <div id="panel-topics" class="panel"></div>
 <div id="panel-notes" class="panel"></div>
-<div id="panel-flashcards" class="panel"></div>
-<div id="panel-quiz" class="panel"></div>
 <div id="panel-ai" class="panel"></div>
 <div id="panel-exam" class="panel"></div>
 <div id="panel-resources" class="panel"></div>
@@ -280,10 +247,9 @@ const STORAGE_KEY='cj_dlt-certified_v1';
 const TOTAL_DAYS=10;
 const days=[{"title": "dlt fundamentals and architecture", "badge": "learn", "sub": "Day 1 \u00b7 Foundation", "tasks": ["Read dlt docs: What is dlt? Core concepts overview", "Understand: source \u2192 resource \u2192 pipeline \u2192 destination pattern", "Install dlt: pip install dlt", "Run Hello World: dlt pipeline to local DuckDB"], "resources": ["dlthub.com/docs/intro", "dlt GitHub: github.com/dlt-hub/dlt"], "tip": "dlt is opinionated \u2014 it handles schema inference, type coercion, and deduplication for you. Don't fight the defaults.", "hasScore": false}, {"title": "Sources, resources and decorators", "badge": "learn", "sub": "Day 2 \u00b7 Sources", "tasks": ["Understand @dlt.source and @dlt.resource decorators", "Write a custom REST API source using dlt's rest_api helper", "Configure pagination, authentication, and rate limiting", "Run the pipeline and inspect the generated schema"], "resources": ["dlt REST API source docs", "dlt verified sources (github.com/dlt-hub/verified-sources)"], "tip": "Use dlt's verified sources as reference implementations \u2014 they show all best practices including incremental loading.", "hasScore": false}, {"title": "Destinations and loading strategies", "badge": "learn", "sub": "Day 3 \u00b7 Destinations", "tasks": ["Connect dlt to BigQuery, Snowflake, or Redshift (use DuckDB for practice)", "Understand write dispositions: append, replace, merge", "Configure primary keys and deduplication for merge loads", "Study destination-specific performance settings"], "resources": ["dlt destinations docs", "dlt DuckDB destination (fastest for local dev)"], "tip": "'merge' write disposition with composite primary keys is the most powerful dlt feature for idempotent loads.", "hasScore": false}, {"title": "Incremental loading and state management", "badge": "learn", "sub": "Day 4 \u00b7 Incremental", "tasks": ["Configure incremental loading with dlt.sources.incremental", "Understand cursor fields: updated_at, id, timestamp", "Study dlt's pipeline state: how it persists between runs", "Practice: build an incremental API source that only fetches new records"], "resources": ["dlt incremental loading docs", "dlt pipeline state docs"], "tip": "Always prefer incremental loading over full refresh. dlt state is stored in the destination \u2014 no external DB needed.", "hasScore": false}, {"title": "Schema management and data contracts", "badge": "learn", "sub": "Day 5 \u00b7 Schema", "tasks": ["Understand dlt's automatic schema inference", "Configure column hints: data_type, nullable, primary_key", "Study schema evolution: add columns, change types, freeze schema", "Implement data contracts using dlt schema contracts feature"], "resources": ["dlt schema docs", "dlt data contracts guide"], "tip": "Schema freezing is critical for production pipelines. Always set explicit column hints for key columns.", "hasScore": false}, {"title": "Transformations and dbt integration", "badge": "learn", "sub": "Day 6 \u00b7 Transform", "tasks": ["Run SQL transformations using dlt's built-in SQL client", "Integrate dlt with dbt for post-load transformations", "Configure dbt profiles to use the dlt destination connection", "Build a dlt \u2192 dbt pipeline on DuckDB"], "resources": ["dlt dbt integration docs", "dlt + dbt example (GitHub)"], "tip": "dlt handles extraction and loading. dbt handles transformation. Together they form a clean ELT pattern.", "hasScore": false}, {"title": "Error handling and data quality", "badge": "learn", "sub": "Day 7 \u00b7 Quality", "tasks": ["Configure dlt to raise on schema violations vs log warnings", "Implement custom data filtering in resource functions", "Study dlt's built-in error reporting and logging", "Add Pydantic validation to resource items"], "resources": ["dlt error handling docs", "dlt Pydantic integration guide"], "tip": "Use fail_map_on_single_error=False during development, then flip it to True in production for strict quality.", "hasScore": false}, {"title": "Production deployment patterns", "badge": "learn", "sub": "Day 8 \u00b7 Production", "tasks": ["Deploy a dlt pipeline to GitHub Actions (cron-based)", "Configure environment-based secrets management", "Study dlt's Airflow, Prefect, and Dagster integrations", "Add observability: logging, alerting, and pipeline run monitoring"], "resources": ["dlt deployment docs", "dlt Airflow integration example"], "tip": "For production, always use environment variables for credentials. Never hardcode in pipeline files.", "hasScore": false}, {"title": "Advanced patterns: REST API helper and normalization", "badge": "learn", "sub": "Day 9 \u00b7 Advanced", "tasks": ["Use dlt's rest_api source helper for complex APIs", "Configure endpoint chaining and resource dependencies", "Study dlt's data normalization: nested JSON \u2192 flat tables", "Build a pipeline that handles deeply nested API responses"], "resources": ["dlt rest_api source helper docs", "dlt nested data normalization guide"], "tip": "The rest_api helper can build 80% of API sources with zero custom code \u2014 use it before writing from scratch.", "hasScore": false}, {"title": "Capstone project + portfolio", "badge": "exam", "sub": "Day 10 \u00b7 Capstone", "tasks": ["Build a complete dlt pipeline: REST API \u2192 DuckDB \u2192 dbt transformations", "Add incremental loading, schema contracts, and error handling", "Deploy to GitHub Actions with scheduled runs", "Document the pipeline and publish to GitHub"], "resources": ["Your GitHub repository", "dlt showcase gallery (dlthub.com/showcase)"], "tip": "A working dlt pipeline on GitHub is worth more than any certification. Make it production-quality.", "hasScore": false}];
 const topics=[{"name": "Core dlt concepts", "color": "#378ADD", "days": [0, 1, 2]}, {"name": "Incremental loading", "color": "#1D9E75", "days": [3, 4, 8]}, {"name": "Schema management", "color": "#BA7517", "days": [4, 5, 7]}, {"name": "Transformations", "color": "#7F77DD", "days": [5, 6]}, {"name": "Production deployment", "color": "#D85A30", "days": [7, 9]}, {"name": "Advanced patterns", "color": "#0891B2", "days": [8, 9]}];
-const quizzes=[{"q": "What does the 'merge' write disposition do in dlt?", "opts": ["Appends all rows each run", "Replaces the entire table", "Upserts rows based on primary keys", "Deletes and reloads the table"], "correct": 2, "exp": "<strong>merge</strong> upserts data \u2014 inserts new rows and updates existing ones based on defined primary keys."}, {"q": "What is query folding in dlt / Power Query context?", "opts": ["Collapsing multiple queries into one", "Pushing transformation logic to the data source", "Caching query results locally", "Compressing query output"], "correct": 1, "exp": "<strong>Query folding</strong> means transformations are pushed to the source (e.g., SQL database) rather than executed in Python."}, {"q": "How does dlt handle schema evolution by default?", "opts": ["Rejects new columns", "Silently adds new columns to the destination", "Raises an error", "Drops new columns"], "correct": 1, "exp": "dlt's default schema evolution policy is to <strong>automatically add new columns</strong> to the destination when they appear in source data."}, {"q": "Where does dlt store pipeline state?", "opts": ["In a local JSON file", "In the destination itself", "In a separate Redis cache", "In memory only"], "correct": 1, "exp": "dlt stores pipeline state <strong>in the destination</strong> \u2014 no external state store is needed."}, {"q": "Which dlt decorator creates a reusable set of resources?", "opts": ["@dlt.pipeline", "@dlt.source", "@dlt.destination", "@dlt.schema"], "correct": 1, "exp": "<strong>@dlt.source</strong> groups multiple @dlt.resource functions into a reusable data source."}];
 const exam={"questions": null, "minutes": null, "passScore": "N/A", "cost": "Free", "provider": "dltHub (community)", "link": "https://dlthub.com/community", "notes": "No formal exam. Mastery demonstrated through building and publishing production pipelines on GitHub."};
 
-let state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
+let state={completed:[],scores:{},hours:{},completedAt:{},notes:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
 
 function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)state={...state,...JSON.parse(s)};}catch(e){}}
 function saveState(){
@@ -300,8 +266,7 @@ function broadcastStatus(){
 }
 function resetAll(){
   if(!confirm('Reset all progress? This cannot be undone.'))return;
-  state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
-  quizCorrect=0;
+  state={completed:[],scores:{},hours:{},completedAt:{},notes:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
   saveState();renderAll();
 }
 function isCompleted(i){return state.completed.includes(i);}
@@ -411,49 +376,6 @@ function renderNotes(){
       </div>
     </div>`;
 }
-
-// Flashcards built from day tips + key concepts
-const flashcards=days.map((d,i)=>{return{front:`Day ${i+1} key concept:\n${d.title}`,back:d.tip}});
-
-function renderFlashcards(){
-  document.getElementById('panel-flashcards').innerHTML=`
-    <div class="info-box" style="margin-bottom:1rem;"><strong>How to use:</strong> Click any card to reveal the tip. Use these for spaced repetition — go through them daily until the concepts feel automatic.</div>
-    <div class="flashcard-grid">
-      ${flashcards.map((fc,i)=>`
-        <div class="flashcard" id="fc-${i}" onclick="flipCard(${i})">
-          <div class="fc-front">${fc.front}</div>
-          <div class="fc-back">${fc.back}</div>
-          <span class="fc-hint">tap to reveal</span>
-        </div>`).join('')}
-    </div>
-    <div class="info-box" style="margin-top:1rem;">
-      <strong>🎙 NotebookLM audio flashcards:</strong> Paste your Day notes into NotebookLM (notebooklm.google.com) and ask it to generate an audio podcast summarizing the topic. Works best with your Week 1 and Week 2 notes combined.
-    </div>`;
-}
-
-function flipCard(i){
-  const card=document.getElementById('fc-'+i);
-  card.classList.toggle('flipped');
-  const hint=card.querySelector('.fc-hint');
-  if(hint)hint.style.display=card.classList.contains('flipped')?'none':'block';
-}
-
-let quizCorrect=0,quizAnswered=false;
-function renderQuiz(){
-  const panel=document.getElementById('panel-quiz');
-  if(!quizzes||quizzes.length===0){panel.innerHTML='<div class="info-box">No quiz questions defined yet for this journey.</div>';return;}
-  if(state.quizIndex>=quizzes.length){
-    const pct=Math.round((quizCorrect/quizzes.length)*100);
-    panel.innerHTML=`<div class="quiz-wrap quiz-score-wrap"><div class="quiz-score-big ${pct>=70?'pass':'fail'}">${pct}%</div><div class="quiz-score-label">You got ${quizCorrect} of ${quizzes.length} correct${pct>=70?' — solid grasp of the core concepts!':' — review the topic sections and retake'}</div><button class="retake-btn" onclick="retakeQuiz()">Retake quiz</button></div>`;
-    return;
-  }
-  const q=quizzes[state.quizIndex],prev=state.quizAnswers[state.quizIndex];
-  quizAnswered=prev!==undefined;
-  panel.innerHTML=`<div class="quiz-wrap"><div class="quiz-progress">Question ${state.quizIndex+1} of ${quizzes.length}</div><div class="quiz-q">${q.q}</div>${q.opts.map((o,i)=>`<div class="quiz-opt ${quizAnswered?(i===q.correct?'correct':(i===prev&&prev!==q.correct?'wrong':'')):''}" onclick="answerQuiz(${i})"><span class="opt-letter">${String.fromCharCode(65+i)}</span><span>${o}</span></div>`).join('')}<div class="quiz-exp ${quizAnswered?'show':''}">${q.exp}</div><button class="next-btn" style="display:${quizAnswered?'inline-block':'none'}" onclick="nextQuiz()">Next question →</button></div>`;
-}
-function answerQuiz(i){if(quizAnswered)return;quizAnswered=true;state.quizAnswers[state.quizIndex]=i;if(i===quizzes[state.quizIndex].correct)quizCorrect++;saveState();renderQuiz();}
-function nextQuiz(){state.quizIndex++;saveState();renderQuiz();}
-function retakeQuiz(){state.quizIndex=0;state.quizAnswers={};quizCorrect=0;saveState();renderQuiz();}
 
 function renderAI(){
   document.getElementById('panel-ai').innerHTML=`
@@ -608,8 +530,6 @@ function showPanel(name,btn){
   if(btn)btn.classList.add('active');
   if(name==='topics')renderTopics();
   if(name==='notes')renderNotes();
-  if(name==='flashcards')renderFlashcards();
-  if(name==='quiz')renderQuiz();
   if(name==='ai')renderAI();
   if(name==='exam')renderExam();
   if(name==='resources')renderResources();
