@@ -112,6 +112,12 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 .complete-btn{width:100%;font-size:13px;padding:9px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;font-weight:400;}
 .complete-btn:hover{background:var(--green-light);color:var(--green-dark);border-color:var(--green);}
 .complete-btn.done{background:var(--green-light);color:var(--green-dark);border-color:var(--green);font-weight:500;}
+/* Notebook links */
+.nb-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.nb-btn{font-size:12px;padding:6px 14px;border-radius:99px;border:.5px solid var(--border2);color:var(--text2);background:none;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all .15s;font-family:inherit;}
+.nb-btn:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
+.nb-btn-colab{background:#F9AB00;border-color:#F9AB00;color:#000;}
+.nb-btn-colab:hover{background:#e09900;color:#000;text-decoration:none;}
 /* Hours log */
 .hours-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text2);}
 .hours-row input{width:60px;font-size:13px;padding:4px 8px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;}
@@ -243,6 +249,18 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 
 <script>
 const COURSE_ID='dlt-certified';
+const NOTEBOOKS=[
+  'day-01-fundamentals',
+  'day-02-sources',
+  'day-03-destinations',
+  'day-04-incremental',
+  'day-05-schema',
+  'day-06-transformations',
+  'day-07-quality',
+  'day-08-production',
+  'day-09-advanced',
+  'day-10-capstone',
+];
 const STORAGE_KEY='cj_dlt-certified_v1';
 const TOTAL_DAYS=10;
 const days=[{"title": "dlt fundamentals and architecture", "badge": "learn", "sub": "Day 1 \u00b7 Foundation", "tasks": ["Read dlt docs: What is dlt? Core concepts overview", "Understand: source \u2192 resource \u2192 pipeline \u2192 destination pattern", "Install dlt: pip install dlt", "Run Hello World: dlt pipeline to local DuckDB"], "resources": ["dlthub.com/docs/intro", "dlt GitHub: github.com/dlt-hub/dlt"], "tip": "dlt is opinionated \u2014 it handles schema inference, type coercion, and deduplication for you. Don't fight the defaults.", "hasScore": false}, {"title": "Sources, resources and decorators", "badge": "learn", "sub": "Day 2 \u00b7 Sources", "tasks": ["Understand @dlt.source and @dlt.resource decorators", "Write a custom REST API source using dlt's rest_api helper", "Configure pagination, authentication, and rate limiting", "Run the pipeline and inspect the generated schema"], "resources": ["dlt REST API source docs", "dlt verified sources (github.com/dlt-hub/verified-sources)"], "tip": "Use dlt's verified sources as reference implementations \u2014 they show all best practices including incremental loading.", "hasScore": false}, {"title": "Destinations and loading strategies", "badge": "learn", "sub": "Day 3 \u00b7 Destinations", "tasks": ["Connect dlt to BigQuery, Snowflake, or Redshift (use DuckDB for practice)", "Understand write dispositions: append, replace, merge", "Configure primary keys and deduplication for merge loads", "Study destination-specific performance settings"], "resources": ["dlt destinations docs", "dlt DuckDB destination (fastest for local dev)"], "tip": "'merge' write disposition with composite primary keys is the most powerful dlt feature for idempotent loads.", "hasScore": false}, {"title": "Incremental loading and state management", "badge": "learn", "sub": "Day 4 \u00b7 Incremental", "tasks": ["Configure incremental loading with dlt.sources.incremental", "Understand cursor fields: updated_at, id, timestamp", "Study dlt's pipeline state: how it persists between runs", "Practice: build an incremental API source that only fetches new records"], "resources": ["dlt incremental loading docs", "dlt pipeline state docs"], "tip": "Always prefer incremental loading over full refresh. dlt state is stored in the destination \u2014 no external DB needed.", "hasScore": false}, {"title": "Schema management and data contracts", "badge": "learn", "sub": "Day 5 \u00b7 Schema", "tasks": ["Understand dlt's automatic schema inference", "Configure column hints: data_type, nullable, primary_key", "Study schema evolution: add columns, change types, freeze schema", "Implement data contracts using dlt schema contracts feature"], "resources": ["dlt schema docs", "dlt data contracts guide"], "tip": "Schema freezing is critical for production pipelines. Always set explicit column hints for key columns.", "hasScore": false}, {"title": "Transformations and dbt integration", "badge": "learn", "sub": "Day 6 \u00b7 Transform", "tasks": ["Run SQL transformations using dlt's built-in SQL client", "Integrate dlt with dbt for post-load transformations", "Configure dbt profiles to use the dlt destination connection", "Build a dlt \u2192 dbt pipeline on DuckDB"], "resources": ["dlt dbt integration docs", "dlt + dbt example (GitHub)"], "tip": "dlt handles extraction and loading. dbt handles transformation. Together they form a clean ELT pattern.", "hasScore": false}, {"title": "Error handling and data quality", "badge": "learn", "sub": "Day 7 \u00b7 Quality", "tasks": ["Configure dlt to raise on schema violations vs log warnings", "Implement custom data filtering in resource functions", "Study dlt's built-in error reporting and logging", "Add Pydantic validation to resource items"], "resources": ["dlt error handling docs", "dlt Pydantic integration guide"], "tip": "Use fail_map_on_single_error=False during development, then flip it to True in production for strict quality.", "hasScore": false}, {"title": "Production deployment patterns", "badge": "learn", "sub": "Day 8 \u00b7 Production", "tasks": ["Deploy a dlt pipeline to GitHub Actions (cron-based)", "Configure environment-based secrets management", "Study dlt's Airflow, Prefect, and Dagster integrations", "Add observability: logging, alerting, and pipeline run monitoring"], "resources": ["dlt deployment docs", "dlt Airflow integration example"], "tip": "For production, always use environment variables for credentials. Never hardcode in pipeline files.", "hasScore": false}, {"title": "Advanced patterns: REST API helper and normalization", "badge": "learn", "sub": "Day 9 \u00b7 Advanced", "tasks": ["Use dlt's rest_api source helper for complex APIs", "Configure endpoint chaining and resource dependencies", "Study dlt's data normalization: nested JSON \u2192 flat tables", "Build a pipeline that handles deeply nested API responses"], "resources": ["dlt rest_api source helper docs", "dlt nested data normalization guide"], "tip": "The rest_api helper can build 80% of API sources with zero custom code \u2014 use it before writing from scratch.", "hasScore": false}, {"title": "Capstone project + portfolio", "badge": "exam", "sub": "Day 10 \u00b7 Capstone", "tasks": ["Build a complete dlt pipeline: REST API \u2192 DuckDB \u2192 dbt transformations", "Add incremental loading, schema contracts, and error handling", "Deploy to GitHub Actions with scheduled runs", "Document the pipeline and publish to GitHub"], "resources": ["Your GitHub repository", "dlt showcase gallery (dlthub.com/showcase)"], "tip": "A working dlt pipeline on GitHub is worth more than any certification. Make it production-quality.", "hasScore": false}];
@@ -319,6 +337,10 @@ function renderSchedule(){
         <span class="chevron">▾</span>
       </div>
       <div class="day-body">
+        <div class="nb-row">
+          <a class="nb-btn" href="notebooks/${NOTEBOOKS[i]}.ipynb" target="_blank">📓 Open notebook</a>
+          <a class="nb-btn nb-btn-colab" href="https://colab.research.google.com/github/certified-journeys/dlt-certified/blob/main/notebooks/${NOTEBOOKS[i]}.ipynb" target="_blank">▶ Open in Colab</a>
+        </div>
         <div class="tip-box"><p><strong>💡 Tip:</strong> ${d.tip}</p></div>
         <div class="task-list">${d.tasks.map(t=>`<div class="task"><div class="task-bullet"></div><span>${t}</span></div>`).join('')}</div>
         <div class="resources-row">${d.resources.map(r=>`<span class="res-pill">📎 ${r}</span>`).join('')}</div>
