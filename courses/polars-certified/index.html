@@ -129,6 +129,14 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 .t-bar-bg{background:var(--surface2);border-radius:99px;height:5px;margin-bottom:4px;overflow:hidden;}
 .t-bar-fill{height:100%;border-radius:99px;transition:width .7s cubic-bezier(.4,0,.2,1);}
 .t-pct{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+/* Topic ↔ Day connections */
+.day-topic-pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.day-topic-pill{font-size:10px;padding:2px 9px;border-radius:99px;border:.5px solid;font-weight:500;cursor:pointer;transition:opacity .15s;white-space:nowrap;}
+.day-topic-pill:hover{opacity:.7;}
+.topic-days{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.topic-day-btn{font-size:11px;padding:2px 8px;border-radius:99px;border:.5px solid var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;font-family:'DM Mono',monospace;transition:all .15s;}
+.topic-day-btn:hover{background:var(--surface3);color:var(--text);}
+.topic-day-btn.done{background:var(--green-light);color:var(--green-dark);border-color:var(--green);}
 /* Notes */
 .notes-wrap{display:flex;flex-direction:column;gap:10px;}
 .note-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;}
@@ -303,6 +311,16 @@ function logHours(i,val){const v=parseFloat(val);if(!isNaN(v)&&v>=0){state.hours
 function scoreClass(s){return s>=90?'ok':s>=80?'warn':'danger';}
 function badgeClass(b){return{learn:'badge-learn',practice:'badge-practice',review:'badge-review',exam:'badge-exam'}[b];}
 function badgeLabel(b){return{learn:'Learn',practice:'Practice',review:'Review',exam:'Exam'}[b];}
+// Topic ↔ Day reverse index
+const dayTopics=(()=>{const m={};topics.forEach(t=>t.days.forEach(d=>{(m[d]=m[d]||[]).push(t);}));return m;})();
+function goToDay(i){
+  showPanel('schedule',document.querySelector('.tab'));
+  setTimeout(()=>{
+    state.openDay=i;saveState();renderSchedule();
+    const el=document.querySelector('.day-card:nth-child('+(i+1)+')');
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  },50);
+}
 function renderTask(t){if(typeof t==='string')return`<div class="task"><div class="task-bullet"></div><span>${t}</span></div>`;return`<div class="task"><div class="task-bullet"></div><span>${t.text}</span>${t.url?`<a class="task-link" href="${t.url}" target="_blank" rel="noopener">↗</a>`:''}</div>`;}
 function renderRes(r){if(typeof r==='string')return`<span class="res-pill">📎 ${r}</span>`;return r.url?`<a class="res-pill" href="${r.url}" target="_blank" rel="noopener">📎 ${r.text}</a>`:`<span class="res-pill">📎 ${r.text}</span>`;}
 
@@ -340,6 +358,7 @@ function renderSchedule(){
       <div class="day-body">
         <div class="nb-row"><a class="nb-btn" href="notebooks/${NOTEBOOKS[i]}.ipynb" target="_blank">📓 Open notebook</a><a class="nb-btn nb-btn-colab" href="https://colab.research.google.com/github/certified-journeys/certified-journeys.github.io/blob/main/courses/polars-certified/notebooks/${NOTEBOOKS[i]}.ipynb" target="_blank">▶ Open in Colab</a></div>
         <div class="tip-box"><p><strong>💡 Tip:</strong> ${d.tip}</p></div>
+        ${(dayTopics[i]||[]).length?`<div class="day-topic-pills">${(dayTopics[i]||[]).map(t=>`<span class="day-topic-pill" style="background:${t.color}18;color:${t.color};border-color:${t.color}40" onclick="event.stopPropagation();showPanel('topics',document.querySelectorAll('.tab')[1])" title="View topic in Topics tab">${t.name}</span>`).join('')}</div>`:''}
         <div class="task-list">${d.tasks.map(renderTask).join('')}</div>
         <div class="resources-row">${d.resources.map(renderRes).join('')}</div>
         ${d.hasScore?`<div class="score-row"><label>Practice score (%):</label><input type="number" min="0" max="100" placeholder="e.g. 84" value="${score||''}" onchange="logScore(${i},this.value)">${score?`<span class="score-badge ${scoreClass(score)==='ok'?'badge-learn':scoreClass(score)==='warn'?'badge-review':'badge-exam'}">${score}%</span>`:''}</div>`:''}
