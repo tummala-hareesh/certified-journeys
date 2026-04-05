@@ -6,10 +6,10 @@ Courses come in **two types** — set `COURSE_TYPE` accordingly:
 
 | Type | Use when | Day-card action row | Output B |
 |------|----------|---------------------|---------|
-| `notebook` | Hands-on technical (Python, data engineering, ML) | 📓 Notebook · ▶ Colab · 📝 notes_by_day.md | Jupyter `.ipynb` per day + `notes/day-NN.md` templates |
-| `standard` | Certification prep, theory-heavy (Scrum, cloud certs, BI) | 📝 notes_by_day.md only | `notes/day-NN.md` templates |
+| `notebook` | Hands-on technical (Python, data engineering, ML) | 📓 Notebook · ▶ Colab · 📝 notes/day-NN.md | Jupyter `.ipynb` per day + `notes/day-NN.md` templates |
+| `standard` | Certification prep, theory-heavy (Scrum, cloud certs, BI) | 📝 notes/day-NN.md only | `notes/day-NN.md` templates |
 
-Both types include a `📝 notes_by_day.md` link per day. The difference is whether notebook + Colab buttons also appear.
+Both types include a `📝 notes/day-NN.md` link per day. The difference is whether notebook + Colab buttons also appear.
 
 ---
 
@@ -320,7 +320,7 @@ The notes link is present in **both** types. The file name is zero-padded to mat
   <a class="nb-btn nb-btn-colab"
      href="https://colab.research.google.com/github/certified-journeys/certified-journeys.github.io/blob/main/courses/[COURSE_ID]/notebooks/${NOTEBOOKS[i]}.ipynb"
      target="_blank">▶ Open in Colab</a>
-  <a class="nb-btn" href="notes/day-${String(i+1).padStart(2,'0')}.md" target="_blank">📝 notes_by_day.md</a>
+  <a class="nb-btn" href="https://github.com/certified-journeys/certified-journeys.github.io/edit/main/courses/${COURSE_ID}/notes/day-${String(i+1).padStart(2,'0')}.md" target="_blank">📝 notes/day-NN.md</a>
 </div>`
 ```
 
@@ -328,7 +328,7 @@ The notes link is present in **both** types. The file name is zero-padded to mat
 
 ```js
 `<div class="nb-row">
-  <a class="nb-btn" href="notes/day-${String(i+1).padStart(2,'0')}.md" target="_blank">📝 notes_by_day.md</a>
+  <a class="nb-btn" href="https://github.com/certified-journeys/certified-journeys.github.io/edit/main/courses/${COURSE_ID}/notes/day-${String(i+1).padStart(2,'0')}.md" target="_blank">📝 notes/day-NN.md</a>
 </div>`
 ```
 
@@ -586,7 +586,7 @@ _Your notes for today._
 -
 ```
 
-The `📝 notes_by_day.md` link in each day card points to this file. Users fill it in locally or in their fork.
+The `📝 notes/day-NN.md` link in each day card points to this file. Users fill it in locally or in their fork.
 
 No Jupyter notebooks are generated for `standard` courses.
 
@@ -600,7 +600,7 @@ No Jupyter notebooks are generated for `standard` courses.
 - [ ] All 5 panels render without JS errors
 - [ ] `renderTask(t)` and `renderRes(r)` helpers present and used in `renderSchedule`
 - [ ] All `{text, url}` objects in `tasks` and `resources` have real, working URLs
-- [ ] Every day card has `.nb-row` with a `📝 notes_by_day.md` link (`notes/day-NN.md`)
+- [ ] Every day card has `.nb-row` with a `📝 notes/day-NN.md` link (`notes/day-NN.md`)
 - [ ] `dayTopics` reverse index is built and `goToDay(i)` function is present
 - [ ] Topic pills appear in each day card body (clickable → Topics tab)
 - [ ] Topics tab shows clickable day buttons (completed days highlighted green)
@@ -626,7 +626,7 @@ No Jupyter notebooks are generated for `standard` courses.
 ### `standard` type only
 - [ ] No `const NOTEBOOKS` array present
 - [ ] No `.nb-btn-colab` in HTML or CSS
-- [ ] Every day card's `.nb-row` has only the `📝 notes_by_day.md` button (1 total)
+- [ ] Every day card's `.nb-row` has only the `📝 notes/day-NN.md` button (1 total)
 
 ---
 

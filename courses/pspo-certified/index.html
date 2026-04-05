@@ -323,7 +323,7 @@ function renderSchedule(){
         <span class="chevron">▾</span>
       </div>
       <div class="day-body">
-<div class="nb-row"><a class="nb-btn" href="notes/day-${String(i+1).padStart(2,'0')}.md" target="_blank">📝 notes_by_day.md</a></div>
+<div class="nb-row"><a class="nb-btn" href="https://github.com/certified-journeys/certified-journeys.github.io/edit/main/courses/${COURSE_ID}/notes/day-${String(i+1).padStart(2,'0')}.md" target="_blank">📝 notes/day-${String(i+1).padStart(2,'0')}.md</a></div>
         <div class="tip-box"><p><strong>💡 Tip:</strong> ${d.tip}</p></div>
         ${(dayTopics[i]||[]).length?`<div class="day-topic-pills">${(dayTopics[i]||[]).map(t=>`<span class="day-topic-pill" style="background:${t.color}18;color:${t.color};border-color:${t.color}40" onclick="event.stopPropagation();showPanel('topics',document.querySelectorAll('.tab')[1])" title="View topic in Topics tab">${t.name}</span>`).join('')}</div>`:''}
         <div class="task-list">${d.tasks.map(renderTask).join('')}</div>
