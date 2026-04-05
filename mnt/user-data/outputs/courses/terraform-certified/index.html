@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HashiCorp Terraform Associate (003) · certified-journeys</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --green:#1D9E75;--green-light:#E8F8F2;--green-dark:#0F6E56;
+  --blue:#378ADD;--blue-light:#EAF3FD;--blue-dark:#185FA5;
+  --amber:#BA7517;--amber-light:#FDF3E3;
+  --coral:#D85A30;--coral-light:#FAEDE8;--coral-dark:#993C1D;
+  --purple:#7F77DD;--purple-light:#EEEDFE;
+  --orange:#E8890C;--orange-light:#FEF3E2;
+  --teal:#0891B2;--teal-light:#E0F5FA;
+  --bg:#F5F4F0;--surface:#FFFFFF;--surface2:#EEECE5;--surface3:#E8E6DF;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.16);
+  --text:#18181A;--text2:#52524E;--text3:#8C8B85;
+  --radius:14px;--radius-sm:9px;--radius-xs:5px;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.1),0 1px 3px rgba(0,0,0,0.06);
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#111113;--surface:#1C1C1F;--surface2:#252528;--surface3:#2E2E33;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+  --text:#F0EFEA;--text2:#A09F9B;--text3:#5E5D58;
+  --green-light:#0B3326;--blue-light:#061E38;--amber-light:#221900;
+  --coral-light:#2A0E05;--purple-light:#161440;--orange-light:#1F1200;--teal-light:#021E26;
+}}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;}
+a{color:var(--blue-dark);text-decoration:none;}
+a:hover{text-decoration:underline;}
+button{cursor:pointer;font-family:inherit;}
+code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:0.9em;}
+
+.app{max-width:860px;margin:0 auto;padding:0 1.25rem 4rem;}
+/* Breadcrumb */
+.breadcrumb{padding:1rem 0 0;font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px;}
+.breadcrumb a{color:var(--text3);text-decoration:none;}
+.breadcrumb a:hover{color:var(--text);}
+.breadcrumb-sep{color:var(--text3);}"
+/* Course Header */
+.course-hero{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin:1rem 0 1.25rem;box-shadow:var(--shadow);}
+.course-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+.course-icon-wrap{display:flex;align-items:center;gap:12px;}
+.course-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;letter-spacing:0.02em;}
+.course-title-block h1{font-size:22px;font-weight:600;letter-spacing:-0.02em;color:var(--text);line-height:1.2;}
+.course-title-block p{font-size:13px;color:var(--text2);margin-top:3px;}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.tag{font-size:11px;padding:3px 10px;border-radius:99px;background:var(--surface2);color:var(--text2);border:0.5px solid var(--border);}
+.hero-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.meta-item{background:var(--surface2);border-radius:var(--radius-sm);padding:10px 12px;}
+.meta-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;}
+.meta-val{font-size:14px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;}
+/* Progress */
+.prog-strip{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.25rem;}
+.prog-strip-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px;}
+.prog-label{font-size:13px;color:var(--text2);}
+.prog-pct{font-size:32px;font-weight:600;letter-spacing:-0.03em;color:var(--text);font-family:'DM Mono',monospace;line-height:1;}
+.bar-bg{background:var(--surface2);border-radius:99px;height:8px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:99px;background:var(--green);transition:width .7s cubic-bezier(.4,0,.2,1);}
+.readiness{margin-top:8px;font-size:13px;color:var(--text2);}
+.readiness span{font-weight:500;}
+.readiness.ready span{color:var(--green);}
+.readiness.close span{color:var(--amber);}
+.readiness.early span{color:var(--coral);}
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:1.25rem;}
+.stat{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:.9rem;}
+.stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.stat-val{font-size:20px;font-weight:600;color:var(--text);letter-spacing:-.02em;font-family:'DM Mono',monospace;}
+.stat-val.ok{color:var(--green);} .stat-val.warn{color:var(--amber);} .stat-val.danger{color:var(--coral);}
+/* Tabs */
+.tabs{display:flex;gap:2px;margin-bottom:1.25rem;background:var(--surface2);border-radius:99px;padding:4px;overflow-x:auto;}
+.tab{flex:1;min-width:max-content;font-size:12px;padding:7px 14px;cursor:pointer;color:var(--text2);border-radius:99px;border:none;background:none;font-family:inherit;font-weight:400;transition:all .2s;text-align:center;white-space:nowrap;}
+.tab.active{background:var(--surface);color:var(--text);font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
+.panel{display:none;} .panel.active{display:block;}
+/* Day cards */
+.day-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;transition:border-color .2s;}
+.day-card.completed{border-color:var(--green-dark);}
+.day-card.completed .day-num{background:var(--green);color:#fff;border-color:var(--green);}
+.day-header{display:flex;align-items:center;gap:12px;padding:.95rem 1.1rem;cursor:pointer;user-select:none;}
+.day-header:hover{background:var(--surface2);}
+.day-num{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--text2);flex-shrink:0;font-family:'DM Mono',monospace;transition:all .2s;}
+.day-meta{flex:1;min-width:0;}
+.day-title{font-size:14px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.day-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.day-badge{font-size:11px;padding:3px 10px;border-radius:99px;font-weight:500;flex-shrink:0;}
+.badge-learn{background:var(--green-light);color:var(--green-dark);}
+.badge-practice{background:var(--blue-light);color:var(--blue-dark);}
+.badge-review{background:var(--amber-light);color:var(--amber);}
+.badge-exam{background:var(--coral-light);color:var(--coral-dark);}
+.chevron{font-size:11px;color:var(--text3);flex-shrink:0;transition:transform .2s;}
+.day-card.open .chevron{transform:rotate(180deg);}
+.day-body{display:none;padding:0 1.1rem 1.1rem;border-top:.5px solid var(--border);}
+.day-card.open .day-body{display:block;}
+.tip-box{background:var(--green-light);border-left:3px solid var(--green);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:.7rem .9rem;margin:1rem 0 .75rem;}
+.tip-box p{font-size:13px;color:var(--green-dark);line-height:1.6;}
+.tip-box strong{font-weight:600;}
+.task-list{margin-bottom:.75rem;}
+.task{display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:13px;color:var(--text2);border-bottom:.5px solid var(--border);line-height:1.5;}
+.task:last-child{border-bottom:none;}
+.task-bullet{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:6px;}
+.resources-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.res-pill{font-size:11px;padding:4px 11px;border-radius:99px;background:var(--surface2);border:.5px solid var(--border);color:var(--text2);}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.score-row label{font-size:12px;color:var(--text2);}
+.score-row input{width:72px;font-size:13px;padding:5px 10px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;}
+.score-badge{font-size:12px;font-weight:500;padding:3px 10px;border-radius:99px;}
+.complete-btn{width:100%;font-size:13px;padding:9px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;font-weight:400;}
+.complete-btn:hover{background:var(--green-light);color:var(--green-dark);border-color:var(--green);}
+.complete-btn.done{background:var(--green-light);color:var(--green-dark);border-color:var(--green);font-weight:500;}
+/* Hours log */
+.hours-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text2);}
+.hours-row input{width:60px;font-size:13px;padding:4px 8px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;}
+/* Topics */
+.topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.topic-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;}
+.topic-card h4{font-size:13px;font-weight:500;color:var(--text);margin-bottom:10px;line-height:1.4;}
+.t-bar-bg{background:var(--surface2);border-radius:99px;height:5px;margin-bottom:4px;overflow:hidden;}
+.t-bar-fill{height:100%;border-radius:99px;transition:width .7s cubic-bezier(.4,0,.2,1);}
+.t-pct{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+/* Notes */
+.notes-wrap{display:flex;flex-direction:column;gap:10px;}
+.note-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;}
+.note-card-head{font-size:13px;font-weight:500;color:var(--text);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.note-card textarea{width:100%;min-height:100px;font-size:13px;line-height:1.7;padding:.7rem .9rem;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;resize:vertical;}
+.note-card textarea:focus{outline:none;border-color:var(--green);background:var(--surface);}
+.note-saved{font-size:11px;color:var(--green);display:none;}
+/* Quiz */
+.quiz-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;}
+.quiz-progress{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:1rem;}
+.quiz-q{font-size:15px;font-weight:500;color:var(--text);line-height:1.6;margin-bottom:1.25rem;}
+.quiz-opt{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border:.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;line-height:1.5;}
+.quiz-opt:hover{border-color:var(--border2);color:var(--text);background:var(--surface2);}
+.quiz-opt.correct{background:var(--green-light);border-color:var(--green);color:var(--green-dark);}
+.quiz-opt.wrong{background:var(--coral-light);border-color:var(--coral);color:var(--coral-dark);}
+.opt-letter{font-weight:600;min-width:18px;font-family:'DM Mono',monospace;font-size:12px;margin-top:1px;}
+.quiz-exp{margin-top:1rem;padding:1rem;background:var(--surface2);border-radius:var(--radius-sm);font-size:13px;color:var(--text2);line-height:1.7;display:none;border-left:3px solid var(--green);}
+.quiz-exp.show{display:block;}
+.quiz-exp strong{color:var(--text);font-weight:500;}
+.next-btn{font-size:13px;padding:8px 18px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;margin-top:1rem;}
+.next-btn:hover{background:var(--surface2);}
+.quiz-score-wrap{text-align:center;padding:2rem 0;}
+.quiz-score-big{font-size:48px;font-weight:600;font-family:'DM Mono',monospace;letter-spacing:-.03em;}
+.quiz-score-big.pass{color:var(--green);} .quiz-score-big.fail{color:var(--coral);}
+.quiz-score-label{font-size:14px;color:var(--text2);margin-top:6px;}
+.retake-btn{margin-top:1.25rem;font-size:13px;padding:9px 20px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;}
+/* Flashcards */
+.flashcard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
+.flashcard{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;cursor:pointer;min-height:100px;display:flex;align-items:center;justify-content:center;text-align:center;transition:all .2s;position:relative;}
+.flashcard:hover{box-shadow:var(--shadow-md);border-color:var(--border2);}
+.fc-front{font-size:13px;font-weight:500;color:var(--text);line-height:1.5;}
+.fc-back{font-size:12px;color:var(--green-dark);background:var(--green-light);border-radius:var(--radius-sm);padding:.7rem;display:none;width:100%;line-height:1.6;}
+.flashcard.flipped .fc-front{display:none;}
+.flashcard.flipped .fc-back{display:block;}
+.fc-hint{font-size:10px;color:var(--text3);position:absolute;bottom:8px;right:10px;}
+/* Exam prep */
+.exam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
+.exam-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;}
+.exam-card-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.exam-card-val{font-size:16px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;}
+.exam-card-sub{font-size:12px;color:var(--text2);margin-top:3px;line-height:1.5;}
+.info-box{background:var(--surface2);border-radius:var(--radius-sm);padding:.9rem 1rem;font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px;}
+.info-box strong{color:var(--text);font-weight:500;}
+/* AI tools */
+.ai-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;margin-bottom:10px;}
+.ai-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.ai-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ai-card-title{font-size:14px;font-weight:500;color:var(--text);}
+.ai-card-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.ai-card-body{font-size:13px;color:var(--text2);line-height:1.7;}
+.ai-prompt-box{background:var(--surface2);border:.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;margin-top:10px;font-size:12px;color:var(--text2);font-family:'DM Mono',monospace;line-height:1.7;white-space:pre-wrap;}
+.ai-link-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;padding:6px 14px;border-radius:99px;border:.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;text-decoration:none;}
+.ai-link-btn:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
+/* Footer */
+.page-footer{font-size:11px;color:var(--text3);text-align:center;margin-top:2rem;padding-top:1rem;border-top:.5px solid var(--border);}
+.page-footer span{color:var(--green);}
+/* Reset btn */
+.reset-btn{font-size:11px;color:var(--text3);background:none;border:.5px solid var(--border2);border-radius:99px;padding:5px 12px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.reset-btn:hover{color:var(--coral);border-color:var(--coral);}
+@media(max-width:600px){
+  .hero-meta{grid-template-columns:repeat(2,1fr);}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .topic-grid{grid-template-columns:1fr;}
+  .exam-grid{grid-template-columns:1fr;}
+  .flashcard-grid{grid-template-columns:1fr;}
+  .course-hero-top{flex-direction:column;}
+  .tab{font-size:11px;padding:6px 8px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="breadcrumb">
+  <a href="../../index.html">certified-journeys</a>
+  <span class="breadcrumb-sep">›</span>
+  <a href="../../index.html#courses">All journeys</a>
+  <span class="breadcrumb-sep">›</span>
+  <span>Terraform</span>
+</div>
+
+<div class="course-hero">
+  <div class="course-hero-top">
+    <div class="course-icon-wrap">
+      <div class="course-icon" style="background:#EEEDFE;color:#7F77DD;">TF</div>
+      <div class="course-title-block">
+        <h1>HashiCorp Terraform Associate (003)</h1>
+        <p>HashiCorp / IBM · Intermediate · 14 days</p>
+        <div class="tag-row"><span class="tag">IaC</span> <span class="tag">DevOps</span> <span class="tag">Cloud</span></div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="resetAll()">Reset progress</button>
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item"><div class="meta-label">Cost</div><div class="meta-val">$70</div></div>
+    <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-val">14 days</div></div>
+    <div class="meta-item"><div class="meta-label">Provider</div><div class="meta-val" style="font-size:12px;font-family:'DM Sans',system-ui;">HashiCorp / IBM</div></div>
+    <div class="meta-item"><div class="meta-label">Exam link</div><div class="meta-val" style="font-size:11px;font-family:'DM Sans',system-ui;"><a href="https://developer.hashicorp.com/certifications/infrastructure-automation" target="_blank">Register →</a></div></div>
+  </div>
+</div>
+
+<div class="prog-strip">
+  <div class="prog-strip-top">
+    <div class="prog-label">Overall completion</div>
+    <div class="prog-pct" id="pct-display">0%</div>
+  </div>
+  <div class="bar-bg"><div class="bar-fill" id="main-bar" style="width:0%"></div></div>
+  <div class="readiness early" id="readiness-row">Status: <span id="status-txt">Not started</span></div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat"><div class="stat-label">Days done</div><div class="stat-val" id="days-done">0/14</div></div>
+  <div class="stat"><div class="stat-label">Avg score</div><div class="stat-val" id="avg-score">—</div></div>
+  <div class="stat"><div class="stat-label">Hours logged</div><div class="stat-val" id="hrs-logged">0 h</div></div>
+  <div class="stat"><div class="stat-label">Days left</div><div class="stat-val" id="days-left">14</div></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showPanel('schedule',this)">📅 Daily Plan</button>
+  <button class="tab" onclick="showPanel('topics',this)">📚 Topics</button>
+  <button class="tab" onclick="showPanel('notes',this)">📝 Notes</button>
+  <button class="tab" onclick="showPanel('flashcards',this)">🃏 Flashcards</button>
+  <button class="tab" onclick="showPanel('quiz',this)">✅ Quiz</button>
+  <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
+  <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
+</div>
+
+<div id="panel-schedule" class="panel active"></div>
+<div id="panel-topics" class="panel"></div>
+<div id="panel-notes" class="panel"></div>
+<div id="panel-flashcards" class="panel"></div>
+<div id="panel-quiz" class="panel"></div>
+<div id="panel-ai" class="panel"></div>
+<div id="panel-exam" class="panel"></div>
+
+<div class="page-footer">Progress saved locally · <span id="sk-display">cj_terraform-certified_v1</span> · No account needed · <a href="../../index.html">← All journeys</a></div>
+</div>
+
+<script>
+const COURSE_ID='terraform-certified';
+const STORAGE_KEY='cj_terraform-certified_v1';
+const TOTAL_DAYS=14;
+const days=[{"title": "Terraform fundamentals and IaC concepts", "badge": "learn", "sub": "Week 1 \u00b7 Foundation", "tasks": ["Install Terraform and verify: terraform --version", "Understand: HCL syntax, blocks, arguments, expressions", "Study IaC concepts: declarative vs imperative, idempotency", "Write your first Terraform: deploy a local file resource"], "resources": ["developer.hashicorp.com/terraform/tutorials", "Terraform: Up & Running (Brikman) ch.1"], "tip": "The exam tests conceptual understanding heavily. Know WHY you use IaC, not just how.", "hasScore": false}, {"title": "Provider configuration and core workflow", "badge": "learn", "sub": "Week 1 \u00b7 Workflow", "tasks": ["Configure AWS provider (use a free tier account)", "terraform init, plan, apply, destroy \u2014 understand each stage", "Study provider authentication: environment variables, profiles", "Read state: terraform show, terraform state list"], "resources": ["Terraform AWS provider docs", "HashiCorp Learn: Get Started with AWS"], "tip": "Know the exact output of each CLI command \u2014 terraform plan output format is frequently tested.", "hasScore": false}, {"title": "Resource blocks, data sources and dependencies", "badge": "learn", "sub": "Week 1 \u00b7 Resources", "tasks": ["Define resources: resource type, local name, arguments", "Data sources: read existing infrastructure with data blocks", "Implicit vs explicit dependencies: depends_on", "Use terraform graph to visualize dependencies"], "resources": ["Terraform resource docs", "Terraform data sources guide"], "tip": "Implicit dependencies (reference via expression) are always preferred over explicit depends_on.", "hasScore": false}, {"title": "Variables, outputs and locals", "badge": "learn", "sub": "Week 1 \u00b7 Variables", "tasks": ["Input variables: types, validation, sensitive flag", "Variable precedence: CLI flags \u2192 env vars \u2192 .tfvars \u2192 defaults", "Output values: sharing data between configurations", "Locals: computed values within a module"], "resources": ["Terraform variables docs", "HashiCorp variable precedence guide"], "tip": "Variable precedence order is tested directly. Memorize: -var flag > TF_VAR_env > terraform.tfvars > defaults.", "hasScore": true}, {"title": "State management deep dive", "badge": "learn", "sub": "Week 1 \u00b7 State", "tasks": ["Study terraform.tfstate: structure and purpose", "Remote state: S3 backend with DynamoDB locking", "terraform state mv, terraform state rm, terraform import", "Sensitive values in state: always encrypted in transit"], "resources": ["Terraform state docs", "Terraform backend configuration guide"], "tip": "The exam tests state manipulation commands. Know when to use state mv vs import vs taint (deprecated).", "hasScore": false}, {"title": "Modules: creation and consumption", "badge": "learn", "sub": "Week 1 \u00b7 Modules", "tasks": ["Create a reusable module with variables and outputs", "Consume a module from Terraform Registry (hashicorp/vpc/aws)", "Module versioning: source = 'module//submodule'", "Study the module file structure: main.tf, variables.tf, outputs.tf"], "resources": ["Terraform module docs", "Terraform Registry \u2014 official modules"], "tip": "Modules are heavily tested. Know the difference between root module, child module, and published module.", "hasScore": false}, {"title": "Built-in functions and expressions", "badge": "learn", "sub": "Week 2 \u00b7 Expressions", "tasks": ["String functions: format(), join(), split(), tostring()", "Collection functions: flatten(), merge(), zipmap()", "Conditional expressions: condition ? true_val : false_val", "for expressions and dynamic blocks"], "resources": ["Terraform built-in functions reference", "HashiCorp Learn: expressions tutorial"], "tip": "Practice built-in functions in the Terraform console: terraform console \u2192 enter function calls directly.", "hasScore": true}, {"title": "Terraform Cloud and remote operations", "badge": "learn", "sub": "Week 2 \u00b7 Cloud", "tasks": ["Understand Terraform Cloud vs Enterprise vs OSS differences", "Remote execution mode: runs in TFC vs locally", "Workspace management in Terraform Cloud", "Sentinel policies: policy-as-code for governance"], "resources": ["Terraform Cloud docs", "HashiCorp Learn: Terraform Cloud tutorials"], "tip": "Terraform Cloud is heavily weighted in the exam. Know the workspace types and execution modes cold.", "hasScore": false}, {"title": "Provisioners, null_resource and lifecycle", "badge": "learn", "sub": "Week 2 \u00b7 Advanced", "tasks": ["Lifecycle meta-argument: create_before_destroy, prevent_destroy, ignore_changes", "Provisioners: local-exec and remote-exec (use sparingly)", "null_resource for running arbitrary local commands", "terraform taint equivalent: -replace flag in modern versions"], "resources": ["Terraform lifecycle docs", "Terraform provisioners guide"], "tip": "The exam may present provisioners as an option. Know why they're a last resort and what to use instead.", "hasScore": false}, {"title": "Workspaces and environment management", "badge": "learn", "sub": "Week 2 \u00b7 Workspaces", "tasks": ["Terraform CLI workspaces: terraform workspace new/select/list", "Workspace use cases: dev/staging/prod isolation", "Study the terraform.workspace interpolation", "Understand when workspaces are NOT appropriate (use separate configs instead)"], "resources": ["Terraform workspace docs", "HashiCorp workspace best practices"], "tip": "Exam often presents workspaces as a solution. Know their limitations \u2014 they share the same backend config.", "hasScore": false}, {"title": "Mock exam #1 + gap analysis", "badge": "practice", "sub": "Week 2 \u00b7 Assessment", "tasks": ["Take a 57-question Terraform practice exam (Udemy or Whizlabs)", "Target score: 75%+", "Flag all questions related to state, cloud, and modules", "Re-read Terraform docs for flagged topics"], "resources": ["Bryan Krausen Terraform practice exams (Udemy)", "HashiCorp Study Guide"], "tip": "Bryan Krausen's practice exams are the closest to the real exam. Do all of them.", "hasScore": true}, {"title": "Security, compliance and secret management", "badge": "learn", "sub": "Week 2 \u00b7 Security", "tasks": ["Mark variables as sensitive: sensitive = true", "Use Vault provider for secrets management", "Study encryption of state in remote backends", "Understand provider authentication patterns: roles vs static keys"], "resources": ["Terraform sensitive variable docs", "HashiCorp Vault + Terraform integration"], "tip": "Never put secrets in .tf files or state without encryption. Sensitive = true prevents console display only.", "hasScore": false}, {"title": "Final mock exam + readiness check", "badge": "exam", "sub": "Week 2 \u00b7 Exam", "tasks": ["Take a second full timed practice exam", "Must score 80%+ before booking", "Book exam: $70 USD \u2014 available online proctored", "Exam: 57 questions, 60 minutes, ~70% to pass"], "resources": ["HashiCorp certification portal", "Pearson VUE online proctoring"], "tip": "The exam is open-note but time-constrained. Build intuition \u2014 don't plan to look everything up.", "hasScore": true}, {"title": "Exam day prep + review", "badge": "exam", "sub": "Week 2 \u00b7 Final", "tasks": ["Review state management commands one more time", "Review variable precedence chart", "Review Terraform Cloud workspace types", "Rest. 57 questions in 60 minutes is very manageable."], "resources": ["Your personal cheat sheet", "HashiCorp Terraform Associate study guide"], "tip": "You know this. The exam rewards engineers who have actually used Terraform in production. That's you.", "hasScore": false}];
+const topics=[{"name": "HCL & Core workflow", "color": "#7F77DD", "days": [0, 1, 2]}, {"name": "State management", "color": "#D85A30", "days": [4, 12]}, {"name": "Modules & Registry", "color": "#1D9E75", "days": [5, 10]}, {"name": "Functions & Expressions", "color": "#378ADD", "days": [6, 8]}, {"name": "Terraform Cloud", "color": "#BA7517", "days": [7, 11]}, {"name": "Security & Compliance", "color": "#E8890C", "days": [11, 12]}];
+const quizzes=[{"q": "What is the correct variable precedence order (highest to lowest)?", "opts": ["-var flag \u2192 TF_VAR \u2192 .tfvars \u2192 defaults", ".tfvars \u2192 TF_VAR \u2192 -var \u2192 defaults", "defaults \u2192 .tfvars \u2192 TF_VAR \u2192 -var", "TF_VAR \u2192 -var \u2192 .tfvars \u2192 defaults"], "correct": 0, "exp": "The correct order: <strong>-var CLI flag</strong> has highest precedence, then TF_VAR_ env vars, then terraform.tfvars, then defaults."}, {"q": "Which meta-argument ensures a new resource is created before the old one is destroyed?", "opts": ["prevent_destroy", "ignore_changes", "create_before_destroy", "replace_triggered_by"], "correct": 2, "exp": "<strong>create_before_destroy</strong> ensures zero downtime by creating the replacement resource first."}, {"q": "What does 'terraform state mv' do?", "opts": ["Moves state to a remote backend", "Renames a resource in the state file", "Deletes a resource from state", "Imports an existing resource"], "correct": 1, "exp": "<strong>terraform state mv</strong> renames or moves a resource within the state file without destroying and recreating it."}, {"q": "Which Terraform Cloud execution mode runs plans in the TFC environment?", "opts": ["Local", "Remote", "API-driven", "VCS-driven"], "correct": 1, "exp": "<strong>Remote execution mode</strong> runs terraform plan and apply in Terraform Cloud's managed infrastructure."}, {"q": "What is query folding in Terraform context \u2014 what does a data source do?", "opts": ["Creates new infrastructure", "Reads existing infrastructure into Terraform state", "Deletes resources from state", "Validates provider configuration"], "correct": 1, "exp": "A <strong>data source</strong> reads existing infrastructure \u2014 it queries the provider API and makes values available in configuration."}];
+const exam={"questions": 57, "minutes": 60, "passScore": "~70%", "cost": "$70", "provider": "HashiCorp / Pearson VUE", "link": "https://developer.hashicorp.com/certifications", "notes": "Available online proctored. Retake policy: wait 2 weeks between attempts."};
+
+let state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
+
+function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)state={...state,...JSON.parse(s)};}catch(e){}}
+function saveState(){
+  state.lastActivity=Date.now();
+  if(state.completed.length>0&&state.status==='not_started')state.status='in_progress';
+  if(state.completed.length>=TOTAL_DAYS)state.status='completed';
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}
+  broadcastStatus();
+}
+function broadcastStatus(){
+  // Write a summary for the home page to read
+  const summary={id:COURSE_ID,status:state.status,completed:state.completed.length,total:TOTAL_DAYS,scores:Object.values(state.scores).filter(s=>s>0),totalHours:Object.values(state.hours).reduce((a,b)=>a+b,0),completedAt:state.completedAt,startDate:state.startDate,lastActivity:state.lastActivity};
+  try{localStorage.setItem('cj_summary_'+COURSE_ID,JSON.stringify(summary));}catch(e){}
+}
+function resetAll(){
+  if(!confirm('Reset all progress? This cannot be undone.'))return;
+  state={completed:[],scores:{},hours:{},completedAt:{},notes:{},quizAnswers:{},quizIndex:0,openDay:null,startDate:null,lastActivity:null,status:'not_started'};
+  quizCorrect=0;
+  saveState();renderAll();
+}
+function isCompleted(i){return state.completed.includes(i);}
+function toggleComplete(i){
+  if(isCompleted(i)){state.completed=state.completed.filter(x=>x!==i);delete state.completedAt[i];}
+  else{
+    state.completed.push(i);
+    state.completedAt[i]=Date.now();
+    if(!state.startDate)state.startDate=Date.now();
+  }
+  saveState();updateStats();renderSchedule();
+  if(document.getElementById('panel-topics').classList.contains('active'))renderTopics();
+}
+function toggleDay(i){state.openDay=state.openDay===i?null:i;saveState();renderSchedule();}
+function logScore(i,val){const v=parseInt(val);if(!isNaN(v)&&v>=0&&v<=100){state.scores[i]=v;saveState();updateStats();}}
+function logHours(i,val){const v=parseFloat(val);if(!isNaN(v)&&v>=0){state.hours[i]=v;saveState();updateStats();}}
+function scoreClass(s){return s>=90?'ok':s>=80?'warn':'danger';}
+function badgeClass(b){return{learn:'badge-learn',practice:'badge-practice',review:'badge-review',exam:'badge-exam'}[b];}
+function badgeLabel(b){return{learn:'Learn',practice:'Practice',review:'Review',exam:'Exam'}[b];}
+
+function updateStats(){
+  const done=state.completed.length,total=TOTAL_DAYS;
+  const pct=Math.round((done/total)*100);
+  document.getElementById('pct-display').textContent=pct+'%';
+  document.getElementById('main-bar').style.width=pct+'%';
+  document.getElementById('days-done').textContent=done+'/'+total;
+  document.getElementById('days-left').textContent=(total-done);
+  const sv=Object.values(state.scores).filter(s=>!isNaN(s)&&s>0);
+  const avgEl=document.getElementById('avg-score');
+  if(sv.length){const avg=Math.round(sv.reduce((a,b)=>a+b,0)/sv.length);avgEl.textContent=avg+'%';avgEl.className='stat-val '+scoreClass(avg);}
+  else{avgEl.textContent='—';avgEl.className='stat-val';}
+  const totalHrs=Object.values(state.hours).reduce((a,b)=>a+b,0);
+  document.getElementById('hrs-logged').textContent=totalHrs>0?totalHrs.toFixed(1)+' h':'0 h';
+  const rRow=document.getElementById('readiness-row'),sTxt=document.getElementById('status-txt');
+  if(done>=total){sTxt.textContent='Completed! 🎉';rRow.className='readiness ready';}
+  else if(done>=Math.floor(total*0.75)){sTxt.textContent='Almost there — final stretch';rRow.className='readiness close';}
+  else if(done>=Math.floor(total*0.4)){sTxt.textContent='On track — great progress';rRow.className='readiness close';}
+  else if(done>=1){sTxt.textContent='In progress — keep going';rRow.className='readiness early';}
+  else{sTxt.textContent='Not started yet';rRow.className='readiness early';}
+}
+
+function renderSchedule(){
+  document.getElementById('panel-schedule').innerHTML=days.map((d,i)=>{
+    const comp=isCompleted(i),open=state.openDay===i,score=state.scores[i],hrs=state.hours[i];
+    return `<div class="day-card ${comp?'completed':''} ${open?'open':''}">
+      <div class="day-header" onclick="toggleDay(${i})">
+        <div class="day-num">${comp?'✓':(i+1)}</div>
+        <div class="day-meta"><div class="day-title">Day ${i+1}: ${d.title}</div><div class="day-sub">${d.sub}</div></div>
+        <span class="day-badge ${badgeClass(d.badge)}">${badgeLabel(d.badge)}</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="day-body">
+        <div class="tip-box"><p><strong>💡 Tip:</strong> ${d.tip}</p></div>
+        <div class="task-list">${d.tasks.map(t=>`<div class="task"><div class="task-bullet"></div><span>${t}</span></div>`).join('')}</div>
+        <div class="resources-row">${d.resources.map(r=>`<span class="res-pill">📎 ${r}</span>`).join('')}</div>
+        ${d.hasScore?`<div class="score-row"><label>Practice score (%):</label><input type="number" min="0" max="100" placeholder="e.g. 84" value="${score||''}" onchange="logScore(${i},this.value)">${score?`<span class="score-badge ${scoreClass(score)==='ok'?'badge-learn':scoreClass(score)==='warn'?'badge-review':'badge-exam'}">${score}%</span>`:''}</div>`:''}
+        <div class="hours-row"><label>Hours spent today:</label><input type="number" min="0" max="24" step="0.5" placeholder="e.g. 2.5" value="${hrs||''}" onchange="logHours(${i},this.value)"><span style="font-size:11px;color:var(--text3);">hrs</span></div>
+        <button class="complete-btn ${comp?'done':''}" onclick="event.stopPropagation();toggleComplete(${i})">${comp?'✓ Completed':'Mark as complete'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderTopics(){
+  document.getElementById('panel-topics').innerHTML=`<div class="topic-grid">${
+    topics.map(t=>{
+      const cov=t.days.filter(d=>state.completed.includes(d)).length;
+      const pct=Math.round((cov/t.days.length)*100);
+      return `<div class="topic-card"><h4>${t.name}</h4><div class="t-bar-bg"><div class="t-bar-fill" style="width:${pct}%;background:${t.color}"></div></div><div class="t-pct">${pct}% covered · ${cov}/${t.days.length} sessions</div></div>`;
+    }).join('')
+  }</div>`;
+}
+
+function saveNote(key,val){
+  state.notes[key]=val;
+  saveState();
+  const indicator=document.getElementById('note-saved-'+key);
+  if(indicator){indicator.style.display='inline';setTimeout(()=>indicator.style.display='none',1500);}
+}
+
+function renderNotes(){
+  const generalNote=state.notes['general']||'';
+  const weekNotes=state.notes['week1']||'';
+  const week2Notes=state.notes['week2']||'';
+  const reflections=state.notes['reflections']||'';
+  document.getElementById('panel-notes').innerHTML=`
+    <div class="notes-wrap">
+      <div class="note-card">
+        <div class="note-card-head"><span>📓 General notes</span><span class="note-saved" id="note-saved-general">Saved ✓</span></div>
+        <textarea placeholder="Anything you want to remember — key concepts, mnemonics, questions to revisit..." oninput="saveNote('general',this.value)">${generalNote}</textarea>
+      </div>
+      <div class="note-card">
+        <div class="note-card-head"><span>📖 Week 1 notes</span><span class="note-saved" id="note-saved-week1">Saved ✓</span></div>
+        <textarea placeholder="Key learnings from Week 1..." oninput="saveNote('week1',this.value)">${weekNotes}</textarea>
+      </div>
+      <div class="note-card">
+        <div class="note-card-head"><span>📖 Week 2 notes</span><span class="note-saved" id="note-saved-week2">Saved ✓</span></div>
+        <textarea placeholder="Key learnings from Week 2..." oninput="saveNote('week2',this.value)">${week2Notes}</textarea>
+      </div>
+      ${days.map((d,i)=>`<div class="note-card">
+        <div class="note-card-head"><span>Day ${i+1}: ${d.title}</span><span class="note-saved" id="note-saved-day${i}">Saved ✓</span></div>
+        <textarea placeholder="Notes, questions, and takeaways for Day ${i+1}..." oninput="saveNote('day${i}',this.value)">${state.notes['day'+i]||''}</textarea>
+      </div>`).join('')}
+      <div class="note-card">
+        <div class="note-card-head"><span>💬 Reflections and lessons learned</span><span class="note-saved" id="note-saved-reflections">Saved ✓</span></div>
+        <textarea style="min-height:140px;" placeholder="What worked? What would you do differently? Advice for someone starting this journey..." oninput="saveNote('reflections',this.value)">${reflections}</textarea>
+      </div>
+    </div>`;
+}
+
+// Flashcards built from day tips + key concepts
+const flashcards=days.map((d,i)=>{return{front:`Day ${i+1} key concept:\n${d.title}`,back:d.tip}});
+
+function renderFlashcards(){
+  document.getElementById('panel-flashcards').innerHTML=`
+    <div class="info-box" style="margin-bottom:1rem;"><strong>How to use:</strong> Click any card to reveal the tip. Use these for spaced repetition — go through them daily until the concepts feel automatic.</div>
+    <div class="flashcard-grid">
+      ${flashcards.map((fc,i)=>`
+        <div class="flashcard" id="fc-${i}" onclick="flipCard(${i})">
+          <div class="fc-front">${fc.front}</div>
+          <div class="fc-back">${fc.back}</div>
+          <span class="fc-hint">tap to reveal</span>
+        </div>`).join('')}
+    </div>
+    <div class="info-box" style="margin-top:1rem;">
+      <strong>🎙 NotebookLM audio flashcards:</strong> Paste your Day notes into NotebookLM (notebooklm.google.com) and ask it to generate an audio podcast summarizing the topic. Works best with your Week 1 and Week 2 notes combined.
+    </div>`;
+}
+
+function flipCard(i){
+  const card=document.getElementById('fc-'+i);
+  card.classList.toggle('flipped');
+  const hint=card.querySelector('.fc-hint');
+  if(hint)hint.style.display=card.classList.contains('flipped')?'none':'block';
+}
+
+let quizCorrect=0,quizAnswered=false;
+function renderQuiz(){
+  const panel=document.getElementById('panel-quiz');
+  if(!quizzes||quizzes.length===0){panel.innerHTML='<div class="info-box">No quiz questions defined yet for this journey.</div>';return;}
+  if(state.quizIndex>=quizzes.length){
+    const pct=Math.round((quizCorrect/quizzes.length)*100);
+    panel.innerHTML=`<div class="quiz-wrap quiz-score-wrap"><div class="quiz-score-big ${pct>=70?'pass':'fail'}">${pct}%</div><div class="quiz-score-label">You got ${quizCorrect} of ${quizzes.length} correct${pct>=70?' — solid grasp of the core concepts!':' — review the topic sections and retake'}</div><button class="retake-btn" onclick="retakeQuiz()">Retake quiz</button></div>`;
+    return;
+  }
+  const q=quizzes[state.quizIndex],prev=state.quizAnswers[state.quizIndex];
+  quizAnswered=prev!==undefined;
+  panel.innerHTML=`<div class="quiz-wrap"><div class="quiz-progress">Question ${state.quizIndex+1} of ${quizzes.length}</div><div class="quiz-q">${q.q}</div>${q.opts.map((o,i)=>`<div class="quiz-opt ${quizAnswered?(i===q.correct?'correct':(i===prev&&prev!==q.correct?'wrong':'')):''}" onclick="answerQuiz(${i})"><span class="opt-letter">${String.fromCharCode(65+i)}</span><span>${o}</span></div>`).join('')}<div class="quiz-exp ${quizAnswered?'show':''}">${q.exp}</div><button class="next-btn" style="display:${quizAnswered?'inline-block':'none'}" onclick="nextQuiz()">Next question →</button></div>`;
+}
+function answerQuiz(i){if(quizAnswered)return;quizAnswered=true;state.quizAnswers[state.quizIndex]=i;if(i===quizzes[state.quizIndex].correct)quizCorrect++;saveState();renderQuiz();}
+function nextQuiz(){state.quizIndex++;saveState();renderQuiz();}
+function retakeQuiz(){state.quizIndex=0;state.quizAnswers={};quizCorrect=0;saveState();renderQuiz();}
+
+function renderAI(){
+  document.getElementById('panel-ai').innerHTML=`
+    <div class="ai-card">
+      <div class="ai-card-head">
+        <div class="ai-icon" style="background:#E8F0FE;">🎙</div>
+        <div><div class="ai-card-title">NotebookLM — Audio Podcast Summary</div><div class="ai-card-sub">Generate a personalized audio briefing of your learning journey</div></div>
+      </div>
+      <div class="ai-card-body">
+        Use Google's NotebookLM to create an audio podcast that summarizes what you're learning. Upload your notes from the Notes tab plus the topic descriptions below as sources, then ask it to generate a podcast episode.
+      </div>
+      <div class="ai-prompt-box">Prompt for NotebookLM Audio:
+"Create a 10-minute podcast episode for a senior engineer studying HashiCorp Terraform Associate (003). Cover: the most important concepts, common exam traps, and the 3 things they absolutely must know before exam day. Use a conversational tone, reference specific examples."</div>
+      <a class="ai-link-btn" href="https://notebooklm.google.com" target="_blank">→ Open NotebookLM</a>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-head">
+        <div class="ai-icon" style="background:#FEF3E2;">🃏</div>
+        <div><div class="ai-card-title">NotebookLM — AI Flashcards</div><div class="ai-card-sub">Generate a personalized quiz from your notes</div></div>
+      </div>
+      <div class="ai-card-body">
+        Upload your notes to NotebookLM and use the Study Guide feature to auto-generate flashcards and practice questions tailored to your notes.
+      </div>
+      <div class="ai-prompt-box">Prompt for NotebookLM Quiz:
+"Generate 20 flashcard-style Q&A pairs for a senior professional studying HashiCorp Terraform Associate (003). Focus on: concept distinctions, common misconceptions, and scenario-based questions. Format as: Q: [question] / A: [answer]"</div>
+      <a class="ai-link-btn" href="https://notebooklm.google.com" target="_blank">→ Open NotebookLM</a>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-head">
+        <div class="ai-icon" style="background:#E8F8F2;">💬</div>
+        <div><div class="ai-card-title">Claude — Deep Dive Prompts</div><div class="ai-card-sub">Use Claude to explore difficult concepts and get explanations</div></div>
+      </div>
+      <div class="ai-card-body">Paste these prompts into Claude when you encounter a topic that isn't clicking. These are optimized for senior-level explanations.</div>
+      <div class="ai-prompt-box">Prompt 1 — Explain like I'm a senior engineer:
+"I'm studying HashiCorp Terraform Associate (003). Explain [TOPIC] to me as if I'm a senior engineer with 5+ years of experience. Skip the basics, focus on nuance, edge cases, and why it matters in practice."
+
+Prompt 2 — Exam scenario:
+"Give me 3 realistic exam scenario questions about [TOPIC] for the HashiCorp Terraform Associate (003) exam, with detailed explanations of why each answer is correct or incorrect."
+
+Prompt 3 — Gap analysis:
+"I just scored [SCORE]% on a practice exam for HashiCorp Terraform Associate (003). My weak areas are [AREAS]. Give me a focused 2-hour study plan targeting exactly those gaps."</div>
+    </div>`;
+}
+
+function renderExam(){
+  const e=exam;
+  const hasExam=e.questions!==null;
+  document.getElementById('panel-exam').innerHTML=`
+    <div class="exam-grid">
+      <div class="exam-card"><div class="exam-card-label">Cost</div><div class="exam-card-val">${e.cost}</div><div class="exam-card-sub">HashiCorp / IBM</div></div>
+      <div class="exam-card"><div class="exam-card-label">Questions</div><div class="exam-card-val">${e.questions||'N/A'}</div><div class="exam-card-sub">question format</div></div>
+      <div class="exam-card"><div class="exam-card-label">Time limit</div><div class="exam-card-val">${e.minutes?e.minutes+' min':'N/A'}</div><div class="exam-card-sub">exam duration</div></div>
+      <div class="exam-card"><div class="exam-card-label">Pass mark</div><div class="exam-card-val" style="font-size:13px;">${e.passScore}</div><div class="exam-card-sub">minimum to pass</div></div>
+    </div>
+    <div class="info-box"><strong>Notes:</strong> ${e.notes}</div>
+    <div class="info-box"><strong>Upgrade path:</strong> After Associate → HashiCorp Terraform Professional (hands-on lab exam)</div>
+    <div style="margin-top:12px;">
+      <a href="https://developer.hashicorp.com/certifications/infrastructure-automation" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:10px 20px;border-radius:var(--radius-sm);background:var(--green);color:#fff;font-weight:500;text-decoration:none;">Register for exam →</a>
+    </div>
+    <div class="info-box" style="margin-top:12px;">
+      <strong>📋 Readiness checklist:</strong><br>
+      Before booking, make sure you:<br>
+      • Completed all ${TOTAL_DAYS} days of the study plan<br>
+      • Scored ${e.passScore} or higher on practice exams<br>
+      • Can explain every topic in the Topics tab without notes<br>
+      • Have written out a cheat sheet from memory and verified it<br>
+      • Are scoring consistently — not just lucky on one attempt
+    </div>`;
+}
+
+function showPanel(name,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(name==='topics')renderTopics();
+  if(name==='notes')renderNotes();
+  if(name==='flashcards')renderFlashcards();
+  if(name==='quiz')renderQuiz();
+  if(name==='ai')renderAI();
+  if(name==='exam')renderExam();
+}
+
+function renderAll(){
+  updateStats();
+  renderSchedule();
+  broadcastStatus();
+}
+
+loadState();
+renderAll();
+</script>
+</body>
+</html>

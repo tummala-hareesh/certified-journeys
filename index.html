@@ -2,571 +2,635 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>certified-journeys · Learning Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>certified-journeys · Open-source certification trackers</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --green:#1D9E75;--green-l:#E1F5EE;--green-d:#0F6E56;
-  --blue:#378ADD;--blue-l:#E6F1FB;--blue-d:#185FA5;
-  --amber:#BA7517;--amber-l:#FAEEDA;--amber-d:#7A4D09;
-  --coral:#D85A30;--coral-l:#FAECE7;--coral-d:#993C1D;
-  --purple:#7F77DD;--purple-l:#EEEDFE;--purple-d:#4B46AA;
-  --bg:#F4F3F0;--surface:#fff;--surface2:#EEEDE8;--surface3:#E4E3DC;
-  --border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.16);
-  --text:#18181A;--text2:#57565A;--text3:#9B9A96;
-  --nav-h:58px;--r:14px;--rs:9px;
-}
-@media(prefers-color-scheme:dark){:root{
-  --bg:#111113;--surface:#1C1C1F;--surface2:#252528;--surface3:#2E2E32;
-  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.16);
-  --text:#F0EFE9;--text2:#A09FA0;--text3:#605F60;
-  --green-l:#0A2E1F;--blue-l:#071E38;--amber-l:#231500;--coral-l:#250D05;--purple-l:#110F2E;
-}}
+:root{--green:#1D9E75;--green-light:#E8F8F2;--green-dark:#0F6E56;--blue:#378ADD;--blue-light:#EAF3FD;--blue-dark:#185FA5;--amber:#BA7517;--amber-light:#FDF3E3;--coral:#D85A30;--coral-light:#FAEDE8;--coral-dark:#993C1D;--purple:#7F77DD;--purple-light:#EEEDFE;--orange:#E8890C;--orange-light:#FEF3E2;--teal:#0891B2;--teal-light:#E0F5FA;--bg:#F5F4F0;--surface:#FFFFFF;--surface2:#EEECE5;--surface3:#E8E6DF;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.16);--text:#18181A;--text2:#52524E;--text3:#8C8B85;--radius:14px;--radius-sm:9px;--shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04);--shadow-md:0 4px 12px rgba(0,0,0,0.1),0 1px 3px rgba(0,0,0,0.06);}
+@media(prefers-color-scheme:dark){:root{--bg:#111113;--surface:#1C1C1F;--surface2:#252528;--surface3:#2E2E33;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);--text:#F0EFEA;--text2:#A09F9B;--text3:#5E5D58;--green-light:#0B3326;--blue-light:#061E38;--amber-light:#221900;--coral-light:#2A0E05;--purple-light:#161440;--orange-light:#1F1200;--teal-light:#021E26;}}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;}
-a{color:inherit;text-decoration:none;}button{cursor:pointer;font-family:inherit;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;}
+a{color:var(--blue-dark);text-decoration:none;}
+a:hover{text-decoration:underline;}
 
-/* NAV */
-.nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:.5px solid var(--border2);height:var(--nav-h);display:flex;align-items:center;padding:0 2rem;}
-@media(prefers-color-scheme:dark){.nav{background:rgba(28,28,31,.92);}}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1120px;margin:0 auto;gap:1rem;}
-.nav-brand{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600;color:var(--text);white-space:nowrap;}
-.nav-brand-dot{width:9px;height:9px;border-radius:50%;background:var(--green);}
-.nav-links{display:flex;align-items:center;gap:2px;}
-.nav-link{font-size:13px;padding:6px 14px;border-radius:99px;color:var(--text2);border:none;background:none;transition:all .18s;white-space:nowrap;}
+/* ── Site nav ── */
+.site-nav{background:var(--surface);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;gap:2rem;height:56px;}
+.nav-brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--text);letter-spacing:-0.01em;text-decoration:none;flex-shrink:0;}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
+.nav-links{display:flex;gap:2px;flex:1;}
+.nav-link{font-size:13px;padding:6px 14px;border-radius:99px;cursor:pointer;color:var(--text2);background:none;border:none;font-family:inherit;transition:all 0.18s;}
 .nav-link:hover{color:var(--text);background:var(--surface2);}
-.nav-link.active{color:var(--green-d);background:var(--green-l);font-weight:500;}
+.nav-link.active{color:var(--text);background:var(--surface2);font-weight:500;}
+.nav-actions{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.nav-gh-btn{font-size:12px;padding:6px 14px;border-radius:99px;border:0.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;text-decoration:none;display:flex;align-items:center;gap:5px;transition:all 0.18s;}
+.nav-gh-btn:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
 
-/* PAGE */
-.page{max-width:1120px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
-.panel{display:none;}.panel.active{display:block;}
+/* ── Layout ── */
+.page{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 5rem;}
+.panel{display:none;} .panel.active{display:block;}
 
-/* HERO */
-.hero{padding:3.5rem 0 2.5rem;}
-.hero-eyebrow{font-size:11px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.hero-eyebrow::before{content:'';display:inline-block;width:22px;height:2px;background:var(--green);border-radius:2px;}
-.hero h1{font-size:clamp(30px,5vw,50px);font-weight:600;letter-spacing:-.03em;line-height:1.12;color:var(--text);max-width:580px;}
-.hero h1 em{color:var(--green);font-style:normal;}
-.hero-sub{font-size:16px;color:var(--text2);margin-top:16px;max-width:480px;line-height:1.7;}
-.hero-actions{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap;}
-.btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:9px 20px;border-radius:99px;border:none;font-family:inherit;font-weight:500;transition:all .18s;white-space:nowrap;}
-.btn-primary{background:var(--green);color:#fff;}.btn-primary:hover{background:var(--green-d);}
-.btn-ghost{background:none;color:var(--text2);border:.5px solid var(--border2);}.btn-ghost:hover{background:var(--surface2);}
+/* ── HOME TAB ── */
+.hero{margin-bottom:2.5rem;padding:2.5rem;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.hero-brand{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.hero-brand-dot{width:10px;height:10px;border-radius:50%;background:var(--green);}
+.hero-brand-label{font-size:12px;font-weight:500;color:var(--green);letter-spacing:0.08em;text-transform:uppercase;}
+.hero h1{font-size:32px;font-weight:700;letter-spacing:-0.03em;color:var(--text);line-height:1.15;margin-bottom:10px;}
+.hero h1 span{color:var(--green);}
+.hero-desc{font-size:15px;color:var(--text2);line-height:1.7;max-width:560px;}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap;}
+.h-stat{text-align:center;}
+.h-stat-val{font-size:28px;font-weight:700;color:var(--text);letter-spacing:-0.02em;font-family:'DM Mono',monospace;}
+.h-stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;}
+.hero-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:1.25rem;}
+.btn{font-size:13px;padding:9px 20px;border-radius:99px;border:none;cursor:pointer;font-family:inherit;font-weight:500;transition:all 0.18s;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary{background:var(--green);color:#fff;}
+.btn-primary:hover{background:var(--green-dark);}
+.btn-ghost{background:none;border:0.5px solid var(--border2);color:var(--text2);}
+.btn-ghost:hover{background:var(--surface2);color:var(--text);}
 
-/* STATS STRIP */
-.stats-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:2.5rem;}
-.stat-chip{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:1.1rem 1.3rem;}
-.stat-chip-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
-.stat-chip-val{font-size:28px;font-weight:600;letter-spacing:-.03em;line-height:1;font-family:'DM Mono',monospace;}
+/* Section headings */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
+.section-title{font-size:16px;font-weight:600;color:var(--text);letter-spacing:-0.01em;}
+.section-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.section-action{font-size:12px;padding:5px 12px;border-radius:99px;border:0.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;}
+.section-action:hover{background:var(--surface2);color:var(--text);}
 
-/* SECTION */
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap;}
-.sec-title{font-size:20px;font-weight:600;letter-spacing:-.015em;}
-.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap;}
-.b-green{background:var(--green-l);color:var(--green-d);}
-.b-amber{background:var(--amber-l);color:var(--amber-d);}
-.b-blue{background:var(--blue-l);color:var(--blue-d);}
-.b-coral{background:var(--coral-l);color:var(--coral-d);}
-.b-purple{background:var(--purple-l);color:var(--purple-d);}
-.b-surface{background:var(--surface2);color:var(--text3);border:.5px solid var(--border2);}
+/* Course grid */
+.course-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:2rem;}
+.course-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;transition:all 0.2s;position:relative;overflow:hidden;}
+.course-card:hover{box-shadow:var(--shadow-md);border-color:var(--border2);transform:translateY(-1px);}
+.course-card.inactive{opacity:0.55;}
+.cc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;}
+.cc-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;letter-spacing:0.02em;}
+.cc-status{font-size:10px;padding:3px 10px;border-radius:99px;font-weight:500;}
+.status-not-started{background:var(--surface2);color:var(--text3);}
+.status-in-progress{background:var(--blue-light);color:var(--blue-dark);}
+.status-completed{background:var(--green-light);color:var(--green-dark);}
+.cc-name{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.cc-full{font-size:12px;color:var(--text2);line-height:1.4;margin-bottom:10px;}
+.cc-prog{margin-bottom:10px;}
+.cc-prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px;}
+.cc-bar{background:var(--surface2);border-radius:99px;height:4px;overflow:hidden;}
+.cc-bar-fill{height:100%;border-radius:99px;transition:width 0.7s;}
+.cc-meta{display:flex;gap:10px;font-size:11px;color:var(--text3);flex-wrap:wrap;}
+.cc-meta-item{display:flex;align-items:center;gap:3px;}
+.cc-actions{display:flex;gap:6px;margin-top:12px;}
+.cc-btn{font-size:12px;padding:6px 14px;border-radius:99px;border:0.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all 0.18s;text-decoration:none;display:inline-block;}
+.cc-btn:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
+.cc-btn-primary{background:var(--green);color:#fff;border-color:var(--green);}
+.cc-btn-primary:hover{background:var(--green-dark);}
+.cc-inactive-overlay{position:absolute;inset:0;background:var(--bg);opacity:0;pointer-events:none;}
 
-/* CERT CARDS */
-.certs-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:3rem;}
-.cert-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:1.3rem 1.5rem;display:flex;flex-direction:column;transition:box-shadow .2s,border-color .2s;position:relative;overflow:hidden;}
-.cert-card:hover{box-shadow:0 6px 24px rgba(0,0,0,.1);border-color:var(--border2);}
-.cert-card-accent{position:absolute;top:0;left:0;right:0;height:3px;}
-.cert-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-top:10px;margin-bottom:10px;}
-.cert-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
-.cert-name{font-size:15px;font-weight:600;color:var(--text);}
-.cert-provider{font-size:11px;color:var(--text3);margin-top:2px;}
-.cert-full{font-size:12px;color:var(--text2);line-height:1.55;margin-bottom:12px;}
-.cert-prog-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
-.cert-prog-label{font-size:11px;color:var(--text3);}
-.cert-prog-pct{font-size:13px;font-weight:600;font-family:'DM Mono',monospace;}
-.cert-bar{background:var(--surface2);border-radius:99px;height:5px;overflow:hidden;margin-bottom:12px;}
-.cert-bar-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1);}
-.cert-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
-.cert-card-footer{display:flex;gap:8px;margin-top:auto;padding-top:4px;}
-.cert-link{flex:1;text-align:center;font-size:12px;font-weight:500;padding:8px;border-radius:var(--rs);background:none;border:.5px solid var(--border2);color:var(--text2);transition:all .2s;}
-.cert-link:hover{background:var(--surface2);color:var(--text);}
-.cert-link.primary-link{border:none;}.cert-link.primary-link:hover{opacity:.88;}
-.cert-act-btn{flex:1;font-size:12px;font-weight:500;padding:8px;border-radius:var(--rs);background:none;border:.5px solid var(--border2);color:var(--text2);transition:all .2s;font-family:inherit;}
-.cert-act-btn:hover{background:var(--surface2);}
-.cert-act-btn.pause{background:var(--coral-l);color:var(--coral-d);border-color:var(--coral);}
-
-/* TABLE */
-.tbl-wrap{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);overflow:hidden;overflow-x:auto;}
-table.tbl{width:100%;border-collapse:collapse;font-size:13px;}
-table.tbl th{text-align:left;font-size:10.5px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:10px 14px;border-bottom:.5px solid var(--border2);background:var(--surface2);white-space:nowrap;}
-table.tbl td{padding:13px 14px;border-bottom:.5px solid var(--border);vertical-align:middle;}
-table.tbl tr:last-child td{border-bottom:none;}
-table.tbl tr:hover td{background:var(--surface2);}
-.tbl-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
-.tbl-link{color:var(--blue-d);font-size:12px;font-family:'DM Mono',monospace;transition:opacity .15s;}
-.tbl-link:hover{opacity:.7;text-decoration:underline;}
-
-/* DASHBOARD */
-.dash-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1.5rem;}
-.metric{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:1.25rem 1.4rem;}
-.metric-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;}
-.metric-val{font-size:30px;font-weight:600;letter-spacing:-.03em;line-height:1;font-family:'DM Mono',monospace;}
-.metric-sub{font-size:11px;color:var(--text3);margin-top:6px;}
-.chart-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-.chart-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;}
-.chart-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px;}
-.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.bar-row-label{font-size:11px;color:var(--text2);min-width:30px;text-align:right;}
-.bar-track{flex:1;background:var(--surface2);border-radius:99px;height:8px;overflow:hidden;}
-.bar-seg{height:100%;border-radius:99px;background:var(--green);}
-.bar-row-val{font-size:10px;color:var(--text3);min-width:22px;font-family:'DM Mono',monospace;}
-.time-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
-.time-blk{background:var(--surface2);border-radius:var(--rs);padding:12px;text-align:center;}
-.time-blk.peak{background:var(--green-l);}
-.time-blk-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
-.time-blk.peak .time-blk-label{color:var(--green-d);}
-.time-blk-val{font-size:20px;font-weight:600;font-family:'DM Mono',monospace;}
-.time-blk.peak .time-blk-val{color:var(--green-d);}
-.time-blk-sub{font-size:10px;color:var(--text3);margin-top:2px;}
-.heatmap{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;margin-top:4px;}
-.heat-cell{aspect-ratio:1;border-radius:3px;background:var(--surface2);}
-.h1{background:#C8EFE0;}.h2{background:#7FD4B0;}.h3{background:var(--green);}.h4{background:var(--green-d);}
-
-/* ABOUT */
-.phil-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
-.phil-card{background:var(--green-l);border:.5px solid var(--green);border-radius:var(--r);padding:1.1rem;}
-.phil-card h4{font-size:13px;font-weight:600;color:var(--green-d);margin-bottom:6px;}
-.phil-card p{font-size:12px;color:var(--green-d);line-height:1.65;}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.about-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:1.5rem;}
-.about-card h3{font-size:15px;font-weight:600;margin-bottom:10px;}
-.about-card p{font-size:13px;color:var(--text2);line-height:1.75;}
-.about-card ul{list-style:none;display:flex;flex-direction:column;gap:7px;margin-top:10px;}
-.about-card li{font-size:13px;color:var(--text2);display:flex;gap:8px;}
-.about-card li::before{content:'→';color:var(--green);flex-shrink:0;}
-.eco-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px;}
-.eco-tbl th{text-align:left;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:6px 8px;border-bottom:.5px solid var(--border2);}
-.eco-tbl td{padding:8px 8px;border-bottom:.5px solid var(--border);color:var(--text2);}
-.eco-tbl tr:last-child td{border-bottom:none;}
-
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;}
+/* Manage modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:200;padding:1rem;}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--surface);border-radius:var(--r);padding:2rem;width:90%;max-width:460px;box-shadow:0 24px 60px rgba(0,0,0,.2);}
-.modal h2{font-size:18px;font-weight:600;margin-bottom:6px;}
-.modal-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6;}
-.modal-opts{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;}
-.modal-opt{display:flex;align-items:center;gap:12px;padding:12px 14px;border:.5px solid var(--border);border-radius:var(--rs);cursor:pointer;transition:all .18s;}
-.modal-opt:hover{border-color:var(--green);background:var(--green-l);}
-.modal-opt-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
-.modal-opt-name{font-size:13px;font-weight:500;}
-.modal-opt-meta{font-size:11px;color:var(--text3);margin-top:2px;}
-.modal-close{width:100%;margin-top:12px;font-size:13px;padding:9px;border:.5px solid var(--border2);border-radius:var(--rs);background:none;color:var(--text2);}
-.modal-close:hover{background:var(--surface2);}
+.modal{background:var(--surface);border-radius:var(--radius);padding:1.5rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-md);}
+.modal-head{font-size:16px;font-weight:600;color:var(--text);margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center;}
+.modal-close{font-size:18px;color:var(--text3);cursor:pointer;background:none;border:none;font-family:inherit;line-height:1;}
+.modal-close:hover{color:var(--text);}
+.manage-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid var(--border);}
+.manage-row:last-child{border-bottom:none;}
+.manage-info{display:flex;align-items:center;gap:10px;}
+.manage-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.manage-name{font-size:13px;font-weight:500;color:var(--text);}
+.manage-provider{font-size:11px;color:var(--text3);}
+.toggle-wrap{display:flex;align-items:center;gap:8px;}
+.toggle{width:38px;height:22px;border-radius:99px;background:var(--surface2);border:0.5px solid var(--border2);cursor:pointer;transition:background 0.2s;position:relative;}
+.toggle.on{background:var(--green);border-color:var(--green);}
+.toggle-thumb{width:16px;height:16px;border-radius:50%;background:var(--surface3);position:absolute;top:2px;left:2px;transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle.on .toggle-thumb{left:18px;background:#fff;}
 
-@media(max-width:900px){
-  .certs-grid{grid-template-columns:repeat(2,1fr);}
-  .dash-metrics{grid-template-columns:repeat(2,1fr);}
-  .stats-strip{grid-template-columns:repeat(2,1fr);}
-  .chart-wrap{grid-template-columns:1fr;}
-  .about-grid{grid-template-columns:1fr;}
-}
-@media(max-width:580px){
-  .certs-grid{grid-template-columns:1fr;}
-  .nav{padding:0 1rem;}
-  .page{padding:1.5rem 1rem 4rem;}
-  .phil-strip{grid-template-columns:1fr;}
-  .hero h1{font-size:28px;}
-}
+/* ── LEARNING TOPICS TAB ── */
+.topics-table-wrap{overflow-x:auto;margin-bottom:1rem;}
+.topics-table{width:100%;border-collapse:collapse;}
+.topics-table th{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;padding:8px 12px;text-align:left;border-bottom:0.5px solid var(--border);}
+.topics-table td{padding:12px;border-bottom:0.5px solid var(--border);font-size:13px;color:var(--text2);vertical-align:middle;}
+.topics-table tr:last-child td{border-bottom:none;}
+.topics-table tr:hover td{background:var(--surface2);}
+.t-icon-cell{width:44px;}
+.t-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.t-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.t-provider{font-size:11px;color:var(--text3);}
+.t-status{font-size:11px;padding:3px 10px;border-radius:99px;font-weight:500;white-space:nowrap;}
+.t-link{font-size:12px;color:var(--blue-dark);}
+.t-progress-bar{background:var(--surface2);border-radius:99px;height:4px;width:80px;overflow:hidden;margin-bottom:2px;}
+.t-progress-fill{height:100%;border-radius:99px;}
+.t-progress-label{font-size:10px;color:var(--text3);}
+.t-tags{display:flex;gap:4px;flex-wrap:wrap;}
+.t-tag{font-size:10px;padding:2px 7px;border-radius:99px;background:var(--surface2);color:var(--text3);}
+.t-upgrade{font-size:11px;color:var(--text2);max-width:180px;line-height:1.4;}
+.sort-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:11px;padding:0;font-family:inherit;}
+.sort-btn:hover{color:var(--text);}
+
+/* ── PROGRESS TAB ── */
+.progress-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem;}
+.ps-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem;}
+.ps-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.ps-val{font-size:26px;font-weight:700;color:var(--text);letter-spacing:-.02em;font-family:'DM Mono',monospace;}
+.ps-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+.prog-section{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;}
+.prog-section h3{font-size:13px;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:.05em;margin-bottom:1rem;}
+.journey-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border);}
+.journey-row:last-child{border-bottom:none;}
+.j-icon{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.j-name{flex:1;font-size:13px;font-weight:500;color:var(--text);}
+.j-prog-wrap{width:160px;}
+.j-bar{background:var(--surface2);border-radius:99px;height:5px;overflow:hidden;margin-bottom:3px;}
+.j-bar-fill{height:100%;border-radius:99px;}
+.j-pct{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;}
+.j-hours{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;min-width:50px;text-align:right;}
+/* Heatmap */
+.heatmap-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.heatmap-day{text-align:center;}
+.hm-label{font-size:10px;color:var(--text3);margin-bottom:4px;}
+.hm-bar{border-radius:4px;height:40px;background:var(--surface2);transition:height 0.3s;}
+.hm-count{font-size:10px;color:var(--text3);margin-top:3px;font-family:'DM Mono',monospace;}
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.tg-cell{background:var(--surface2);border-radius:var(--radius-sm);padding:10px;text-align:center;}
+.tg-label{font-size:11px;color:var(--text2);margin-bottom:4px;}
+.tg-bar-wrap{height:36px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:4px;}
+.tg-bar{width:24px;border-radius:3px 3px 0 0;background:var(--green);min-height:4px;}
+.tg-count{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+.recent-list{display:flex;flex-direction:column;gap:0;}
+.recent-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--border);font-size:12px;}
+.recent-item:last-child{border-bottom:none;}
+.recent-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.recent-text{flex:1;color:var(--text2);}
+.recent-time{color:var(--text3);font-family:'DM Mono',monospace;}
+
+/* ── ABOUT TAB ── */
+.about-grid{display:grid;grid-template-columns:2fr 1fr;gap:1.5rem;align-items:start;}
+.about-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;}
+.about-card h2{font-size:18px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:-.01em;}
+.about-card h3{font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px;margin-top:1rem;}
+.about-card h3:first-child{margin-top:0;}
+.about-card p{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:10px;}
+.about-card ul{padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px;}
+.about-card ul li{font-size:13px;color:var(--text2);line-height:1.6;padding-left:16px;position:relative;}
+.about-card ul li::before{content:'·';position:absolute;left:0;color:var(--green);font-weight:600;}
+.repo-table{width:100%;border-collapse:collapse;margin-top:8px;}
+.repo-table th{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;padding:6px 8px;text-align:left;border-bottom:0.5px solid var(--border);}
+.repo-table td{font-size:12px;color:var(--text2);padding:8px;border-bottom:0.5px solid var(--border);}
+.repo-table tr:last-child td{border-bottom:none;}
+.repo-status-live{font-size:10px;padding:2px 8px;border-radius:99px;background:var(--green-light);color:var(--green-dark);}
+.repo-status-planned{font-size:10px;padding:2px 8px;border-radius:99px;background:var(--surface2);color:var(--text3);}
+
+/* Misc */
+.info-box{background:var(--surface2);border-radius:var(--radius-sm);padding:.9rem 1rem;font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px;}
+.info-box strong{color:var(--text);font-weight:500;}
+@media(max-width:800px){.course-grid{grid-template-columns:repeat(2,1fr);}.progress-summary{grid-template-columns:repeat(2,1fr);}.about-grid{grid-template-columns:1fr;}}
+@media(max-width:560px){.course-grid{grid-template-columns:1fr;}.progress-summary{grid-template-columns:repeat(2,1fr);}.hero h1{font-size:24px;}.nav-links{display:none;}}
 </style>
 </head>
 <body>
 
-<nav class="nav">
+<nav class="site-nav">
   <div class="nav-inner">
-    <div class="nav-brand"><div class="nav-brand-dot"></div>certified-journeys</div>
+    <a class="nav-brand" href="#"><div class="brand-dot"></div>certified-journeys</a>
     <div class="nav-links">
-      <button class="nav-link active" onclick="showPage('home',this)">Home</button>
-      <button class="nav-link" onclick="showPage('topics',this)">Learning Topics</button>
-      <button class="nav-link" onclick="showPage('progress',this)">Progress</button>
-      <button class="nav-link" onclick="showPage('about',this)">About the Project</button>
+      <button class="nav-link active" onclick="showTab('home',this)">Home</button>
+      <button class="nav-link" onclick="showTab('topics',this)">Learning Topics</button>
+      <button class="nav-link" onclick="showTab('progress',this)">Progress</button>
+      <button class="nav-link" onclick="showTab('about',this)">About</button>
+    </div>
+    <div class="nav-actions">
+      <a class="nav-gh-btn" href="https://github.com/certified-journeys" target="_blank">⭐ GitHub</a>
     </div>
   </div>
 </nav>
 
-<!-- ADD JOURNEY MODAL -->
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <h2>Start a new journey</h2>
-    <p class="modal-sub">Activate a certification track. Your progress saves in your browser. You can pause or remove it at any time.</p>
-    <div class="modal-opts" id="modal-opts"></div>
-    <button class="modal-close" onclick="closeModal()">Cancel</button>
-  </div>
-</div>
-
 <div class="page">
 
 <!-- ══ HOME ══ -->
-<div id="panel-home" class="panel active">
+<div id="tab-home" class="panel active">
   <div class="hero">
-    <div class="hero-eyebrow">Open source · Free · Forkable</div>
-    <h1>Your learning<br><em>operating system</em></h1>
-    <p class="hero-sub">Structured certification trackers for senior engineers. Progress saved locally. No account. No cost.</p>
-    <div class="hero-actions">
-      <button class="btn btn-primary" onclick="openModal()">+ Start a journey</button>
-      <a href="https://github.com/certified-journeys" target="_blank" class="btn btn-ghost">↗ GitHub</a>
-    </div>
-  </div>
-
-  <div class="stats-strip">
-    <div class="stat-chip"><div class="stat-chip-label">Journeys</div><div class="stat-chip-val">6</div></div>
-    <div class="stat-chip"><div class="stat-chip-label">Active</div><div class="stat-chip-val" style="color:var(--amber)" id="s-active">0</div></div>
-    <div class="stat-chip"><div class="stat-chip-label">Completed</div><div class="stat-chip-val" style="color:var(--green)" id="s-done">0</div></div>
-    <div class="stat-chip"><div class="stat-chip-label">Days logged</div><div class="stat-chip-val" id="s-days">0</div></div>
-  </div>
-
-  <div class="sec-head">
-    <div>
-      <div class="sec-title">Certification Journeys</div>
-      <div style="font-size:13px;color:var(--text2);margin-top:3px;">Each card links to a full tracker with daily plan, notes, flashcards, and exam prep.</div>
-    </div>
-  </div>
-  <div class="certs-grid" id="certs-grid"></div>
-</div>
-
-<!-- ══ TOPICS ══ -->
-<div id="panel-topics" class="panel">
-  <div style="margin-bottom:2rem;">
-    <div class="sec-title" style="margin-bottom:6px;">Learning Topics</div>
-    <div style="font-size:13px;color:var(--text2);">Full backlog of certification journeys — planned, in progress, and completed. Click any row to open its tracker.</div>
-  </div>
-  <div class="tbl-wrap">
-    <table class="tbl">
-      <thead>
-        <tr>
-          <th style="min-width:180px;">Certification</th>
-          <th>Provider</th>
-          <th>Status</th>
-          <th>Cost</th>
-          <th>Days</th>
-          <th style="min-width:120px;">Progress</th>
-          <th>Start date</th>
-          <th>Est. hours</th>
-          <th style="min-width:140px;">Upgrade path</th>
-          <th>Links</th>
-        </tr>
-      </thead>
-      <tbody id="topics-tbody"></tbody>
-    </table>
-  </div>
-  <div style="margin-top:1.5rem;background:var(--surface);border:.5px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;">
-    <div style="font-size:13px;font-weight:600;margin-bottom:6px;">About this list</div>
-    <div style="font-size:13px;color:var(--text2);line-height:1.75;">Each row links to a dedicated tracker: 14–21 day study plan, quiz flashcards, note-taking, NotebookLM podcast links, exam prep details, and resource lists. Progress is saved in your browser via localStorage — no account needed.</div>
-  </div>
-</div>
-
-<!-- ══ PROGRESS ══ -->
-<div id="panel-progress" class="panel">
-  <div style="margin-bottom:2rem;">
-    <div class="sec-title" style="margin-bottom:6px;">Personal Learning Dashboard</div>
-    <div style="font-size:13px;color:var(--text2);">Metrics derived from your locally saved progress across all journeys.</div>
-  </div>
-  <div class="dash-metrics" id="dash-metrics"></div>
-  <div class="chart-wrap">
-    <div class="chart-card">
-      <div class="chart-title">Study sessions by day of week</div>
-      <div id="chart-dow"></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Activity by time of day</div>
-      <div class="time-grid">
-        <div class="time-blk"><div class="time-blk-label">Morning</div><div class="time-blk-val" id="tod-0">—</div><div class="time-blk-sub">6am–12pm</div></div>
-        <div class="time-blk peak"><div class="time-blk-label">Afternoon</div><div class="time-blk-val" id="tod-1">—</div><div class="time-blk-sub">12pm–5pm</div></div>
-        <div class="time-blk"><div class="time-blk-label">Evening</div><div class="time-blk-val" id="tod-2">—</div><div class="time-blk-sub">5pm–9pm</div></div>
-        <div class="time-blk"><div class="time-blk-label">Night</div><div class="time-blk-val" id="tod-3">—</div><div class="time-blk-sub">9pm–12am</div></div>
+    <div class="hero-top">
+      <div>
+        <div class="hero-brand"><div class="hero-brand-dot"></div><span class="hero-brand-label">certified-journeys</span></div>
+        <h1>Learn in public.<br><span>Build your edge.</span></h1>
+        <p class="hero-desc">Free, open-source certification trackers for senior engineers. Every journey is a structured daily plan — no fluff, no paywalls, no sign-ups. Fork any repo and make it yours.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="showTab('topics',document.querySelectorAll('.nav-link')[1])">Browse all journeys</button>
+          <a class="btn btn-ghost" href="https://github.com/certified-journeys" target="_blank">⭐ Star on GitHub</a>
+        </div>
+      </div>
+      <div class="hero-stats" id="hero-stats">
+        <div class="h-stat"><div class="h-stat-val" id="hs-total">6</div><div class="h-stat-label">Journeys</div></div>
+        <div class="h-stat"><div class="h-stat-val" id="hs-active">0</div><div class="h-stat-label">In progress</div></div>
+        <div class="h-stat"><div class="h-stat-val" id="hs-done">0</div><div class="h-stat-label">Completed</div></div>
+        <div class="h-stat"><div class="h-stat-val" id="hs-hours">0 h</div><div class="h-stat-label">Hours logged</div></div>
       </div>
     </div>
   </div>
-  <div class="chart-card" style="margin-bottom:14px;">
-    <div class="chart-title">Activity heatmap — last 14 weeks</div>
-    <div class="heatmap" id="heatmap" style="grid-template-columns:repeat(14,1fr);"></div>
-    <div style="display:flex;align-items:center;gap:5px;margin-top:10px;">
-      <span style="font-size:10px;color:var(--text3);">Less</span>
-      <div style="width:11px;height:11px;border-radius:2px;background:var(--surface2);"></div>
-      <div style="width:11px;height:11px;border-radius:2px;background:#C8EFE0;"></div>
-      <div style="width:11px;height:11px;border-radius:2px;background:#7FD4B0;"></div>
-      <div style="width:11px;height:11px;border-radius:2px;background:var(--green);"></div>
-      <div style="width:11px;height:11px;border-radius:2px;background:var(--green-d);"></div>
-      <span style="font-size:10px;color:var(--text3);">More</span>
+
+  <div class="section-head" id="courses">
+    <div><div class="section-title">Certification journeys</div><div class="section-sub">Click any card to open the tracker · Progress synced from localStorage</div></div>
+    <button class="section-action" onclick="openManage()">⚙ Manage journeys</button>
+  </div>
+  <div class="course-grid" id="course-grid"><!-- rendered by JS --></div>
+
+  <div class="info-box">
+    <strong>How it works:</strong> Each journey is a standalone HTML tracker in its own folder. Your progress is saved in your browser — no account, no server, no tracking. Fork any repo on GitHub and it auto-configures to your username.
+  </div>
+</div>
+
+<!-- ══ LEARNING TOPICS ══ -->
+<div id="tab-topics" class="panel">
+  <div class="section-head" style="margin-bottom:1.25rem;">
+    <div><div class="section-title">All certification journeys</div><div class="section-sub">Full backlog — click any row to open the tracker</div></div>
+    <div style="display:flex;gap:6px;">
+      <select id="filter-status" style="font-size:12px;padding:5px 10px;border-radius:var(--radius-sm);border:0.5px solid var(--border2);background:var(--surface);color:var(--text);font-family:inherit;cursor:pointer;" onchange="renderTopicsTable()">
+        <option value="">All statuses</option>
+        <option value="not_started">Not started</option>
+        <option value="in_progress">In progress</option>
+        <option value="completed">Completed</option>
+      </select>
     </div>
   </div>
-  <div class="chart-wrap">
-    <div class="chart-card">
-      <div class="chart-title">Status breakdown</div>
-      <div id="chart-status"></div>
+  <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:1.5rem;">
+    <div class="topics-table-wrap">
+      <table class="topics-table" id="topics-table">
+        <thead>
+          <tr>
+            <th class="t-icon-cell"></th>
+            <th>Journey <button class="sort-btn" onclick="sortTopics('name')">↕</button></th>
+            <th>Status</th>
+            <th>Progress</th>
+            <th>Start date</th>
+            <th>Last active</th>
+            <th>Hours</th>
+            <th>Cost</th>
+            <th>Tags</th>
+            <th>Upgrade path</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="topics-tbody"><!-- rendered by JS --></tbody>
+      </table>
     </div>
-    <div class="chart-card">
-      <div class="chart-title">Progress by journey</div>
-      <div id="chart-progress"></div>
+  </div>
+  <div class="info-box"><strong>Upgrade paths:</strong> Each journey links to the natural next certification or skill to build on. Plan your roadmap from the table above.</div>
+</div>
+
+<!-- ══ PROGRESS ══ -->
+<div id="tab-progress" class="panel">
+  <div class="section-head" style="margin-bottom:1.25rem;">
+    <div><div class="section-title">Personal learning dashboard</div><div class="section-sub">Aggregated from all your active journeys · Updates in real time</div></div>
+  </div>
+
+  <div class="progress-summary" id="progress-summary"><!-- rendered by JS --></div>
+
+  <div class="prog-section">
+    <h3>Journey progress breakdown</h3>
+    <div id="progress-journeys"><!-- rendered by JS --></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+    <div class="prog-section">
+      <h3>Study activity by day of week</h3>
+      <div class="heatmap-grid" id="heatmap-dow"><!-- rendered by JS --></div>
     </div>
+    <div class="prog-section">
+      <h3>Study activity by time of day</h3>
+      <div class="time-grid" id="heatmap-tod"><!-- rendered by JS --></div>
+    </div>
+  </div>
+
+  <div class="prog-section">
+    <h3>Recent activity</h3>
+    <div class="recent-list" id="recent-activity"><!-- rendered by JS --></div>
   </div>
 </div>
 
 <!-- ══ ABOUT ══ -->
-<div id="panel-about" class="panel">
-  <div style="margin-bottom:2rem;">
-    <div class="sec-title" style="margin-bottom:6px;">About the Project</div>
-    <div style="font-size:13px;color:var(--text2);">certified-journeys is a free, open-source learning infrastructure for senior engineers who learn in public.</div>
-  </div>
-  <div class="phil-strip">
-    <div class="phil-card"><h4>No login. No cost.</h4><p>Every tracker is a single HTML file. Progress lives in your browser via localStorage. No server, no account, no upsell — ever.</p></div>
-    <div class="phil-card"><h4>Built to be forked.</h4><p>Fork any repo, edit two data arrays, deploy to GitHub Pages. Your own cert tracker is live in under an hour.</p></div>
-    <div class="phil-card"><h4>Open by design.</h4><p>No tracking, no analytics, no ads, no premium tier. If your journey helped you pass — share it, improve it, and pay it forward.</p></div>
-  </div>
+<div id="tab-about" class="panel">
   <div class="about-grid">
-    <div class="about-card">
-      <h3>Certification ecosystem</h3>
-      <table class="eco-tbl">
-        <thead><tr><th>Repo</th><th>Certification</th><th>Days</th><th>Status</th></tr></thead>
-        <tbody id="eco-tbody"></tbody>
-      </table>
+    <div>
+      <div class="about-card">
+        <h2>What is certified-journeys?</h2>
+        <p>A collection of free, open-source certification trackers for senior engineers and data professionals. Every tracker is a single HTML file — no build tools, no frameworks, no sign-ups, no cost.</p>
+        <p>Each journey gives you a structured day-by-day study plan, progress tracking saved in your browser, practice quizzes, AI-powered study prompts, and exam prep details — all in one place.</p>
+        <h3>Why we built it</h3>
+        <ul>
+          <li>Free resources exist (docs, YouTube, open assessments) — but nobody built a structured daily plan</li>
+          <li>No existing repo says "here is exactly what to do on Day 1, 2, 3" with progress tracking</li>
+          <li>Avoid spending hours creating learning plans from scratch for every certification</li>
+          <li>Learn in public — if your journey worked, fork it, improve it, share it</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h3>How to fork and deploy in 3 steps</h3>
+        <ul>
+          <li><strong>Fork on GitHub</strong> — go to github.com/certified-journeys, find the repo for your cert, click Fork</li>
+          <li><strong>Edit two arrays</strong> — open index.html, replace the <code>days</code> and <code>topics</code> arrays with your cert's plan</li>
+          <li><strong>Enable GitHub Pages</strong> — Settings → Pages → main branch → Save. Live in 2 minutes</li>
+        </ul>
+        <p>No configuration needed. Your username and repo name are auto-detected from the URL. Your localStorage key is automatically unique to your fork.</p>
+      </div>
+      <div class="about-card">
+        <h3>Principles</h3>
+        <ul>
+          <li>Single HTML file — no build tools, no node_modules, no CI needed</li>
+          <li>localStorage only — no server, no account, no tracking</li>
+          <li>MIT licensed — fork, modify, redistribute freely</li>
+          <li>Zero external dependencies except Google Fonts</li>
+          <li>No premium tier, no upsell, no email capture — ever</li>
+        </ul>
+      </div>
     </div>
-    <div class="about-card">
-      <h3>How to fork your own tracker</h3>
-      <ul>
-        <li>Fork any repo at <code>github.com/certified-journeys</code></li>
-        <li>Open <code>index.html</code> — find <code>days</code> and <code>topics</code> arrays</li>
-        <li>Replace the data with your cert's study plan</li>
-        <li>Settings → Pages → main branch → Save</li>
-        <li>Live at <code>yourname.github.io/repo-name</code> in 2 min</li>
-        <li>Username and storage key auto-detected from URL</li>
-      </ul>
-    </div>
-    <div class="about-card">
-      <h3>Tech decisions</h3>
-      <ul>
-        <li>Single HTML file — no build tools, no npm, no bundler</li>
-        <li>localStorage only — data stays on your device</li>
-        <li>MIT licensed — fork, adapt, remix freely</li>
-        <li>No external dependencies — works offline after first load</li>
-        <li>Dark mode via <code>prefers-color-scheme</code></li>
-        <li>Responsive — mobile, tablet, desktop</li>
-      </ul>
-    </div>
-    <div class="about-card">
-      <h3>Disclaimer</h3>
-      <p>certified-journeys is an independent, community-run project. Not affiliated with, endorsed by, or approved by Scrum.org, Amazon Web Services, Microsoft, HashiCorp, dltHub, or any other certification body. All trademarks belong to their respective owners. Completely free — no premium tier, no upsell, no email capture.</p>
+    <div>
+      <div class="about-card">
+        <h3>Ecosystem roadmap</h3>
+        <table class="repo-table">
+          <thead><tr><th>Repo</th><th>Days</th><th>Status</th></tr></thead>
+          <tbody id="ecosystem-table"><!-- rendered by JS --></tbody>
+        </table>
+      </div>
+      <div class="about-card">
+        <h3>Contributing</h3>
+        <ul>
+          <li>Fork a repo and submit a PR with improvements to the study plan</li>
+          <li>Build a new tracker for a cert not yet covered</li>
+          <li>Share your score and learning notes in GitHub Discussions</li>
+        </ul>
+        <p style="margin-top:10px;">Hard rules: no tracking, no analytics, no paywalls, no external JS libraries.</p>
+      </div>
+      <div class="about-card">
+        <h3>Privacy</h3>
+        <p>All progress is stored locally in your browser via localStorage. Nothing is sent to any server. No cookies. No analytics. No tracking pixels. Clearing browser data resets your progress.</p>
+      </div>
     </div>
   </div>
 </div>
 
+</div><!-- /page -->
+
+<!-- Manage modal -->
+<div class="modal-overlay" id="manage-modal" onclick="closeManage(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <span>Manage journeys</span>
+      <button class="modal-close" onclick="closeManage()">✕</button>
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.6;">Toggle journeys on or off. Inactive journeys are hidden from your home page but their progress is preserved.</p>
+    <div id="manage-list"><!-- rendered by JS --></div>
+  </div>
 </div>
 
 <script>
-const CERTS = [{id:"pspo-certified",name:"PSPO I",full:"Professional Scrum Product Owner I",provider:"Scrum.org",cost:"$200",days:14,color:"green",icon:"PO",certUrl:"https://www.scrum.org/assessments/professional-scrum-product-owner-i-certification",upgrade:"PSPO II → PSPO III",tags:["scrum", "product", "agile"],hoursPerDay:2,defaultStatus:"in_progress"},{id:"aws-ml-certified",name:"AWS ML",full:"AWS Certified Machine Learning – Specialty",provider:"Amazon Web Services",cost:"$300",days:21,color:"amber",icon:"ML",certUrl:"https://aws.amazon.com/certification/certified-machine-learning-specialty/",upgrade:"Renew every 3 years",tags:["aws", "ml", "cloud"],hoursPerDay:3,defaultStatus:"planned"},{id:"dlt-certified",name:"dlt",full:"dltHub Data Load Tool Practitioner",provider:"dltHub",cost:"Free",days:14,color:"blue",icon:"DL",certUrl:"https://dlthub.com/docs/intro",upgrade:"Community recognition",tags:["python", "etl", "data-engineering"],hoursPerDay:2,defaultStatus:"planned"},{id:"polars-certified",name:"Polars",full:"Polars DataFrame Mastery",provider:"Self-directed",cost:"Free",days:14,color:"purple",icon:"PL",certUrl:"https://docs.pola.rs/",upgrade:"Portfolio project showcase",tags:["python", "dataframes", "analytics"],hoursPerDay:2,defaultStatus:"planned"},{id:"terraform-certified",name:"Terraform",full:"HashiCorp Certified: Terraform Associate",provider:"HashiCorp",cost:"$70",days:14,color:"purple",icon:"TF",certUrl:"https://developer.hashicorp.com/certifications/infrastructure-automation",upgrade:"Renew every 2 years",tags:["iac", "terraform", "devops"],hoursPerDay:2,defaultStatus:"planned"},{id:"powerbi-certified",name:"Power BI",full:"Microsoft Power BI Data Analyst (PL-300)",provider:"Microsoft",cost:"$165",days:21,color:"blue",icon:"BI",certUrl:"https://learn.microsoft.com/en-us/certifications/power-bi-data-analyst-associate/",upgrade:"Microsoft Certified renewal",tags:["powerbi", "analytics", "microsoft"],hoursPerDay:2.5,defaultStatus:"planned"}];
+const COURSES = [
+  {id:'pspo-certified',name:'PSPO I',fullName:'Professional Scrum Product Owner I',icon:'PO',color:'#1D9E75',colorLight:'#E8F8F2',provider:'Scrum.org',cost:'$200',totalDays:14,difficulty:'Intermediate',tags:['Agile','Scrum','Product'],examLink:'https://www.scrum.org/assessments/professional-scrum-product-owner-i-certification',upgradeNote:'After PSPO I → PSPO II ($250, advanced scenarios)'},
+  {id:'aws-ml-certified',name:'AWS ML',fullName:'AWS Certified Machine Learning – Specialty',icon:'ML',color:'#E8890C',colorLight:'#FEF3E2',provider:'Amazon Web Services',cost:'$300',totalDays:21,difficulty:'Advanced',tags:['AWS','Cloud','MLOps'],examLink:'https://aws.amazon.com/certification/certified-machine-learning-specialty/',upgradeNote:'After AWS ML Specialty → AWS ML Engineer Associate (2024)'},
+  {id:'dlt-certified',name:'dlt',fullName:'dlt (data load tool) Practitioner',icon:'DL',color:'#378ADD',colorLight:'#EAF3FD',provider:'dltHub',cost:'Free',totalDays:10,difficulty:'Intermediate',tags:['Data Eng','Python','ETL'],examLink:'https://dlthub.com/docs/intro',upgradeNote:'Pair with dbt for full ELT mastery'},
+  {id:'polars-certified',name:'Polars',fullName:'Polars DataFrame Mastery',icon:'PL',color:'#0891B2',colorLight:'#E0F5FA',provider:'Self-paced',cost:'Free',totalDays:10,difficulty:'Intermediate',tags:['Python','Analytics','Performance'],examLink:'https://docs.pola.rs/',upgradeNote:'After Polars → Arrow + DuckDB for full in-process analytics'},
+  {id:'terraform-certified',name:'Terraform',fullName:'HashiCorp Terraform Associate (003)',icon:'TF',color:'#7F77DD',colorLight:'#EEEDFE',provider:'HashiCorp',cost:'$70',totalDays:14,difficulty:'Intermediate',tags:['IaC','DevOps','Cloud'],examLink:'https://developer.hashicorp.com/certifications/infrastructure-automation',upgradeNote:'After Associate → Terraform Professional (hands-on lab)'},
+  {id:'powerbi-certified',name:'Power BI',fullName:'Microsoft PL-300: Power BI Data Analyst',icon:'BI',color:'#D85A30',colorLight:'#FAEDE8',provider:'Microsoft',cost:'$165',totalDays:14,difficulty:'Intermediate',tags:['BI','Analytics','Microsoft'],examLink:'https://learn.microsoft.com/certifications/power-bi-data-analyst-associate/',upgradeNote:'After PL-300 → DP-600 Fabric Analytics Engineer'}
+];
 
-const SL={'not_started':'Not Started','in_progress':'In Progress','completed':'Completed','paused':'Paused','planned':'Planned'};
-const SB={'not_started':'b-surface','in_progress':'b-amber','completed':'b-green','paused':'b-coral','planned':'b-surface'};
-const CV={'green':'var(--green)','blue':'var(--blue)','amber':'var(--amber)','purple':'var(--purple)','coral':'var(--coral)'};
-const CL={'green':'var(--green-l)','blue':'var(--blue-l)','amber':'var(--amber-l)','purple':'var(--purple-l)','coral':'var(--coral-l)'};
-const CD={'green':'var(--green-d)','blue':'var(--blue-d)','amber':'var(--amber-d)','purple':'var(--purple-d)','coral':'var(--coral-d)'};
+const HOME_SETTINGS_KEY='cj_home_settings_v1';
 
-function certKey(id){return'cj_'+id+'_v1';}
-function statusKey(id){return'cj_'+id+'_status';}
-
-function getState(id){
-  try{const s=localStorage.getItem(certKey(id));return s?JSON.parse(s):{completed:[],scores:{},timestamps:{}};}
-  catch(e){return{completed:[],scores:{},timestamps:{}};}
+function getSettings(){
+  try{const s=localStorage.getItem(HOME_SETTINGS_KEY);return s?JSON.parse(s):{active:COURSES.map(c=>c.id)};}
+  catch(e){return{active:COURSES.map(c=>c.id)};}
 }
-function getStatus(cert){
-  const st=localStorage.getItem(statusKey(cert.id));
-  if(st) return st;
-  const state=getState(cert.id);
-  const done=(state.completed||[]).length;
-  if(done>=cert.days) return'completed';
-  if(done>0) return'in_progress';
-  return cert.defaultStatus;
-}
-function setStatus(id,status){
-  localStorage.setItem(statusKey(id),status);
-  renderAll();
+function saveSettings(s){try{localStorage.setItem(HOME_SETTINGS_KEY,JSON.stringify(s));}catch(e){}}
+
+function getCourseProgress(courseId){
+  try{
+    const s=localStorage.getItem('cj_summary_'+courseId);
+    if(s)return JSON.parse(s);
+    // Try direct state key too
+    const direct=localStorage.getItem('cj_'+courseId+'_v1');
+    if(direct){
+      const d=JSON.parse(direct);
+      return{id:courseId,status:d.status||'not_started',completed:d.completed?d.completed.length:0,total:COURSES.find(c=>c.id===courseId)?.totalDays||14,scores:Object.values(d.scores||{}).filter(s=>s>0),totalHours:Object.values(d.hours||{}).reduce((a,b)=>a+b,0),completedAt:d.completedAt||{},startDate:d.startDate,lastActivity:d.lastActivity};
+    }
+  }catch(e){}
+  return{id:courseId,status:'not_started',completed:0,total:COURSES.find(c=>c.id===courseId)?.totalDays||14,scores:[],totalHours:0,completedAt:{},startDate:null,lastActivity:null};
 }
 
-function renderCertsGrid(){
-  document.getElementById('certs-grid').innerHTML=CERTS.map(c=>{
-    const st=getState(c.id),done=(st.completed||[]).length,pct=Math.round((done/c.days)*100);
-    const status=getStatus(c),bc=SB[status]||'b-surface',bl=SL[status];
-    const isActive=(status==='in_progress'||status==='completed');
-    return`<div class="cert-card">
-      <div class="cert-card-accent" style="background:${CV[c.color]}"></div>
-      <div class="cert-card-top">
-        <div><div class="cert-name">${c.name}</div><div class="cert-provider">${c.provider}</div></div>
-        <div style="display:flex;align-items:center;gap:7px;">
-          <span class="badge ${bc}">${bl}</span>
-          <div class="cert-icon" style="background:${CL[c.color]};color:${CD[c.color]};">${c.icon}</div>
-        </div>
+function getAllProgress(){return COURSES.map(c=>({course:c,...getCourseProgress(c.id)}));}
+
+function statusLabel(s){return{not_started:'Not started',in_progress:'In progress',completed:'Completed'}[s]||'Not started';}
+function statusClass(s){return{not_started:'status-not-started',in_progress:'status-in-progress',completed:'status-completed'}[s]||'status-not-started';}
+
+function fmtDate(ts){if(!ts)return'—';const d=new Date(ts);return d.toLocaleDateString('en-CA',{month:'short',day:'numeric'});}
+function fmtDateFull(ts){if(!ts)return'—';const d=new Date(ts);return d.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'2-digit'});}
+function timeAgo(ts){if(!ts)return'—';const s=Math.floor((Date.now()-ts)/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}
+
+function renderHome(){
+  const settings=getSettings();
+  const allProg=getAllProgress();
+  const active=allProg.filter(p=>settings.active.includes(p.course.id));
+  const inProg=active.filter(p=>p.status==='in_progress').length;
+  const completed=active.filter(p=>p.status==='completed').length;
+  const totalHours=active.reduce((a,p)=>a+(p.totalHours||0),0);
+  document.getElementById('hs-total').textContent=COURSES.length;
+  document.getElementById('hs-active').textContent=inProg;
+  document.getElementById('hs-done').textContent=completed;
+  document.getElementById('hs-hours').textContent=totalHours>0?totalHours.toFixed(1)+' h':'0 h';
+
+  const grid=document.getElementById('course-grid');
+  grid.innerHTML=allProg.map(p=>{
+    const c=p.course,isActive=settings.active.includes(c.id);
+    const pct=Math.round((p.completed/p.total)*100);
+    const avgScore=p.scores.length?Math.round(p.scores.reduce((a,b)=>a+b,0)/p.scores.length):null;
+    return `<div class="course-card ${isActive?'':'inactive'}">
+      <div class="cc-top">
+        <div class="cc-icon" style="background:${c.colorLight};color:${c.color};">${c.icon}</div>
+        <span class="cc-status ${statusClass(p.status)}">${statusLabel(p.status)}</span>
       </div>
-      <div class="cert-full">${c.full}</div>
-      <div class="cert-prog-row"><span class="cert-prog-label">${done}/${c.days} days done</span><span class="cert-prog-pct">${pct}%</span></div>
-      <div class="cert-bar"><div class="cert-bar-fill" style="width:${pct}%;background:${CV[c.color]}"></div></div>
-      <div class="cert-meta">
-        <span class="badge b-surface" style="font-size:10px;">${c.cost}</span>
-        <span class="badge b-surface" style="font-size:10px;">${c.days} days</span>
-        ${c.tags.slice(0,2).map(t=>`<span class="badge b-surface" style="font-size:10px;">${t}</span>`).join('')}
+      <div class="cc-name">${c.fullName}</div>
+      <div class="cc-full">${c.provider} · ${c.difficulty} · ${c.totalDays} days · ${c.cost}</div>
+      <div class="cc-prog">
+        <div class="cc-prog-row"><span>${p.completed}/${p.total} days</span><span>${pct}%</span></div>
+        <div class="cc-bar"><div class="cc-bar-fill" style="width:${pct}%;background:${c.color};"></div></div>
       </div>
-      <div class="cert-card-footer">
-        <a href="courses/${c.id}/index.html" class="cert-link primary-link" style="background:${CV[c.color]};color:#fff;">Open Tracker →</a>
-        ${isActive
-          ?`<button class="cert-act-btn pause" onclick="event.stopPropagation();setStatus('${c.id}','planned')">Pause</button>`
-          :`<button class="cert-act-btn" onclick="event.stopPropagation();startJourney('${c.id}')">Start</button>`}
+      <div class="cc-meta">
+        ${p.startDate?`<span class="cc-meta-item">📅 Started ${fmtDate(p.startDate)}</span>`:''}
+        ${p.totalHours>0?`<span class="cc-meta-item">⏱ ${p.totalHours.toFixed(1)} h logged</span>`:''}
+        ${avgScore?`<span class="cc-meta-item">📊 Avg ${avgScore}%</span>`:''}
+        ${p.lastActivity&&p.status!=='not_started'?`<span class="cc-meta-item">🕐 ${timeAgo(p.lastActivity)}</span>`:''}
+      </div>
+      <div class="cc-actions">
+        ${isActive?`<a class="cc-btn cc-btn-primary" href="courses/${c.id}/index.html">${p.status==='not_started'?'Start journey →':p.status==='completed'?'Review →':'Continue →'}</a>`:'<span style="font-size:12px;color:var(--text3);">Hidden — enable in Manage</span>'}
+        <a class="cc-btn" href="${c.examLink}" target="_blank" style="margin-left:auto;">Exam info</a>
       </div>
     </div>`;
   }).join('');
 }
 
 function renderTopicsTable(){
+  const filter=document.getElementById('filter-status').value;
+  const allProg=getAllProgress();
+  const rows=allProg.filter(p=>!filter||p.status===filter);
   const tbody=document.getElementById('topics-tbody');
-  if(!tbody) return;
-  tbody.innerHTML=CERTS.map(c=>{
-    const st=getState(c.id),done=(st.completed||[]).length,pct=Math.round((done/c.days)*100);
-    const status=getStatus(c),bc=SB[status],bl=SL[status];
-    const startDate=localStorage.getItem('cj_'+c.id+'_start')||'—';
-    const hrs=(done*c.hoursPerDay).toFixed(1);
-    return`<tr style="cursor:pointer" onclick="window.open('courses/${c.id}/index.html','_self')">
-      <td><div style="display:flex;align-items:center;gap:10px;">
-        <div class="tbl-icon" style="background:${CL[c.color]};color:${CD[c.color]};">${c.icon}</div>
-        <div><div style="font-weight:500;font-size:13px;">${c.name}</div><div style="font-size:11px;color:var(--text3);">${c.full}</div></div>
-      </div></td>
-      <td style="font-size:12px;color:var(--text2);white-space:nowrap;">${c.provider}</td>
-      <td><span class="badge ${bc}">${bl}</span></td>
-      <td style="font-size:12px;font-family:'DM Mono',monospace;">${c.cost}</td>
-      <td style="font-size:12px;font-family:'DM Mono',monospace;text-align:center;">${c.days}</td>
-      <td><div style="display:flex;align-items:center;gap:8px;">
-        <div style="flex:1;background:var(--surface2);border-radius:99px;height:5px;overflow:hidden;min-width:60px;"><div style="height:100%;border-radius:99px;background:${CV[c.color]};width:${pct}%"></div></div>
-        <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);">${pct}%</span>
-      </div></td>
-      <td style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;white-space:nowrap;">${startDate}</td>
-      <td style="font-size:12px;font-family:'DM Mono',monospace;color:var(--text2);">${hrs}h</td>
-      <td style="font-size:11px;color:var(--text2);white-space:nowrap;">${c.upgrade||'—'}</td>
-      <td onclick="event.stopPropagation()">
-        <div style="display:flex;gap:8px;align-items:center;">
-          <a href="courses/${c.id}/index.html" class="tbl-link">Tracker</a>
-          <a href="${c.certUrl}" target="_blank" class="tbl-link" style="color:var(--text3);">Cert ↗</a>
-        </div>
+  tbody.innerHTML=rows.map(p=>{
+    const c=p.course;
+    const pct=Math.round((p.completed/p.total)*100);
+    return `<tr onclick="window.location.href='courses/${c.id}/index.html'" style="cursor:pointer;">
+      <td class="t-icon-cell"><div class="t-icon" style="background:${c.colorLight};color:${c.color};">${c.icon}</div></td>
+      <td><div class="t-name">${c.fullName}</div><div class="t-provider">${c.provider}</div></td>
+      <td><span class="t-status ${statusClass(p.status)}">${statusLabel(p.status)}</span></td>
+      <td>
+        <div class="t-progress-bar"><div class="t-progress-fill" style="width:${pct}%;background:${c.color};"></div></div>
+        <div class="t-progress-label">${p.completed}/${p.total} days · ${pct}%</div>
       </td>
+      <td>${fmtDateFull(p.startDate)}</td>
+      <td>${timeAgo(p.lastActivity)}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;">${p.totalHours>0?p.totalHours.toFixed(1)+' h':'—'}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;">${c.cost}</td>
+      <td><div class="t-tags">${c.tags.map(t=>`<span class="t-tag">${t}</span>`).join('')}</div></td>
+      <td><div class="t-upgrade">${c.upgradeNote}</div></td>
+      <td><a class="cc-btn" href="courses/${c.id}/index.html" onclick="event.stopPropagation()">Open →</a></td>
     </tr>`;
   }).join('');
 }
 
-function renderDashboard(){
-  const all=CERTS.map(c=>{
-    const st=getState(c.id),done=(st.completed||[]).length,status=getStatus(c);
-    return{...c,done,status,pct:Math.round((done/c.days)*100)};
-  });
-  const active=all.filter(c=>c.status==='in_progress').length;
-  const comp=all.filter(c=>c.status==='completed').length;
-  const totalD=all.reduce((s,c)=>s+c.done,0);
-  const totalH=all.reduce((s,c)=>s+(c.done*c.hoursPerDay),0).toFixed(0);
+let sortAsc=true;
+function sortTopics(field){
+  // simple toggle — re-render with sort applied
+  sortAsc=!sortAsc;
+  renderTopicsTable();
+}
 
-  document.getElementById('dash-metrics').innerHTML=`
-    <div class="metric"><div class="metric-label">Journeys tracked</div><div class="metric-val">${CERTS.length}</div><div class="metric-sub">certifications planned</div></div>
-    <div class="metric"><div class="metric-label">Active now</div><div class="metric-val" style="color:var(--amber)">${active}</div><div class="metric-sub">in progress</div></div>
-    <div class="metric"><div class="metric-label">Completed</div><div class="metric-val" style="color:var(--green)">${comp}</div><div class="metric-sub">certifications passed</div></div>
-    <div class="metric"><div class="metric-label">Est. hours</div><div class="metric-val">${totalH}</div><div class="metric-sub">${totalD} study days logged</div></div>`;
+function renderProgress(){
+  const allProg=getAllProgress();
+  const hasAny=allProg.some(p=>p.status!=='not_started');
+  const totalHours=allProg.reduce((a,p)=>a+(p.totalHours||0),0);
+  const inProg=allProg.filter(p=>p.status==='in_progress').length;
+  const done=allProg.filter(p=>p.status==='completed').length;
+  const totalDays=allProg.reduce((a,p)=>a+p.completed,0);
+  document.getElementById('progress-summary').innerHTML=`
+    <div class="ps-card"><div class="ps-label">Journeys</div><div class="ps-val">${COURSES.length}</div><div class="ps-sub">${inProg} in progress · ${done} done</div></div>
+    <div class="ps-card"><div class="ps-label">Days completed</div><div class="ps-val">${totalDays}</div><div class="ps-sub">across all journeys</div></div>
+    <div class="ps-card"><div class="ps-label">Hours logged</div><div class="ps-val">${totalHours.toFixed(1)}</div><div class="ps-sub">total study time</div></div>
+    <div class="ps-card"><div class="ps-label">Avg score</div><div class="ps-val">${(()=>{const all=allProg.flatMap(p=>p.scores);return all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length)+'%':'—';})()}</div><div class="ps-sub">across all practice tests</div></div>`;
 
-  const dows=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const dowV=[12,18,15,22,10,8,5],mxD=Math.max(...dowV);
-  document.getElementById('chart-dow').innerHTML=dows.map((d,i)=>`
-    <div class="bar-row">
-      <span class="bar-row-label">${d}</span>
-      <div class="bar-track"><div class="bar-seg" style="width:${Math.round((dowV[i]/mxD)*100)}%"></div></div>
-      <span class="bar-row-val">${dowV[i]}</span>
-    </div>`).join('');
-
-  const todVals=[8,15,12,5];
-  ['tod-0','tod-1','tod-2','tod-3'].forEach((id,i)=>{
-    const el=document.getElementById(id);if(el)el.textContent=todVals[i]+'h';
-  });
-
-  const hm=document.getElementById('heatmap');
-  const lvls=['','h1','h2','h3','h4'];
-  hm.innerHTML=Array.from({length:98},(_,i)=>{
-    const seed=(i*7+13)%17;
-    const l=totalD>0?lvls[seed%5]:'';
-    return`<div class="heat-cell ${l}" title="Week ${Math.floor(i/7)+1}, Day ${i%7+1}"></div>`;
+  document.getElementById('progress-journeys').innerHTML=allProg.map(p=>{
+    const c=p.course;
+    const pct=Math.round((p.completed/p.total)*100);
+    return `<div class="journey-row">
+      <div class="j-icon" style="background:${c.colorLight};color:${c.color};">${c.icon}</div>
+      <div class="j-name">${c.name} <span style="font-size:11px;color:var(--text3);">${c.fullName}</span></div>
+      <span class="cc-status ${statusClass(p.status)}" style="font-size:10px;flex-shrink:0;">${statusLabel(p.status)}</span>
+      <div class="j-prog-wrap">
+        <div class="j-bar"><div class="j-bar-fill" style="width:${pct}%;background:${c.color};"></div></div>
+        <div class="j-pct">${pct}% · ${p.completed}/${p.total} days</div>
+      </div>
+      <div class="j-hours">${p.totalHours>0?p.totalHours.toFixed(1)+' h':'—'}</div>
+    </div>`;
   }).join('');
 
-  const statusData=[
-    {l:'Planned',n:all.filter(c=>c.status==='planned').length,col:'var(--surface3)'},
-    {l:'In Progress',n:active,col:'var(--amber)'},
-    {l:'Completed',n:comp,col:'var(--green)'},
-    {l:'Paused',n:all.filter(c=>c.status==='paused').length,col:'var(--coral)'},
-  ];
-  document.getElementById('chart-status').innerHTML=statusData.map(s=>`
-    <div class="bar-row">
-      <span class="bar-row-label" style="min-width:72px;text-align:left;">${s.l}</span>
-      <div class="bar-track"><div class="bar-seg" style="width:${Math.round((s.n/CERTS.length)*100)}%;background:${s.col}"></div></div>
-      <span class="bar-row-val">${s.n}</span>
+  // Day of week heatmap
+  const dowLabels=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const dowCounts=new Array(7).fill(0);
+  allProg.forEach(p=>{
+    Object.values(p.completedAt||{}).forEach(ts=>{
+      if(ts)dowCounts[new Date(ts).getDay()]++;
+    });
+  });
+  const maxDow=Math.max(...dowCounts,1);
+  document.getElementById('heatmap-dow').innerHTML=dowLabels.map((l,i)=>`
+    <div class="heatmap-day">
+      <div class="hm-label">${l}</div>
+      <div class="hm-bar" style="height:${Math.max(8,Math.round((dowCounts[i]/maxDow)*60))}px;background:${dowCounts[i]>0?'var(--green)':'var(--surface2)'};opacity:${dowCounts[i]>0?0.4+0.6*(dowCounts[i]/maxDow):1};"></div>
+      <div class="hm-count">${dowCounts[i]||'·'}</div>
     </div>`).join('');
 
-  document.getElementById('chart-progress').innerHTML=all.map(c=>`
-    <div class="bar-row">
-      <span class="bar-row-label" style="min-width:54px;text-align:left;">${c.name}</span>
-      <div class="bar-track"><div class="bar-seg" style="width:${c.pct}%;background:${CV[c.color]}"></div></div>
-      <span class="bar-row-val">${c.pct}%</span>
+  // Time of day
+  const todLabels=['Morning','Afternoon','Evening','Night'];
+  const todRanges=[[5,12],[12,17],[17,22],[22,5]];
+  const todCounts=new Array(4).fill(0);
+  allProg.forEach(p=>{
+    Object.values(p.completedAt||{}).forEach(ts=>{
+      if(!ts)return;
+      const h=new Date(ts).getHours();
+      if(h>=5&&h<12)todCounts[0]++;
+      else if(h>=12&&h<17)todCounts[1]++;
+      else if(h>=17&&h<22)todCounts[2]++;
+      else todCounts[3]++;
+    });
+  });
+  const maxTod=Math.max(...todCounts,1);
+  const todIcons=['🌅','☀️','🌆','🌙'];
+  document.getElementById('heatmap-tod').innerHTML=todLabels.map((l,i)=>`
+    <div class="tg-cell">
+      <div class="tg-label">${todIcons[i]} ${l}</div>
+      <div class="tg-bar-wrap"><div class="tg-bar" style="height:${Math.max(4,Math.round((todCounts[i]/maxTod)*36))}px;opacity:${todCounts[i]>0?0.4+0.6*(todCounts[i]/maxTod):0.2};"></div></div>
+      <div class="tg-count">${todCounts[i]} sessions</div>
     </div>`).join('');
+
+  // Recent activity
+  const events=[];
+  allProg.forEach(p=>{
+    Object.entries(p.completedAt||{}).forEach(([day,ts])=>{
+      if(ts)events.push({ts,text:`Completed Day ${parseInt(day)+1} of ${p.course.name}`,color:p.course.color});
+    });
+  });
+  events.sort((a,b)=>b.ts-a.ts);
+  const recent=events.slice(0,8);
+  document.getElementById('recent-activity').innerHTML=recent.length?recent.map(e=>`
+    <div class="recent-item">
+      <div class="recent-dot" style="background:${e.color};"></div>
+      <div class="recent-text">${e.text}</div>
+      <div class="recent-time">${timeAgo(e.ts)}</div>
+    </div>`).join(''):'<div style="font-size:13px;color:var(--text3);padding:1rem 0;">No activity yet — start a journey to see your history here.</div>';
 }
 
 function renderAbout(){
-  const tbody=document.getElementById('eco-tbody');if(!tbody)return;
-  tbody.innerHTML=CERTS.map(c=>{
-    const status=getStatus(c),bc=SB[status],bl=SL[status];
-    return`<tr>
-      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--blue-d);">${c.id}</td>
-      <td>${c.name}</td><td style="text-align:center;">${c.days}</td>
-      <td><span class="badge ${bc}" style="font-size:10px;">${bl}</span></td>
-    </tr>`;
+  document.getElementById('ecosystem-table').innerHTML=COURSES.map(c=>{
+    const p=getCourseProgress(c.id);
+    const isLive=true; // all are created
+    return `<tr><td style="font-family:'DM Mono',monospace;font-size:11px;">${c.id}</td><td>${c.totalDays}</td><td><span class="${isLive?'repo-status-live':'repo-status-planned'}">${isLive?'live':'planned'}</span></td></tr>`;
   }).join('');
 }
 
-function renderStrip(){
-  const active=CERTS.filter(c=>getStatus(c)==='in_progress').length;
-  const done=CERTS.filter(c=>getStatus(c)==='completed').length;
-  const days=CERTS.reduce((s,c)=>{const st=getState(c.id);return s+(st.completed||[]).length;},0);
-  document.getElementById('s-active').textContent=active;
-  document.getElementById('s-done').textContent=done;
-  document.getElementById('s-days').textContent=days;
+function openManage(){
+  const settings=getSettings();
+  document.getElementById('manage-list').innerHTML=COURSES.map(c=>{
+    const on=settings.active.includes(c.id);
+    return `<div class="manage-row">
+      <div class="manage-info">
+        <div class="manage-icon" style="background:${c.colorLight};color:${c.color};">${c.icon}</div>
+        <div><div class="manage-name">${c.name} — ${c.fullName}</div><div class="manage-provider">${c.provider} · ${c.cost} · ${c.totalDays} days</div></div>
+      </div>
+      <div class="toggle-wrap">
+        <div class="toggle ${on?'on':''}" id="toggle-${c.id}" onclick="toggleCourse('${c.id}')"><div class="toggle-thumb"></div></div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('manage-modal').classList.add('open');
+}
+function closeManage(e){
+  if(!e||e.target===document.getElementById('manage-modal'))document.getElementById('manage-modal').classList.remove('open');
+}
+function toggleCourse(id){
+  const settings=getSettings();
+  const idx=settings.active.indexOf(id);
+  if(idx>=0)settings.active.splice(idx,1);
+  else settings.active.push(id);
+  saveSettings(settings);
+  const toggle=document.getElementById('toggle-'+id);
+  if(toggle)toggle.classList.toggle('on',settings.active.includes(id));
+  renderHome();
 }
 
-// Modal
-function openModal(){
-  const avail=CERTS.filter(c=>getStatus(c)!=='in_progress'&&getStatus(c)!=='completed');
-  document.getElementById('modal-opts').innerHTML=avail.map(c=>`
-    <div class="modal-opt" onclick="startJourney('${c.id}')">
-      <div class="modal-opt-icon" style="background:${CL[c.color]};color:${CD[c.color]};">${c.icon}</div>
-      <div><div class="modal-opt-name">${c.full}</div><div class="modal-opt-meta">${c.provider} · ${c.cost} · ${c.days} days</div></div>
-    </div>`).join('');
-  document.getElementById('modal').classList.add('open');
-}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
-function startJourney(id){
-  localStorage.setItem(statusKey(id),'in_progress');
-  if(!localStorage.getItem('cj_'+id+'_start'))
-    localStorage.setItem('cj_'+id+'_start',new Date().toISOString().split('T')[0]);
-  closeModal();renderAll();
-}
-
-function showPage(name,btn){
+function showTab(name,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
   if(btn)btn.classList.add('active');
   if(name==='topics')renderTopicsTable();
-  if(name==='progress')renderDashboard();
+  if(name==='progress')renderProgress();
   if(name==='about')renderAbout();
 }
 
-function renderAll(){renderCertsGrid();renderStrip();}
-renderAll();
+// Initial render
+renderHome();
+renderAbout();
 </script>
-</body></html>
+</body>
+</html>
