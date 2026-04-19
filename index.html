@@ -312,48 +312,45 @@ nav {
   </div>
 </div>
 
-<!-- GitHub Sync modal -->
+<!-- GitHub Gist Sync modal -->
 <div class="modal-overlay" id="sync-modal">
   <div class="modal-box">
     <button class="modal-close-btn" onclick="closeSyncModal()">✕</button>
     <h3>☁ GitHub Sync</h3>
-    <p class="modal-desc">Connect once — progress from every course syncs to your forked repo automatically.</p>
 
-    <!-- Shown when connected -->
+    <!-- Connected view -->
     <div id="sync-connected-view" style="display:none">
       <div class="modal-status ok" id="sync-connected-msg" style="display:block;margin-bottom:1.25rem;"></div>
-      <label class="modal-label">Transfer to another device</label>
-      <p class="modal-note">Copy this code on device 1, paste it on device 2 to connect instantly — no re-entering your token.</p>
+      <p class="modal-desc" style="margin-bottom:0.75rem">Progress from every course auto-syncs to a private GitHub Gist on every change.</p>
+      <label class="modal-label">Transfer code — use on another device</label>
+      <p class="modal-note">Paste this on any other device to connect instantly, no re-entering your token.</p>
       <div style="display:flex;gap:8px;margin-bottom:1.25rem;">
         <input class="modal-input" type="text" id="sync-config-str" readonly style="margin-bottom:0;font-size:11px;cursor:pointer;" onclick="this.select()">
         <button class="btn btn-ghost" onclick="copyTransferCode()" style="flex-shrink:0;white-space:nowrap">Copy</button>
       </div>
-      <div class="modal-actions">
+      <div class="modal-status" id="sync-copy-status"></div>
+      <div class="modal-actions" style="margin-top:1rem">
         <button class="btn btn-ghost" onclick="closeSyncModal()">Done</button>
         <button class="modal-disconnect" onclick="disconnectGitHub()">Disconnect</button>
       </div>
-      <div class="modal-status" id="sync-copy-status"></div>
     </div>
 
-    <!-- Shown when not connected -->
+    <!-- Connect view -->
     <div id="sync-connect-view">
+      <p class="modal-desc">Paste your GitHub token — we automatically find or create a private Gist to store your progress.</p>
       <label class="modal-label">Personal Access Token</label>
       <input class="modal-input" type="password" id="sync-pat" placeholder="github_pat_…" autocomplete="off">
       <p class="modal-note">
-        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Create a fine-grained token →</a><br>
-        Repository access → select this repo → <strong>Contents: Read &amp; Write</strong>
+        <a href="https://github.com/settings/tokens/new?scopes=gist" target="_blank" rel="noopener">Create a token with Gist scope →</a>
+        <br>Select <strong>Classic token</strong> → check <strong>gist</strong> → Generate.
       </p>
-      <div class="modal-autofields">
-        <span>Owner: <strong id="sync-owner-val">—</strong></span>
-        <span>Repo:&nbsp; <strong id="sync-repo-val">—</strong></span>
-      </div>
       <div class="modal-actions">
         <button class="btn btn-primary" id="sync-connect-btn" onclick="connectGitHub()">Connect</button>
         <button class="btn btn-ghost" onclick="closeSyncModal()">Cancel</button>
       </div>
       <div class="modal-status" id="sync-status"></div>
       <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--border)">
-        <label class="modal-label" style="color:var(--text3)">Or paste a transfer code from another device</label>
+        <label class="modal-label" style="color:var(--text3)">Already connected on another device?</label>
         <div style="display:flex;gap:8px;">
           <input class="modal-input" type="text" id="sync-import-str" placeholder="Paste transfer code…" style="margin-bottom:0;font-size:12px;">
           <button class="btn btn-ghost" onclick="importTransferCode()" style="flex-shrink:0">Import</button>
@@ -449,32 +446,27 @@ function render() {
 
 render();
 
-// ── GitHub Sync UI ──────────────────────────────────────────
+// ── GitHub Gist Sync UI ─────────────────────────────────────
 (function () {
-  function detectCtx() {
-    const host = window.location.hostname;
-    const path = window.location.pathname;
-    const m = host.match(/^([^.]+)\.github\.io$/);
-    // Skip: localhost, the original org site, and non-GitHub-Pages hosts
-    if (!m || m[1] === 'certified-journeys') return { owner: '', repo: '' };
-    const parts = path.split('/').filter(Boolean);
-    return { owner: m[1], repo: parts[0] || 'certified-journeys.github.io' };
-  }
+  const GH = typeof GHSync !== 'undefined' ? GHSync : null;
 
-  const ctx = detectCtx();
+  function isOnForkedSite() {
+    const m = window.location.hostname.match(/^([^.]+)\.github\.io$/);
+    return m && m[1] !== 'certified-journeys';
+  }
 
   function updateNavBtn() {
     const btn = document.getElementById('sync-btn');
     if (!btn) return;
-    const connected = typeof GHSync !== 'undefined' && GHSync.isConnected();
-    btn.textContent = connected ? '☁ Synced' : '☁ Connect';
-    btn.classList.toggle('connected', connected);
+    const ok = GH && GH.isConnected();
+    btn.textContent = ok ? '☁ Synced' : '☁ Connect';
+    btn.classList.toggle('connected', !!ok);
   }
 
   function maybeShowBanner() {
-    if (!ctx.owner) return; // not a fork — skip
+    if (!isOnForkedSite()) return;
     if (localStorage.getItem('cj_sync_banner_dismissed')) return;
-    if (typeof GHSync !== 'undefined' && GHSync.isConnected()) return;
+    if (GH && GH.isConnected()) return;
     document.getElementById('sync-banner').style.display = 'flex';
   }
 
@@ -485,27 +477,21 @@ render();
 
   window.openSyncModal = function () {
     document.getElementById('sync-modal').classList.add('open');
-    const creds = typeof GHSync !== 'undefined' ? GHSync.getCreds() : null;
-    const connected = creds && typeof GHSync !== 'undefined' && GHSync.isConnected();
-    const owner = (creds && creds.owner) || ctx.owner || '';
-    const repo  = (creds && creds.repo)  || ctx.repo  || 'certified-journeys.github.io';
-
+    const connected = GH && GH.isConnected();
     if (connected) {
+      const creds = GH.getCreds();
       document.getElementById('sync-connected-view').style.display = 'block';
       document.getElementById('sync-connect-view').style.display   = 'none';
-      document.getElementById('sync-connected-msg').textContent = '☁ Connected to ' + owner + '/' + repo;
-      const cfg = GHSync.exportConfig ? GHSync.exportConfig() : '';
-      document.getElementById('sync-config-str').value = cfg || '';
-      document.getElementById('sync-copy-status').className = 'modal-status';
+      document.getElementById('sync-connected-msg').textContent    = '☁ Connected · Gist ' + creds.gistId.slice(0, 8) + '…';
+      document.getElementById('sync-config-str').value             = GH.exportConfig();
+      document.getElementById('sync-copy-status').className        = 'modal-status';
     } else {
       document.getElementById('sync-connected-view').style.display = 'none';
       document.getElementById('sync-connect-view').style.display   = 'block';
-      document.getElementById('sync-owner-val').textContent = owner || '(not detected)';
-      document.getElementById('sync-repo-val').textContent  = repo;
-      document.getElementById('sync-pat').value = '';
-      document.getElementById('sync-import-str').value = '';
-      document.getElementById('sync-status').className = 'modal-status';
-      document.getElementById('sync-import-status').className = 'modal-status';
+      document.getElementById('sync-pat').value                    = '';
+      document.getElementById('sync-import-str').value             = '';
+      document.getElementById('sync-status').className             = 'modal-status';
+      document.getElementById('sync-import-status').className      = 'modal-status';
     }
   };
 
@@ -513,70 +499,58 @@ render();
     document.getElementById('sync-modal').classList.remove('open');
   };
 
-  window.copyTransferCode = function () {
-    const cfg = document.getElementById('sync-config-str').value;
-    if (!cfg) return;
-    navigator.clipboard.writeText(cfg).then(() => {
-      const st = document.getElementById('sync-copy-status');
-      st.textContent = '✓ Copied! Paste it on your other device to connect instantly.';
-      st.className   = 'modal-status ok';
-      setTimeout(() => { st.className = 'modal-status'; }, 4000);
-    });
-  };
-
-  window.importTransferCode = async function () {
-    if (typeof GHSync === 'undefined') return;
-    const str = document.getElementById('sync-import-str').value.trim();
-    const st  = document.getElementById('sync-import-status');
-    if (!str) { st.textContent = 'Paste your transfer code first.'; st.className = 'modal-status err'; return; }
-    const c = GHSync.importConfig(str);
-    if (!c)  { st.textContent = 'Invalid transfer code.'; st.className = 'modal-status err'; return; }
-    st.textContent = 'Connecting…'; st.className = 'modal-status';
-    GHSync.saveCreds(c);
-    const r = await GHSync.testConnection();
-    if (r.ok) {
-      updateNavBtn();
-      document.getElementById('sync-banner').style.display = 'none';
-      localStorage.setItem('cj_sync_banner_dismissed', '1');
-      openSyncModal(); // re-render as connected view
-    } else {
-      GHSync.saveCreds(null);
-      st.textContent = r.msg; st.className = 'modal-status err';
-    }
-  };
-
   window.connectGitHub = async function () {
-    if (typeof GHSync === 'undefined') return;
-    const pat   = document.getElementById('sync-pat').value.trim();
-    const owner = ctx.owner;
-    const repo  = ctx.repo || 'certified-journeys.github.io';
-    if (!pat)   { showStatus('Enter your Personal Access Token.', false); return; }
-    if (!owner) { showStatus('Cannot detect GitHub username from this URL.', false); return; }
-
+    if (!GH) return;
+    const pat = document.getElementById('sync-pat').value.trim();
+    if (!pat) { showStatus('Enter your Personal Access Token.', false); return; }
     const btn = document.getElementById('sync-connect-btn');
     btn.disabled = true; btn.textContent = 'Connecting…';
-
-    GHSync.saveCreds({ pat, owner, repo, branch: 'main' });
-    const r = await GHSync.testConnection();
-
+    const r = await GH.connect(pat);
     if (r.ok) {
-      updateNavBtn();
       document.getElementById('sync-banner').style.display = 'none';
       localStorage.setItem('cj_sync_banner_dismissed', '1');
-      openSyncModal(); // re-render as connected view
+      updateNavBtn(); updateLastSynced(); openSyncModal();
     } else {
-      GHSync.saveCreds(null);
       showStatus(r.msg, false);
     }
     btn.disabled = false; btn.textContent = 'Connect';
   };
 
+  window.importTransferCode = async function () {
+    if (!GH) return;
+    const str = document.getElementById('sync-import-str').value.trim();
+    const st  = document.getElementById('sync-import-status');
+    if (!str) { st.textContent = 'Paste your transfer code first.'; st.className = 'modal-status err'; return; }
+    const c = GH.importConfig(str);
+    if (!c)  { st.textContent = 'Invalid transfer code.'; st.className = 'modal-status err'; return; }
+    st.textContent = 'Verifying…'; st.className = 'modal-status';
+    GH.saveCreds(c);
+    const r = await GH.testConnection();
+    if (r.ok) {
+      document.getElementById('sync-banner').style.display = 'none';
+      localStorage.setItem('cj_sync_banner_dismissed', '1');
+      updateNavBtn(); updateLastSynced(); openSyncModal();
+    } else {
+      GH.saveCreds(null);
+      st.textContent = r.msg; st.className = 'modal-status err';
+    }
+  };
+
+  window.copyTransferCode = function () {
+    const val = document.getElementById('sync-config-str').value;
+    if (!val) return;
+    navigator.clipboard.writeText(val).then(() => {
+      const st = document.getElementById('sync-copy-status');
+      st.textContent = '✓ Copied! Paste it on your other device.';
+      st.className   = 'modal-status ok';
+      setTimeout(() => { st.className = 'modal-status'; }, 3500);
+    });
+  };
+
   window.disconnectGitHub = function () {
-    if (typeof GHSync !== 'undefined') GHSync.saveCreds(null);
-    updateNavBtn();
+    if (GH) GH.saveCreds(null);
     localStorage.removeItem('cj_sync_banner_dismissed');
-    closeSyncModal();
-    maybeShowBanner();
+    updateNavBtn(); closeSyncModal(); maybeShowBanner();
   };
 
   function showStatus(msg, ok) {
@@ -586,8 +560,8 @@ render();
   }
 
   function formatSyncTime(iso) {
-    const d   = new Date(iso);
-    const now = new Date();
+    const d    = new Date(iso);
+    const now  = new Date();
     const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     if (d.toDateString() === now.toDateString()) return time;
     if (d.toDateString() === new Date(now - 86400000).toDateString()) return 'Yesterday ' + time;
@@ -597,25 +571,20 @@ render();
   function updateLastSynced() {
     const el = document.getElementById('sync-ts');
     if (!el) return;
-    const ts = typeof GHSync !== 'undefined' ? GHSync.getLastSynced() : null;
-    if (ts && typeof GHSync !== 'undefined' && GHSync.isConnected()) {
-      el.textContent = 'Last synced ' + formatSyncTime(ts);
+    const ts = GH ? GH.getLastSynced() : null;
+    if (ts && GH && GH.isConnected()) {
+      el.textContent   = 'Synced ' + formatSyncTime(ts);
       el.style.display = 'block';
     } else {
       el.style.display = 'none';
     }
   }
 
-  // Update when a sync completes in this tab
   window.addEventListener('cj-synced', () => { updateNavBtn(); updateLastSynced(); });
-
-  // Update when a sync completes in another tab (course page)
   window.addEventListener('storage', e => {
     if (e.key === 'cj_last_synced') updateLastSynced();
-    if (e.key === 'cj_github_creds') { updateNavBtn(); updateLastSynced(); }
+    if (e.key === 'cj_gist_creds')  { updateNavBtn(); updateLastSynced(); }
   });
-
-  // Close on overlay click
   document.getElementById('sync-modal').addEventListener('click', function (e) {
     if (e.target === this) closeSyncModal();
   });

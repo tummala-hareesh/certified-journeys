@@ -197,23 +197,6 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 .sync-badge.syncing{color:var(--blue-dark);border-color:var(--blue);}
 .sync-badge.error{color:var(--coral-dark);border-color:var(--coral);}
 /* GitHub sync modal */
-.gh-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;align-items:center;justify-content:center;}
-.gh-modal.open{display:flex;}
-.gh-modal-box{background:var(--surface);border:.5px solid var(--border2);border-radius:var(--radius);padding:1.5rem;width:min(460px,92vw);box-shadow:var(--shadow-md);}
-.gh-modal-box h3{font-size:15px;font-weight:600;margin-bottom:4px;}
-.gh-modal-sub{font-size:12px;color:var(--text2);margin-bottom:1.1rem;line-height:1.6;}
-.gh-field{margin-bottom:10px;}
-.gh-field label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:3px;}
-.gh-field input{width:100%;font-size:13px;padding:7px 10px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;transition:border-color .15s;}
-.gh-field input:focus{outline:none;border-color:var(--blue);}
-.gh-modal-actions{display:flex;gap:8px;margin-top:1rem;align-items:center;flex-wrap:wrap;}
-.gh-btn-save{font-size:13px;padding:8px 18px;border-radius:var(--radius-sm);border:.5px solid var(--green);background:var(--green);color:#fff;cursor:pointer;font-family:inherit;font-weight:500;transition:background .15s;}
-.gh-btn-save:hover{background:var(--green-dark);}
-.gh-btn-cancel{font-size:13px;padding:8px 14px;border-radius:var(--radius-sm);border:.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;}
-.gh-btn-disconnect{font-size:12px;padding:6px 12px;border-radius:var(--radius-sm);border:.5px solid var(--coral);background:none;color:var(--coral-dark);cursor:pointer;font-family:inherit;}
-.gh-modal-msg{font-size:12px;margin-left:auto;color:var(--text3);}
-.gh-modal-msg.ok{color:var(--green-dark);}
-.gh-modal-msg.err{color:var(--coral-dark);}
 </style>
 </head>
 <body>
@@ -277,40 +260,14 @@ code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;
 <div id="panel-exam" class="panel"></div>
 <div id="panel-resources" class="panel"></div>
 
-<div class="page-footer"><button class="sync-badge" id="sync-badge" onclick="openGHModal()">☁ Connect GitHub</button> · <span id="sk-display">cj_polars-certified_v1</span> · <a href="../../index.html">← All journeys</a></div>
-</div>
-<!-- GitHub sync modal -->
-<div class="gh-modal" id="gh-modal" onclick="if(event.target===this)closeGHModal()">
-  <div class="gh-modal-box">
-    <h3>☁ GitHub Sync</h3>
-    <p class="gh-modal-sub">Progress is committed to <code>courses/COURSE_ID/progress.json</code> in your repo on every change.<br>
-    Generate a <strong>Fine-grained token</strong> with <em>Contents: Read &amp; Write</em> on this repo.</p>
-    <div class="gh-field"><label>Personal Access Token</label><input id="gh-pat" type="password" placeholder="github_pat_…" autocomplete="off"></div>
-    <div class="gh-field"><label>Owner (your GitHub username or org)</label><input id="gh-owner" type="text" placeholder="your-username"></div>
-    <div class="gh-field"><label>Repository</label><input id="gh-repo" type="text" placeholder="certified-journeys.github.io"></div>
-    <div class="gh-field"><label>Branch</label><input id="gh-branch" type="text" placeholder="main"></div>
-    <div class="gh-field" style="margin-top:1rem;padding-top:1rem;border-top:.5px solid var(--border2)">
-      <label>Transfer to another device <span style="font-weight:400;color:var(--text3);font-size:11px">— copy on device 1, paste on device 2</span></label>
-      <div style="display:flex;gap:6px;margin-top:4px">
-        <input id="gh-config-str" type="text" placeholder="Config appears here when connected — or paste from another device" style="flex:1;font-size:11px" autocomplete="off"/>
-        <button class="gh-btn-cancel" onclick="copyGHConfig()">Copy</button>
-        <button class="gh-btn-cancel" onclick="importGHConfig()">Import</button>
-      </div>
-    </div>
-    <div class="gh-modal-actions">
-      <button class="gh-btn-save" onclick="saveGHCreds()">Test &amp; Save</button>
-      <button class="gh-btn-cancel" onclick="closeGHModal()">Cancel</button>
-      <button class="gh-btn-disconnect" id="gh-disconnect-btn" style="display:none" onclick="disconnectGH()">Disconnect</button>
-      <span class="gh-modal-msg" id="gh-modal-msg"></span>
-    </div>
-  </div>
+<div class="page-footer"><button class="sync-badge" id="sync-badge">☁ Connect GitHub</button> · <span id="sk-display">cj_polars-certified_v1</span> · <a href="../../index.html">← All journeys</a></div>
 </div>
 
 <script src="../../github-sync.js"></script>
 
 <script>
 // GHSync fallback — in case github-sync.js fails to load
-if(typeof GHSync==='undefined'){window.GHSync={isConnected:()=>false,saveCreds:()=>{},getCreds:()=>null,fetchState:async()=>null,pushState:async()=>false,saveDebounced:()=>{},testConnection:async()=>({ok:false,msg:'Script not loaded'})};}
+if(typeof GHSync==='undefined'){window.GHSync={isConnected:()=>false,saveCreds:()=>{},getCreds:()=>null,connect:async()=>({ok:false,msg:''}),fetchState:async()=>null,pushState:async()=>false,saveDebounced:()=>{},testConnection:async()=>({ok:false,msg:''}),exportConfig:()=>'',importConfig:()=>null,getLastSynced:()=>null};}
 const COURSE_ID='polars-certified';
 const STORAGE_KEY='cj_polars-certified_v1';
 const NOTEBOOKS=[
@@ -343,54 +300,15 @@ function saveState(){
 }
 function updateSyncBadge(st){
   const b=document.getElementById('sync-badge');if(!b)return;
-  const map={connected:'☁ Synced',syncing:'☁ Syncing…',error:'☁ Sync error',disconnected:'☁ Connect GitHub'};
-  b.textContent=map[st]||'☁ Connect GitHub';
+  const map={connected:'☁ Synced',syncing:'☁ Syncing…',error:'☁ Sync error',disconnected:'☁ Not synced'};
+  b.textContent=map[st]||'☁ Not synced';
   b.className='sync-badge'+(st==='connected'?' sync-ok':st==='syncing'?' sync-busy':st==='error'?' sync-err':'');
 }
-function openGHModal(){
-  const c=GHSync.getCreds();
-  if(c){document.getElementById('gh-pat').value=c.pat||'';document.getElementById('gh-owner').value=c.owner||'';document.getElementById('gh-repo').value=c.repo||'';document.getElementById('gh-branch').value=c.branch||'main';}
-  document.getElementById('gh-disconnect-btn').style.display=GHSync.isConnected()?'inline-flex':'none';
-  document.getElementById('gh-modal-msg').textContent='';
-  const cfg=GHSync.exportConfig();const inp=document.getElementById('gh-config-str');if(inp)inp.value=cfg||'';
-  document.getElementById('gh-modal').classList.add('open');
 }
-function closeGHModal(){document.getElementById('gh-modal').classList.remove('open');}
-async function saveGHCreds(){
-  const pat=document.getElementById('gh-pat').value.trim();
-  const owner=document.getElementById('gh-owner').value.trim();
-  const repo=document.getElementById('gh-repo').value.trim();
-  const branch=document.getElementById('gh-branch').value.trim()||'main';
-  const msg=document.getElementById('gh-modal-msg');
-  if(!pat||!owner||!repo){msg.textContent='All fields required.';msg.className='gh-modal-msg err';return;}
-  msg.textContent='Testing…';msg.className='gh-modal-msg';
-  GHSync.saveCreds({pat,owner,repo,branch});
   const r=await GHSync.testConnection();
-  if(r.ok){msg.textContent=r.msg;msg.className='gh-modal-msg ok';document.getElementById('gh-disconnect-btn').style.display='inline-flex';updateSyncBadge('connected');setTimeout(closeGHModal,1200);}
-  else{msg.textContent=r.msg;msg.className='gh-modal-msg err';GHSync.saveCreds(null);}
+});
 }
-function disconnectGH(){
-  GHSync.saveCreds(null);
-  ['gh-pat','gh-owner','gh-repo','gh-config-str'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('gh-branch').value='';
-  document.getElementById('gh-disconnect-btn').style.display='none';
-  updateSyncBadge('disconnected');closeGHModal();
 }
-function copyGHConfig(){
-  const cfg=GHSync.exportConfig();const msg=document.getElementById('gh-modal-msg');
-  if(!cfg){msg.textContent='Connect first to copy config.';msg.className='gh-modal-msg err';return;}
-  navigator.clipboard.writeText(cfg).then(()=>{msg.textContent='Copied! Paste this on your other device.';msg.className='gh-modal-msg ok';setTimeout(()=>{msg.textContent='';},3000);});
-}
-function importGHConfig(){
-  const str=(document.getElementById('gh-config-str').value||'').trim();
-  const msg=document.getElementById('gh-modal-msg');
-  const c=GHSync.importConfig(str);
-  if(!c){msg.textContent='Invalid config string.';msg.className='gh-modal-msg err';return;}
-  document.getElementById('gh-pat').value=c.pat||'';
-  document.getElementById('gh-owner').value=c.owner||'';
-  document.getElementById('gh-repo').value=c.repo||'';
-  document.getElementById('gh-branch').value=c.branch||'main';
-  msg.textContent='Imported — click Test & Save to connect.';msg.className='gh-modal-msg ok';
 }
 function broadcastStatus(){
   // Write a summary for the home page to read
