@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building with the Claude API · certified-journeys</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --green:#D97757;--green-light:#FAEDE8;--green-dark:#993C1D;
+  --blue:#378ADD;--blue-light:#EAF3FD;--blue-dark:#185FA5;
+  --amber:#BA7517;--amber-light:#FDF3E3;
+  --coral:#D85A30;--coral-light:#FAEDE8;--coral-dark:#993C1D;
+  --purple:#7F77DD;--purple-light:#EEEDFE;
+  --orange:#E8890C;--orange-light:#FEF3E2;
+  --teal:#0891B2;--teal-light:#E0F5FA;
+  --bg:#F5F4F0;--surface:#FFFFFF;--surface2:#EEECE5;--surface3:#E8E6DF;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.16);
+  --text:#18181A;--text2:#52524E;--text3:#8C8B85;
+  --radius:14px;--radius-sm:9px;--radius-xs:5px;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.1),0 1px 3px rgba(0,0,0,0.06);
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#111113;--surface:#1C1C1F;--surface2:#252528;--surface3:#2E2E33;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+  --text:#F0EFEA;--text2:#A09F9B;--text3:#5E5D58;
+  --green-light:#2A1005;--blue-light:#061E38;--amber-light:#221900;
+  --coral-light:#2A0E05;--purple-light:#161440;--orange-light:#1F1200;--teal-light:#021E26;
+}}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;}
+a{color:var(--blue-dark);text-decoration:none;}
+a:hover{text-decoration:underline;}
+button{cursor:pointer;font-family:inherit;}
+code{font-family:'DM Mono',monospace;background:var(--surface2);padding:1px 5px;border-radius:3px;font-size:0.9em;}
+
+.app{max-width:860px;margin:0 auto;padding:0 1.25rem 4rem;}
+.breadcrumb{padding:.55rem 0;font-size:13px;display:flex;align-items:center;gap:0;border-bottom:.5px solid var(--border);margin-bottom:1.1rem;}
+.breadcrumb a{color:var(--text2);text-decoration:none;font-weight:500;padding:4px 8px;border-radius:6px;transition:all .15s;}
+.breadcrumb a:first-child{color:var(--green-dark);font-weight:600;}
+.breadcrumb a:hover{color:var(--text);background:var(--surface2);text-decoration:none;}
+.breadcrumb>span:last-child{color:var(--text);font-weight:600;padding:4px 8px;background:var(--surface2);border-radius:6px;}
+.breadcrumb-sep{color:var(--border2);padding:0 2px;font-size:16px;user-select:none;line-height:1;}
+.course-hero{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin:1rem 0 1.25rem;box-shadow:var(--shadow);}
+.course-hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+.course-icon-wrap{display:flex;align-items:center;gap:12px;}
+.course-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;letter-spacing:0.02em;}
+.course-title-block h1{font-size:22px;font-weight:600;letter-spacing:-0.02em;color:var(--text);line-height:1.2;}
+.course-title-block p{font-size:13px;color:var(--text2);margin-top:3px;}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.tag{font-size:11px;padding:3px 10px;border-radius:99px;background:var(--surface2);color:var(--text2);border:0.5px solid var(--border);}
+.hero-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.meta-item{background:var(--surface2);border-radius:var(--radius-sm);padding:10px 12px;}
+.meta-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;}
+.meta-val{font-size:14px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;}
+.prog-strip{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.25rem;}
+.prog-strip-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px;}
+.prog-label{font-size:13px;color:var(--text2);}
+.prog-pct{font-size:32px;font-weight:600;letter-spacing:-0.03em;color:var(--text);font-family:'DM Mono',monospace;line-height:1;}
+.bar-bg{background:var(--surface2);border-radius:99px;height:8px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:99px;background:var(--green);transition:width .7s cubic-bezier(.4,0,.2,1);}
+.readiness{margin-top:8px;font-size:13px;color:var(--text2);}
+.readiness span{font-weight:500;}
+.readiness.ready span{color:var(--green);}
+.readiness.close span{color:var(--amber);}
+.readiness.early span{color:var(--coral);}
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:1.25rem;}
+.stat{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:.9rem;}
+.stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.stat-val{font-size:20px;font-weight:600;color:var(--text);letter-spacing:-.02em;font-family:'DM Mono',monospace;}
+.stat-val.ok{color:var(--green);} .stat-val.warn{color:var(--amber);} .stat-val.danger{color:var(--coral);}
+.tabs{display:flex;gap:2px;margin-bottom:1.25rem;background:var(--surface2);border-radius:99px;padding:4px;overflow-x:auto;}
+.tab{flex:1;min-width:max-content;font-size:12px;padding:7px 14px;cursor:pointer;color:var(--text2);border-radius:99px;border:none;background:none;font-family:inherit;font-weight:400;transition:all .2s;text-align:center;white-space:nowrap;}
+.tab.active{background:var(--surface);color:var(--text);font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
+.panel{display:none;} .panel.active{display:block;}
+.day-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;transition:border-color .2s;}
+.day-card.completed{border-color:var(--green-dark);}
+.day-card.completed .day-num{background:var(--green);color:#fff;border-color:var(--green);}
+.day-header{display:flex;align-items:center;gap:12px;padding:.95rem 1.1rem;cursor:pointer;user-select:none;}
+.day-header:hover{background:var(--surface2);}
+.day-num{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--text2);flex-shrink:0;font-family:'DM Mono',monospace;transition:all .2s;}
+.day-meta{flex:1;min-width:0;}
+.day-title{font-size:14px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.day-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.day-badge{font-size:11px;padding:3px 10px;border-radius:99px;font-weight:500;flex-shrink:0;}
+.badge-learn{background:var(--green-light);color:var(--green-dark);}
+.badge-practice{background:var(--blue-light);color:var(--blue-dark);}
+.badge-review{background:var(--amber-light);color:var(--amber);}
+.badge-exam{background:var(--coral-light);color:var(--coral-dark);}
+.chevron{font-size:11px;color:var(--text3);flex-shrink:0;transition:transform .2s;}
+.day-card.open .chevron{transform:rotate(180deg);}
+.day-body{display:none;padding:0 1.1rem 1.1rem;border-top:.5px solid var(--border);}
+.day-card.open .day-body{display:block;}
+.tip-box{background:var(--green-light);border-left:3px solid var(--green);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:.7rem .9rem;margin:1rem 0 .75rem;}
+.tip-box p{font-size:13px;color:var(--green-dark);line-height:1.6;}
+.tip-box strong{font-weight:600;}
+.task-list{margin-bottom:.75rem;}
+.task{display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:13px;color:var(--text2);border-bottom:.5px solid var(--border);line-height:1.5;}
+.task:last-child{border-bottom:none;}
+.task-tick{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:2px;background:none;padding:0;}
+.task-tick:hover{border-color:var(--green);}
+.task-tick.ticked{background:var(--green);border-color:var(--green);}
+.task-tick.ticked::after{content:"✓";font-size:10px;color:#fff;font-weight:700;line-height:1;}
+.task.task-done>span{text-decoration:line-through;color:var(--text3);}
+.task-progress{height:3px;border-radius:99px;background:var(--surface2);margin-bottom:8px;overflow:hidden;}
+.task-progress-fill{height:100%;background:var(--green);border-radius:99px;transition:width .3s;}
+.resources-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.res-pill{font-size:11px;padding:4px 11px;border-radius:99px;background:var(--surface2);border:.5px solid var(--border);color:var(--text2);}
+a.res-pill{text-decoration:none;cursor:pointer;}
+a.res-pill:hover{background:var(--surface3);border-color:var(--border2);color:var(--text);}
+.task-link{color:var(--blue-dark);font-size:11px;margin-left:6px;flex-shrink:0;opacity:0.7;line-height:1.5;}
+.task-link:hover{opacity:1;text-decoration:none;}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.score-row label{font-size:12px;color:var(--text2);}
+.score-row input{width:72px;font-size:13px;padding:5px 10px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;}
+.score-badge{font-size:12px;font-weight:500;padding:3px 10px;border-radius:99px;}
+.complete-btn{width:100%;font-size:13px;padding:9px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:none;color:var(--text2);cursor:pointer;font-family:inherit;transition:all .2s;font-weight:400;}
+.complete-btn:hover{background:var(--green-light);color:var(--green-dark);border-color:var(--green);}
+.complete-btn.done{background:var(--green-light);color:var(--green-dark);border-color:var(--green);font-weight:500;}
+.nb-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.nb-btn{font-size:12px;padding:6px 14px;border-radius:99px;border:.5px solid var(--border2);color:var(--text2);background:none;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all .15s;font-family:inherit;}
+.nb-btn:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
+.nb-btn-colab{background:#F9AB00;border-color:#F9AB00;color:#000;}
+.nb-btn-colab:hover{background:#e09900;color:#000;text-decoration:none;}
+.hours-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px;color:var(--text2);}
+.hours-row input{width:60px;font-size:13px;padding:4px 8px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;}
+.topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.topic-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;}
+.topic-card h4{font-size:13px;font-weight:500;color:var(--text);margin-bottom:10px;line-height:1.4;}
+.t-bar-bg{background:var(--surface2);border-radius:99px;height:5px;margin-bottom:4px;overflow:hidden;}
+.t-bar-fill{height:100%;border-radius:99px;transition:width .7s cubic-bezier(.4,0,.2,1);}
+.t-pct{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+.day-topic-pills{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.day-topic-pill{font-size:10px;padding:2px 9px;border-radius:99px;border:.5px solid;font-weight:500;cursor:pointer;transition:opacity .15s;white-space:nowrap;}
+.day-topic-pill:hover{opacity:.7;}
+.topic-days{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+.topic-day-btn{font-size:11px;padding:2px 8px;border-radius:99px;border:.5px solid var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;font-family:'DM Mono',monospace;transition:all .15s;}
+.topic-day-btn:hover{background:var(--surface3);color:var(--text);}
+.topic-day-btn.done{background:var(--green-light);color:var(--green-dark);border-color:var(--green);}
+.exam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
+.exam-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;}
+.exam-card-label{font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.exam-card-val{font-size:16px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace;}
+.exam-card-sub{font-size:12px;color:var(--text2);margin-top:3px;line-height:1.5;}
+.info-box{background:var(--surface2);border-radius:var(--radius-sm);padding:.9rem 1rem;font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:10px;}
+.info-box strong{color:var(--text);font-weight:500;}
+.ai-card{background:var(--surface);border:.5px solid var(--border);border-radius:var(--radius);padding:1.1rem;margin-bottom:10px;}
+.ai-card-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.ai-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ai-card-title{font-size:14px;font-weight:500;color:var(--text);}
+.ai-card-sub{font-size:12px;color:var(--text2);margin-top:2px;}
+.ai-card-body{font-size:13px;color:var(--text2);line-height:1.7;}
+.ai-prompt-box{background:var(--surface2);border:.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;margin-top:10px;font-size:12px;color:var(--text2);font-family:'DM Mono',monospace;line-height:1.7;white-space:pre-wrap;}
+.ai-link-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;padding:6px 14px;border-radius:99px;border:.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;text-decoration:none;}
+.ai-link-btn:hover{background:var(--surface2);color:var(--text);text-decoration:none;}
+.page-footer{font-size:11px;color:var(--text3);text-align:center;margin-top:2rem;padding-top:1rem;border-top:.5px solid var(--border);}
+.reset-btn{font-size:11px;color:var(--text3);background:none;border:.5px solid var(--border2);border-radius:99px;padding:5px 12px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.reset-btn:hover{color:var(--coral);border-color:var(--coral);}
+.res-section{margin-bottom:1.25rem;}
+.res-section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:8px;padding-bottom:6px;border-bottom:.5px solid var(--border);}
+.res-link-list{display:flex;flex-direction:column;gap:0;}
+.res-link-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:.5px solid var(--border);}
+.res-link-item:last-child{border-bottom:none;}
+.res-link-index{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);min-width:24px;padding-top:2px;}
+.res-link-body{flex:1;min-width:0;}
+.res-link-body a{font-size:13px;font-weight:500;color:var(--blue-dark);text-decoration:none;}
+.res-link-body a:hover{text-decoration:underline;}
+.res-link-desc{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.5;}
+.sync-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:99px;border:.5px solid var(--border2);background:none;color:var(--text3);cursor:pointer;font-family:inherit;transition:all .2s;}
+.sync-badge:hover{background:var(--surface2);color:var(--text2);}
+.sync-badge.connected{color:var(--green-dark);border-color:var(--green);}
+.sync-badge.syncing{color:var(--blue-dark);border-color:var(--blue);}
+.sync-badge.error{color:var(--coral-dark);border-color:var(--coral);}
+.gh-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;align-items:center;justify-content:center;}
+.gh-modal.open{display:flex;}
+.gh-modal-box{background:var(--surface);border:.5px solid var(--border2);border-radius:var(--radius);padding:1.5rem;width:min(460px,92vw);box-shadow:var(--shadow-md);}
+.gh-modal-box h3{font-size:15px;font-weight:600;margin-bottom:4px;}
+.gh-modal-sub{font-size:12px;color:var(--text2);margin-bottom:1.1rem;line-height:1.6;}
+.gh-field{margin-bottom:10px;}
+.gh-field label{display:block;font-size:11px;font-weight:500;color:var(--text2);margin-bottom:3px;}
+.gh-field input{width:100%;font-size:13px;padding:7px 10px;border:.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);font-family:'DM Mono',monospace;transition:border-color .15s;}
+.gh-field input:focus{outline:none;border-color:var(--blue);}
+.gh-modal-actions{display:flex;gap:8px;margin-top:1rem;align-items:center;flex-wrap:wrap;}
+.gh-btn-save{font-size:13px;padding:8px 18px;border-radius:var(--radius-sm);border:.5px solid var(--green);background:var(--green);color:#fff;cursor:pointer;font-family:inherit;font-weight:500;transition:background .15s;}
+.gh-btn-save:hover{background:var(--green-dark);}
+.gh-btn-cancel{font-size:13px;padding:8px 14px;border-radius:var(--radius-sm);border:.5px solid var(--border2);background:none;color:var(--text2);cursor:pointer;font-family:inherit;}
+.gh-btn-disconnect{font-size:12px;padding:6px 12px;border-radius:var(--radius-sm);border:.5px solid var(--coral);background:none;color:var(--coral-dark);cursor:pointer;font-family:inherit;}
+.gh-modal-msg{font-size:12px;margin-left:auto;color:var(--text3);}
+.gh-modal-msg.ok{color:var(--green-dark);}
+.gh-modal-msg.err{color:var(--coral-dark);}
+@media(max-width:640px){
+  .hero-meta{grid-template-columns:repeat(2,1fr);}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .topic-grid{grid-template-columns:1fr;}
+  .exam-grid{grid-template-columns:1fr;}
+  .course-hero-top{flex-direction:column;}
+  .tab{font-size:11px;padding:6px 8px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="breadcrumb">
+  <a href="../../index.html">certified-journeys</a>
+  <span class="breadcrumb-sep">›</span>
+  <a href="../../index.html#courses">All journeys</a>
+  <span class="breadcrumb-sep">›</span>
+  <span>Claude API</span>
+</div>
+
+<div class="course-hero">
+  <div class="course-hero-top">
+    <div class="course-icon-wrap">
+      <div class="course-icon" style="background:#FAEDE8;color:#D97757;">CL</div>
+      <div class="course-title-block">
+        <h1>Building with the Claude API</h1>
+        <p>Anthropic Academy · Intermediate · 10 days</p>
+        <div class="tag-row"><span class="tag">Claude</span> <span class="tag">Python</span> <span class="tag">Prompt Eng</span> <span class="tag">AI Agents</span> <span class="tag">MCP</span></div>
+      </div>
+    </div>
+    <button class="reset-btn" onclick="resetAll()">Reset progress</button>
+  </div>
+  <div class="hero-meta">
+    <div class="meta-item"><div class="meta-label">Cost</div><div class="meta-val">Free</div></div>
+    <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-val">10 days</div></div>
+    <div class="meta-item"><div class="meta-label">Provider</div><div class="meta-val" style="font-size:12px;font-family:'DM Sans',system-ui;">Anthropic</div></div>
+    <div class="meta-item"><div class="meta-label">Certificate</div><div class="meta-val" style="font-size:11px;font-family:'DM Sans',system-ui;"><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank">Enroll →</a></div></div>
+  </div>
+</div>
+
+<div class="prog-strip">
+  <div class="prog-strip-top">
+    <div class="prog-label">Overall completion</div>
+    <div class="prog-pct" id="pct-display">0%</div>
+  </div>
+  <div class="bar-bg"><div class="bar-fill" id="main-bar" style="width:0%"></div></div>
+  <div class="readiness early" id="readiness-row">Status: <span id="status-txt">Not started</span></div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat"><div class="stat-label">Days done</div><div class="stat-val" id="days-done">0/10</div></div>
+  <div class="stat"><div class="stat-label">Avg score</div><div class="stat-val" id="avg-score">—</div></div>
+  <div class="stat"><div class="stat-label">Hours logged</div><div class="stat-val" id="hrs-logged">0 h</div></div>
+  <div class="stat"><div class="stat-label">Days left</div><div class="stat-val" id="days-left">10</div></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showPanel('schedule',this)">📅 Daily Plan</button>
+  <button class="tab" onclick="showPanel('topics',this)">📚 Topics</button>
+  <button class="tab" onclick="showPanel('ai',this)">🤖 AI Tools</button>
+  <button class="tab" onclick="showPanel('resources',this)">🔗 Resources</button>
+  <button class="tab" onclick="showPanel('exam',this)">🎓 Exam Prep</button>
+</div>
+
+<div id="panel-schedule" class="panel active"></div>
+<div id="panel-topics" class="panel"></div>
+<div id="panel-ai" class="panel"></div>
+<div id="panel-resources" class="panel"></div>
+<div id="panel-exam" class="panel"></div>
+
+<div class="page-footer">
+  <button class="sync-badge" id="sync-badge" onclick="openGHModal()">☁ Connect GitHub</button>
+  · <span id="sk-display">cj_claude-api-certified_v1</span> · <a href="../../index.html">← All journeys</a>
+</div>
+</div>
+
+<div class="gh-modal" id="gh-modal" onclick="if(event.target===this)closeGHModal()">
+  <div class="gh-modal-box">
+    <h3>☁ GitHub Sync</h3>
+    <p class="gh-modal-sub">Progress is committed to <code>courses/claude-api-certified/progress.json</code> in your repo on every change.<br>
+    Generate a <strong>Fine-grained token</strong> with <em>Contents: Read &amp; Write</em> on this repo.</p>
+    <div class="gh-field"><label>Personal Access Token</label><input id="gh-pat" type="password" placeholder="github_pat_…" autocomplete="off"></div>
+    <div class="gh-field"><label>Owner (your GitHub username or org)</label><input id="gh-owner" type="text" placeholder="your-username"></div>
+    <div class="gh-field"><label>Repository</label><input id="gh-repo" type="text" placeholder="certified-journeys.github.io"></div>
+    <div class="gh-field"><label>Branch</label><input id="gh-branch" type="text" placeholder="main"></div>
+    <div class="gh-field" style="margin-top:1rem;padding-top:1rem;border-top:.5px solid var(--border2)">
+      <label>Transfer to another device <span style="font-weight:400;color:var(--text3);font-size:11px">— copy on device 1, paste on device 2</span></label>
+      <div style="display:flex;gap:6px;margin-top:4px">
+        <input id="gh-config-str" type="text" placeholder="Config appears here when connected — or paste from another device" style="flex:1;font-size:11px" autocomplete="off"/>
+        <button class="gh-btn-cancel" onclick="copyGHConfig()">Copy</button>
+        <button class="gh-btn-cancel" onclick="importGHConfig()">Import</button>
+      </div>
+    </div>
+    <div class="gh-modal-actions">
+      <button class="gh-btn-save" onclick="saveGHCreds()">Test &amp; Save</button>
+      <button class="gh-btn-cancel" onclick="closeGHModal()">Cancel</button>
+      <button class="gh-btn-disconnect" id="gh-disconnect-btn" style="display:none" onclick="disconnectGH()">Disconnect</button>
+      <span class="gh-modal-msg" id="gh-modal-msg"></span>
+    </div>
+  </div>
+</div>
+
+<script src="../../github-sync.js"></script>
+
+<script>
+if(typeof GHSync==='undefined'){window.GHSync={isConnected:()=>false,saveCreds:()=>{},getCreds:()=>null,fetchState:async()=>null,pushState:async()=>false,saveDebounced:()=>{},testConnection:async()=>({ok:false,msg:'Script not loaded'}),exportConfig:()=>null,importConfig:()=>null};}
+
+const COURSE_ID='claude-api-certified';
+const STORAGE_KEY='cj_claude-api-certified_v1';
+const TOTAL_DAYS=10;
+const NOTEBOOKS=[
+  'day-01-setup',
+  'day-02-api-core',
+  'day-03-evaluations',
+  'day-04-prompt-engineering',
+  'day-05-tool-use',
+  'day-06-rag-search',
+  'day-07-advanced-features',
+  'day-08-mcp',
+  'day-09-agents',
+  'day-10-capstone'
+];
+
+const days=[
+  {
+    title:"Introduction & Claude Models",
+    badge:"learn",
+    sub:"Day 1 · SDK setup & first API call",
+    tasks:[
+      {text:"Install the Anthropic Python SDK",url:"https://github.com/anthropics/anthropic-sdk-python"},
+      "Configure ANTHROPIC_API_KEY in your environment",
+      {text:"Read the Claude models overview (Haiku / Sonnet / Opus)",url:"https://docs.anthropic.com/en/docs/about-claude/models"},
+      "Make your first messages.create() call and inspect the response object",
+      "Compare latency and output quality across three model tiers"
+    ],
+    resources:[
+      {text:"Anthropic Python SDK",url:"https://github.com/anthropics/anthropic-sdk-python"},
+      {text:"Claude Models Reference",url:"https://docs.anthropic.com/en/docs/about-claude/models"},
+      {text:"Getting Started Guide",url:"https://docs.anthropic.com/en/docs/get-started"}
+    ],
+    tip:"Use claude-haiku-4-5 while learning — it's 20× cheaper than Opus and fast enough for all experiments.",
+    hasScore:false
+  },
+  {
+    title:"API Core Mechanics",
+    badge:"learn",
+    sub:"Day 2 · System prompts, multi-turn & streaming",
+    tasks:[
+      {text:"Add a system prompt and observe the behavior change",url:"https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/system-prompts"},
+      "Build a multi-turn conversation loop that maintains message history",
+      {text:"Stream a response with client.messages.stream() and print tokens live",url:"https://docs.anthropic.com/en/api/messages-streaming"},
+      {text:"Count tokens before sending with client.messages.count_tokens()",url:"https://docs.anthropic.com/en/docs/build-with-claude/token-counting"},
+      "Tune max_tokens, temperature, and stop_sequences"
+    ],
+    resources:[
+      {text:"Messages API Reference",url:"https://docs.anthropic.com/en/api/messages"},
+      {text:"Streaming Guide",url:"https://docs.anthropic.com/en/api/messages-streaming"},
+      {text:"Token Counting Docs",url:"https://docs.anthropic.com/en/docs/build-with-claude/token-counting"}
+    ],
+    tip:"System prompts are your best lever for consistent behavior. Write them like a job description, not a single instruction.",
+    hasScore:false
+  },
+  {
+    title:"Prompt Evaluation Systems",
+    badge:"practice",
+    sub:"Day 3 · Test datasets, grading & eval workflows",
+    tasks:[
+      "Build a test dataset with 10+ input / expected-output pairs as a CSV",
+      "Write a grading function that scores Claude outputs programmatically",
+      {text:"Use Claude-as-judge to grade model outputs at scale",url:"https://docs.anthropic.com/en/docs/test-and-evaluate/strengthen-guardrails/llm-as-a-judge"},
+      "Run A/B comparison of two prompts against the same test dataset",
+      "Aggregate scores in a DataFrame and generate a comparison report"
+    ],
+    resources:[
+      {text:"Anthropic Eval Cookbook",url:"https://github.com/anthropics/anthropic-cookbook/tree/main/misc/evaluate_outputs"},
+      {text:"LLM-as-a-Judge Guide",url:"https://docs.anthropic.com/en/docs/test-and-evaluate/strengthen-guardrails/llm-as-a-judge"},
+      {text:"Promptfoo (eval framework)",url:"https://promptfoo.dev"}
+    ],
+    tip:"Evaluation is the difference between vibe-coding and AI engineering. Build your eval suite before you optimize prompts.",
+    hasScore:true
+  },
+  {
+    title:"Prompt Engineering Techniques",
+    badge:"learn",
+    sub:"Day 4 · XML, chain-of-thought & few-shot",
+    tasks:[
+      {text:"Structure a complex prompt using XML tags (<context>, <instructions>, <example>)",url:"https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/use-xml-tags"},
+      "Add chain-of-thought with 'Think step by step before answering'",
+      "Provide 3 few-shot examples and measure accuracy improvement on your eval set",
+      {text:"Explore 10 patterns in the Anthropic prompt library",url:"https://docs.anthropic.com/en/resources/prompt-library"},
+      "Compare role prompting vs system prompt persona control"
+    ],
+    resources:[
+      {text:"Prompt Engineering Overview",url:"https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"},
+      {text:"XML Tags Best Practices",url:"https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/use-xml-tags"},
+      {text:"Anthropic Prompt Library",url:"https://docs.anthropic.com/en/resources/prompt-library"}
+    ],
+    tip:"XML tags are Claude's native language for structured inputs. Always wrap long context, examples, and instructions in named tags.",
+    hasScore:false
+  },
+  {
+    title:"Tool Use & Function Calling",
+    badge:"practice",
+    sub:"Day 5 · Schemas, tool_use blocks & multi-turn loops",
+    tasks:[
+      {text:"Define a custom tool with a JSON Schema and pass it to the API",url:"https://docs.anthropic.com/en/docs/build-with-claude/tool-use"},
+      "Handle the tool_use stop_reason and extract tool call arguments",
+      "Build a mock weather lookup tool and a calculator tool",
+      "Implement a multi-turn tool loop until Claude returns end_turn",
+      {text:"Add the built-in web_search tool and retrieve live results",url:"https://docs.anthropic.com/en/docs/build-with-claude/tool-use/web-search-tool"}
+    ],
+    resources:[
+      {text:"Tool Use Guide",url:"https://docs.anthropic.com/en/docs/build-with-claude/tool-use"},
+      {text:"Tool Use Cookbook",url:"https://github.com/anthropics/anthropic-cookbook/tree/main/tool_use"},
+      {text:"JSON Schema Reference",url:"https://json-schema.org/learn/getting-started-step-by-step"}
+    ],
+    tip:"Tools transform Claude from a talker to a doer. Always handle the case where Claude calls multiple tools before returning a final answer.",
+    hasScore:true
+  },
+  {
+    title:"RAG & Agentic Search",
+    badge:"practice",
+    sub:"Day 6 · Embeddings, chunking & retrieval pipelines",
+    tasks:[
+      "Chunk a long document using fixed-size and sentence-boundary strategies",
+      {text:"Generate embeddings with voyage-ai or sentence-transformers",url:"https://docs.anthropic.com/en/docs/build-with-claude/embeddings"},
+      "Build an in-memory vector store with cosine similarity search",
+      "Inject retrieved chunks into a Claude prompt as grounding context",
+      "Measure retrieval quality: precision@3 on a small labeled test set"
+    ],
+    resources:[
+      {text:"Anthropic RAG Cookbook",url:"https://github.com/anthropics/anthropic-cookbook/tree/main/skills/retrieval_augmented_generation"},
+      {text:"Voyage AI Embeddings",url:"https://docs.voyageai.com/docs/embeddings"},
+      {text:"ChromaDB (vector store)",url:"https://docs.trychroma.com"}
+    ],
+    tip:"Chunk size is the most overlooked RAG parameter. Test 256, 512, and 1024 tokens — the best size depends entirely on your content.",
+    hasScore:true
+  },
+  {
+    title:"Advanced Claude Features",
+    badge:"learn",
+    sub:"Day 7 · Thinking, vision, PDFs, caching & citations",
+    tasks:[
+      {text:"Enable extended thinking on claude-sonnet-4-5 and inspect thinking blocks",url:"https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking"},
+      {text:"Send an image input using base64 or URL source type",url:"https://docs.anthropic.com/en/docs/build-with-claude/vision"},
+      {text:"Process a PDF with the document source type",url:"https://docs.anthropic.com/en/docs/build-with-claude/pdf-support"},
+      {text:"Add cache_control to a large system prompt and measure token savings",url:"https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching"},
+      {text:"Request citations in a RAG response and validate source references",url:"https://docs.anthropic.com/en/docs/build-with-claude/citations"}
+    ],
+    resources:[
+      {text:"Extended Thinking Docs",url:"https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking"},
+      {text:"Vision Guide",url:"https://docs.anthropic.com/en/docs/build-with-claude/vision"},
+      {text:"Prompt Caching Guide",url:"https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching"}
+    ],
+    tip:"Prompt caching cuts costs 80%+ on repeated large contexts. Cache anything > 1000 tokens that doesn't change between requests.",
+    hasScore:false
+  },
+  {
+    title:"Model Context Protocol",
+    badge:"practice",
+    sub:"Day 8 · MCP servers, clients & resources",
+    tasks:[
+      {text:"Install the Python MCP SDK and read the core spec",url:"https://github.com/modelcontextprotocol/python-sdk"},
+      "Build an MCP server that exposes a custom tool over stdio transport",
+      "Add a resource endpoint that returns structured JSON data",
+      "Build an MCP client that connects to your server and invokes the tool",
+      {text:"Debug your server interactively with the MCP Inspector",url:"https://github.com/modelcontextprotocol/inspector"}
+    ],
+    resources:[
+      {text:"MCP Specification",url:"https://spec.modelcontextprotocol.io"},
+      {text:"Python MCP SDK",url:"https://github.com/modelcontextprotocol/python-sdk"},
+      {text:"MCP Inspector",url:"https://github.com/modelcontextprotocol/inspector"}
+    ],
+    tip:"MCP is the USB-C of AI tool integrations. Build a server once and reuse it across Claude Desktop, Claude Code, and your own apps.",
+    hasScore:false
+  },
+  {
+    title:"Agents & Claude Code Workflows",
+    badge:"practice",
+    sub:"Day 9 · Agent loops, Computer Use & multi-agent patterns",
+    tasks:[
+      {text:"Build a ReAct agent loop: observe → think → act → repeat",url:"https://github.com/anthropics/anthropic-cookbook/tree/main/patterns/agents"},
+      "Add an error budget: define max retries and halt conditions explicitly",
+      {text:"Study the Computer Use API with the reference implementation",url:"https://docs.anthropic.com/en/docs/build-with-claude/computer-use"},
+      {text:"Design a two-agent system: orchestrator + specialist subagent",url:"https://docs.anthropic.com/en/docs/build-with-claude/agents"},
+      "Add structured logging to every tool call in your agent loop"
+    ],
+    resources:[
+      {text:"Agent Patterns Cookbook",url:"https://github.com/anthropics/anthropic-cookbook/tree/main/patterns/agents"},
+      {text:"Computer Use Docs",url:"https://docs.anthropic.com/en/docs/build-with-claude/computer-use"},
+      {text:"Claude Code Docs",url:"https://docs.anthropic.com/en/docs/claude-code"}
+    ],
+    tip:"Agents need explicit error budgets — decide upfront how many tool failures to tolerate. Silent infinite loops are the #1 production agent failure mode.",
+    hasScore:true
+  },
+  {
+    title:"Capstone: Production-Ready App",
+    badge:"exam",
+    sub:"Day 10 · Ship a complete Claude-powered application",
+    tasks:[
+      "Design a data flow diagram for your Claude-powered app architecture",
+      "Implement multi-turn chat, tool use, and RAG retrieval in one app",
+      "Add prompt caching to all large system prompts and measure cost reduction",
+      "Write an eval suite with 20+ test cases covering the main user flows",
+      {text:"Deploy to a public URL (Hugging Face Spaces, Railway, or Render)",url:"https://huggingface.co/spaces"}
+    ],
+    resources:[
+      {text:"Anthropic Cookbook (all patterns)",url:"https://github.com/anthropics/anthropic-cookbook"},
+      {text:"Hugging Face Spaces (free deploy)",url:"https://huggingface.co/spaces"},
+      {text:"Anthropic Production Best Practices",url:"https://docs.anthropic.com/en/docs/build-with-claude/overview"}
+    ],
+    tip:"Production Claude apps need four things: evals, caching, rate limit handling, and graceful fallbacks. Ship all four before calling it done.",
+    hasScore:true
+  }
+];
+
+const topics=[
+  {name:"API Fundamentals",color:"#D97757",days:[0,1]},
+  {name:"Prompt Engineering",color:"#7F77DD",days:[2,3]},
+  {name:"Tool Use & RAG",color:"#378ADD",days:[4,5]},
+  {name:"Advanced Features",color:"#0891B2",days:[6]},
+  {name:"Model Context Protocol",color:"#BA7517",days:[7]},
+  {name:"Agents & Production",color:"#D85A30",days:[8,9]}
+];
+
+const exam={
+  questions:null,
+  minutes:null,
+  passScore:"Certificate",
+  cost:"Free",
+  provider:"Anthropic Academy",
+  link:"https://anthropic.skilljar.com/claude-with-the-anthropic-api",
+  notes:"Anthropic Academy issues a certificate of completion. No timed exam — mastery is demonstrated by building and deploying complete Claude-powered applications."
+};
+
+let state={completed:[],scores:{},hours:{},completedAt:{},tasksDone:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
+
+async function loadState(){
+  try{const s=localStorage.getItem(STORAGE_KEY);if(s)state={...state,...JSON.parse(s)};}catch(e){}
+  if(GHSync.isConnected()){
+    updateSyncBadge('syncing');
+    const gh=await GHSync.fetchState(COURSE_ID);
+    if(gh){state={...state,...gh};try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}}
+    updateSyncBadge(gh?'connected':'error');
+  }else{updateSyncBadge('disconnected');}
+}
+
+function saveState(){
+  state.lastActivity=Date.now();
+  if(state.completed.length>0&&state.status==='not_started')state.status='in_progress';
+  if(state.completed.length>=TOTAL_DAYS)state.status='completed';
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}
+  broadcastStatus();
+  if(GHSync.isConnected())GHSync.saveDebounced(COURSE_ID,state,2500,()=>updateSyncBadge('syncing'),ok=>updateSyncBadge(ok?'connected':'error'));
+}
+
+function broadcastStatus(){
+  const summary={id:COURSE_ID,status:state.status,completed:state.completed.length,total:TOTAL_DAYS,scores:Object.values(state.scores).filter(s=>s>0),totalHours:Object.values(state.hours).reduce((a,b)=>a+b,0),completedAt:state.completedAt,startDate:state.startDate,lastActivity:state.lastActivity};
+  try{localStorage.setItem('cj_summary_'+COURSE_ID,JSON.stringify(summary));}catch(e){}
+}
+
+function resetAll(){
+  if(!confirm('Reset all progress? This cannot be undone.'))return;
+  state={completed:[],scores:{},hours:{},completedAt:{},tasksDone:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
+  saveState();renderAll();
+}
+
+function isCompleted(i){return state.completed.includes(i);}
+
+function toggleComplete(i){
+  if(isCompleted(i)){state.completed=state.completed.filter(x=>x!==i);delete state.completedAt[i];}
+  else{state.completed.push(i);state.completedAt[i]=Date.now();if(!state.startDate)state.startDate=Date.now();}
+  saveState();updateStats();renderSchedule();
+  if(document.getElementById('panel-topics').classList.contains('active'))renderTopics();
+}
+
+function toggleDay(i){state.openDay=state.openDay===i?null:i;saveState();renderSchedule();}
+function logScore(i,val){const v=parseInt(val);if(!isNaN(v)&&v>=0&&v<=100){state.scores[i]=v;saveState();updateStats();}}
+function logHours(i,val){const v=parseFloat(val);if(!isNaN(v)&&v>=0){state.hours[i]=v;saveState();updateStats();}}
+function scoreClass(s){return s>=90?'ok':s>=80?'warn':'danger';}
+function badgeClass(b){return{learn:'badge-learn',practice:'badge-practice',review:'badge-review',exam:'badge-exam'}[b];}
+function badgeLabel(b){return{learn:'Learn',practice:'Practice',review:'Review',exam:'Exam'}[b];}
+
+const dayTopics=(()=>{const m={};topics.forEach(t=>t.days.forEach(d=>{(m[d]=m[d]||[]).push(t);}));return m;})();
+
+function goToDay(i){
+  showPanel('schedule',document.querySelector('.tab'));
+  setTimeout(()=>{
+    state.openDay=i;saveState();renderSchedule();
+    const el=document.querySelector('.day-card:nth-child('+(i+1)+')');
+    if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  },50);
+}
+
+function renderTask(t,di,ti){
+  const done=(state.tasksDone[di]||[]).includes(ti);
+  const text=typeof t==='string'?t:t.text;
+  const link=(typeof t==='object'&&t.url)?`<a class="task-link" href="${t.url}" target="_blank" rel="noopener">↗</a>`:'';
+  return`<div class="task${done?' task-done':''}"><button class="task-tick${done?' ticked':''}" onclick="event.stopPropagation();tickTask(${di},${ti})"></button><span>${text}</span>${link}</div>`;
+}
+
+function tickTask(di,ti){
+  const arr=state.tasksDone[di]||(state.tasksDone[di]=[]);
+  const idx=arr.indexOf(ti);
+  if(idx===-1)arr.push(ti);else arr.splice(idx,1);
+  const total=days[di].tasks.length;
+  const done=arr.length;
+  if(done===total&&!isCompleted(di)){toggleComplete(di);return;}
+  if(done<total&&isCompleted(di)){state.completed=state.completed.filter(x=>x!==di);delete state.completedAt[di];}
+  saveState();renderSchedule();
+}
+
+function renderRes(r){
+  if(typeof r==='string')return`<span class="res-pill">📎 ${r}</span>`;
+  return r.url?`<a class="res-pill" href="${r.url}" target="_blank" rel="noopener">📎 ${r.text}</a>`:`<span class="res-pill">📎 ${r.text}</span>`;
+}
+
+function updateStats(){
+  const done=state.completed.length,total=TOTAL_DAYS;
+  const pct=Math.round((done/total)*100);
+  document.getElementById('pct-display').textContent=pct+'%';
+  document.getElementById('main-bar').style.width=pct+'%';
+  document.getElementById('days-done').textContent=done+'/'+total;
+  document.getElementById('days-left').textContent=(total-done);
+  const sv=Object.values(state.scores).filter(s=>!isNaN(s)&&s>0);
+  const avgEl=document.getElementById('avg-score');
+  if(sv.length){const avg=Math.round(sv.reduce((a,b)=>a+b,0)/sv.length);avgEl.textContent=avg+'%';avgEl.className='stat-val '+scoreClass(avg);}
+  else{avgEl.textContent='—';avgEl.className='stat-val';}
+  const totalHrs=Object.values(state.hours).reduce((a,b)=>a+b,0);
+  document.getElementById('hrs-logged').textContent=totalHrs>0?totalHrs.toFixed(1)+' h':'0 h';
+  const rRow=document.getElementById('readiness-row'),sTxt=document.getElementById('status-txt');
+  if(done>=total){sTxt.textContent='Completed! 🎉';rRow.className='readiness ready';}
+  else if(done>=Math.floor(total*0.75)){sTxt.textContent='Almost there — final stretch';rRow.className='readiness close';}
+  else if(done>=Math.floor(total*0.4)){sTxt.textContent='On track — great progress';rRow.className='readiness close';}
+  else if(done>=1){sTxt.textContent='In progress — keep going';rRow.className='readiness early';}
+  else{sTxt.textContent='Not started yet';rRow.className='readiness early';}
+}
+
+function renderSchedule(){
+  document.getElementById('panel-schedule').innerHTML=days.map((d,i)=>{
+    const comp=isCompleted(i),open=state.openDay===i,score=state.scores[i],hrs=state.hours[i];
+    return`<div class="day-card ${comp?'completed':''} ${open?'open':''}">
+      <div class="day-header" onclick="toggleDay(${i})">
+        <div class="day-num">${comp?'✓':(i+1)}</div>
+        <div class="day-meta"><div class="day-title">Day ${i+1}: ${d.title}</div><div class="day-sub">${d.sub}</div></div>
+        <span class="day-badge ${badgeClass(d.badge)}">${badgeLabel(d.badge)}</span>
+        <span class="chevron">▾</span>
+      </div>
+      <div class="day-body">
+        <div class="nb-row">
+          <a class="nb-btn" href="notebooks/${NOTEBOOKS[i]}.ipynb" target="_blank">📓 Open notebook</a>
+          <a class="nb-btn nb-btn-colab" href="https://colab.research.google.com/github/certified-journeys/certified-journeys.github.io/blob/main/courses/claude-api-certified/notebooks/${NOTEBOOKS[i]}.ipynb" target="_blank">▶ Open in Colab</a>
+          <a class="nb-btn" href="https://github.com/certified-journeys/certified-journeys.github.io/edit/main/courses/${COURSE_ID}/notes/day-${String(i+1).padStart(2,'0')}.md" target="_blank">📝 notes/day-${String(i+1).padStart(2,'0')}.md</a>
+        </div>
+        <div class="tip-box"><p><strong>💡 Tip:</strong> ${d.tip}</p></div>
+        ${(dayTopics[i]||[]).length?`<div class="day-topic-pills">${(dayTopics[i]||[]).map(t=>`<span class="day-topic-pill" style="background:${t.color}18;color:${t.color};border-color:${t.color}40" onclick="event.stopPropagation();showPanel('topics',document.querySelectorAll('.tab')[1])" title="View topic in Topics tab">${t.name}</span>`).join('')}</div>`:''}
+        ${(()=>{const tot=d.tasks.length;const done=(state.tasksDone[i]||[]).length;return tot?`<div class="task-progress"><div class="task-progress-fill" style="width:${Math.round(done/tot*100)}%"></div></div>`:''})()}
+        <div class="task-list">${d.tasks.map((t,j)=>renderTask(t,i,j)).join('')}</div>
+        <div class="resources-row">${d.resources.map(renderRes).join('')}</div>
+        ${d.hasScore?`<div class="score-row"><label>Practice score (%):</label><input type="number" min="0" max="100" placeholder="e.g. 84" value="${score||''}" onchange="logScore(${i},this.value)">${score?`<span class="score-badge ${scoreClass(score)==='ok'?'badge-learn':scoreClass(score)==='warn'?'badge-review':'badge-exam'}">${score}%</span>`:''}</div>`:''}
+        <div class="hours-row"><label>Hours spent today:</label><input type="number" min="0" max="24" step="0.5" placeholder="e.g. 2.5" value="${hrs||''}" onchange="logHours(${i},this.value)"><span style="font-size:11px;color:var(--text3);">hrs</span></div>
+        <button class="complete-btn ${comp?'done':''}" onclick="event.stopPropagation();toggleComplete(${i})">${comp?'✓ Completed':'Mark as complete'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderTopics(){
+  document.getElementById('panel-topics').innerHTML=`<div class="topic-grid">${
+    topics.map(t=>{
+      const cov=t.days.filter(d=>state.completed.includes(d)).length;
+      const pct=Math.round((cov/t.days.length)*100);
+      const dayBtns=t.days.map(d=>`<button class="topic-day-btn${state.completed.includes(d)?' done':''}" onclick="goToDay(${d})">Day ${d+1}</button>`).join('');
+      return`<div class="topic-card"><h4>${t.name}</h4><div class="t-bar-bg"><div class="t-bar-fill" style="width:${pct}%;background:${t.color}"></div></div><div class="t-pct">${pct}% covered · ${cov}/${t.days.length} sessions</div><div class="topic-days">${dayBtns}</div></div>`;
+    }).join('')
+  }</div>`;
+}
+
+function renderAI(){
+  document.getElementById('panel-ai').innerHTML=`
+    <div class="ai-card">
+      <div class="ai-card-head">
+        <div class="ai-icon" style="background:#E8F0FE;">🎙</div>
+        <div><div class="ai-card-title">NotebookLM — Audio Podcast Summary</div><div class="ai-card-sub">Generate a personalized audio briefing of your learning journey</div></div>
+      </div>
+      <div class="ai-card-body">Upload your notes from each day plus the Anthropic docs as sources, then ask NotebookLM to generate a podcast. Great for commute review before working on the next notebook.</div>
+      <div class="ai-prompt-box">Prompt for NotebookLM Audio:
+"Create a 10-minute podcast episode for a developer studying 'Building with the Claude API'. Cover: the most important concepts across the API, tool use, RAG, MCP, and agents. Highlight common mistakes, performance tips, and the 3 things to absolutely master before building production apps. Use a conversational tone with concrete examples."</div>
+      <a class="ai-link-btn" href="https://notebooklm.google.com" target="_blank">→ Open NotebookLM</a>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-head">
+        <div class="ai-icon" style="background:#FEF3E2;">🃏</div>
+        <div><div class="ai-card-title">NotebookLM — AI Flashcards</div><div class="ai-card-sub">Generate a personalized quiz from your day notes</div></div>
+      </div>
+      <div class="ai-card-body">Upload your notes to NotebookLM and use the Study Guide feature to auto-generate flashcards targeting the most nuanced API behaviors.</div>
+      <div class="ai-prompt-box">Prompt for NotebookLM Quiz:
+"Generate 20 flashcard-style Q&A pairs for a developer studying the Claude API. Focus on: stop_reason handling, tool_use loops, cache_control placement, extended thinking vs standard mode, MCP transport types, and agent error budget patterns. Format as Q: [question] / A: [answer]"</div>
+      <a class="ai-link-btn" href="https://notebooklm.google.com" target="_blank">→ Open NotebookLM</a>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-head">
+        <div class="ai-icon" style="background:#FAEDE8;">💬</div>
+        <div><div class="ai-card-title">Claude — Deep Dive Prompts</div><div class="ai-card-sub">Use Claude to explore difficult API concepts and patterns</div></div>
+      </div>
+      <div class="ai-card-body">Paste these prompts into Claude when an API concept isn't clicking. Optimized for developers who already know Python and REST APIs.</div>
+      <div class="ai-prompt-box">Prompt 1 — Explain like I'm a senior engineer:
+"I'm building with the Claude API. Explain [TOPIC — e.g. tool_use stop_reason loop / prompt caching / extended thinking] to me as if I'm a senior Python developer. Skip the basics, focus on edge cases, failure modes, and production gotchas."
+
+Prompt 2 — Scenario-based debugging:
+"I'm building a Claude agent that uses tools. Here's my code: [PASTE CODE]. The agent isn't terminating correctly. Walk me through what's wrong, why it happens, and the correct pattern."
+
+Prompt 3 — Gap analysis study plan:
+"I just finished Day [N] of the Claude API study plan. My weakest areas are [AREAS]. Give me a focused 2-hour drill targeting exactly those gaps, with specific API calls to write and test."</div>
+    </div>`;
+}
+
+function renderExam(){
+  const e=exam;
+  document.getElementById('panel-exam').innerHTML=`
+    <div class="exam-grid">
+      <div class="exam-card"><div class="exam-card-label">Cost</div><div class="exam-card-val">${e.cost}</div><div class="exam-card-sub">Anthropic Academy</div></div>
+      <div class="exam-card"><div class="exam-card-label">Format</div><div class="exam-card-val">Project</div><div class="exam-card-sub">Build a working app</div></div>
+      <div class="exam-card"><div class="exam-card-label">Time limit</div><div class="exam-card-val">None</div><div class="exam-card-sub">Self-paced</div></div>
+      <div class="exam-card"><div class="exam-card-label">Award</div><div class="exam-card-val" style="font-size:13px;">${e.passScore}</div><div class="exam-card-sub">upon completion</div></div>
+    </div>
+    <div class="info-box"><strong>Notes:</strong> ${e.notes}</div>
+    <div class="info-box"><strong>Upgrade path:</strong> After completing this course, explore the MCP Advanced Topics course, then AWS Bedrock or Vertex AI integrations for cloud-scale deployments.</div>
+    <div style="margin-top:12px;">
+      <a href="${e.link}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:10px 20px;border-radius:var(--radius-sm);background:var(--green);color:#fff;font-weight:500;text-decoration:none;">Enroll on Anthropic Academy →</a>
+    </div>
+    <div class="info-box" style="margin-top:12px;">
+      <strong>📋 Readiness checklist:</strong><br>
+      Before calling it done, make sure you:<br>
+      • Completed all ${TOTAL_DAYS} days of the study plan<br>
+      • Scored 80%+ on practice eval sets (Days 3, 5, 6, 9)<br>
+      • Can explain every Topics tab item without looking at docs<br>
+      • Have a deployed, working Claude-powered app with evals and caching<br>
+      • Have written your MCP server from scratch and connected it to a client
+    </div>`;
+}
+
+function renderResources(){
+  document.getElementById('panel-resources').innerHTML=`
+    <div class="res-section">
+      <div class="res-section-title">📖 Core Reading</div>
+      <div class="res-link-list">
+        <div class="res-link-item"><span class="res-link-index">01</span><div class="res-link-body"><a href="https://docs.anthropic.com/en/docs/build-with-claude/overview" target="_blank">Anthropic Developer Docs</a><div class="res-link-desc">The primary reference — covers every API feature with code examples.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">02</span><div class="res-link-body"><a href="https://docs.anthropic.com/en/api/messages" target="_blank">Messages API Reference</a><div class="res-link-desc">Full parameter reference for messages.create() — the core API endpoint.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">03</span><div class="res-link-body"><a href="https://docs.anthropic.com/en/docs/about-claude/models" target="_blank">Claude Models Overview</a><div class="res-link-desc">Current model IDs, context windows, capabilities, and pricing tiers.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">04</span><div class="res-link-body"><a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank">Prompt Engineering Guide</a><div class="res-link-desc">Anthropic's official guide — XML, CoT, few-shot, and role prompting.</div></div></div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🛠 Hands-On Resources</div>
+      <div class="res-link-list">
+        <div class="res-link-item"><span class="res-link-index">05</span><div class="res-link-body"><a href="https://github.com/anthropics/anthropic-cookbook" target="_blank">Anthropic Cookbook</a><div class="res-link-desc">Official recipes for tool use, RAG, agents, caching, and more — all runnable.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">06</span><div class="res-link-body"><a href="https://anthropic.skilljar.com/claude-with-the-anthropic-api" target="_blank">Anthropic Academy Course</a><div class="res-link-desc">The companion course — video walkthroughs of each module.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">07</span><div class="res-link-body"><a href="https://github.com/anthropics/anthropic-sdk-python" target="_blank">Anthropic Python SDK</a><div class="res-link-desc">Source code, typed client, and usage examples for every API feature.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">08</span><div class="res-link-body"><a href="https://docs.anthropic.com/en/resources/prompt-library" target="_blank">Anthropic Prompt Library</a><div class="res-link-desc">50+ production-ready prompts across domains — great starting points.</div></div></div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">🔧 Ecosystem & Tooling</div>
+      <div class="res-link-list">
+        <div class="res-link-item"><span class="res-link-index">09</span><div class="res-link-body"><a href="https://spec.modelcontextprotocol.io" target="_blank">Model Context Protocol Spec</a><div class="res-link-desc">The open standard for connecting AI models to external data and tools.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">10</span><div class="res-link-body"><a href="https://docs.voyageai.com/docs/embeddings" target="_blank">Voyage AI Embeddings</a><div class="res-link-desc">Anthropic-recommended embedding model for RAG pipelines.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">11</span><div class="res-link-body"><a href="https://promptfoo.dev" target="_blank">Promptfoo</a><div class="res-link-desc">Open-source framework for prompt evaluation and regression testing.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">12</span><div class="res-link-body"><a href="https://console.anthropic.com" target="_blank">Anthropic Console</a><div class="res-link-desc">Workbench for testing prompts, viewing usage, and managing API keys.</div></div></div>
+      </div>
+    </div>
+    <div class="res-section">
+      <div class="res-section-title">⬆ Upgrade Path</div>
+      <div class="res-link-list">
+        <div class="res-link-item"><span class="res-link-index">13</span><div class="res-link-body"><a href="https://anthropic.skilljar.com/model-context-protocol-advanced-topics" target="_blank">MCP Advanced Topics (Anthropic Academy)</a><div class="res-link-desc">Sampling, notifications, and production MCP server patterns.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">14</span><div class="res-link-body"><a href="https://anthropic.skilljar.com/claude-with-google-vertex" target="_blank">Claude with Google Vertex AI</a><div class="res-link-desc">Deploy Claude models at scale through Google Cloud's Vertex AI platform.</div></div></div>
+        <div class="res-link-item"><span class="res-link-index">15</span><div class="res-link-body"><a href="https://anthropic.skilljar.com/claude-in-amazon-bedrock" target="_blank">Claude with Amazon Bedrock</a><div class="res-link-desc">Run Claude models through AWS for enterprise-grade compliance and scaling.</div></div></div>
+      </div>
+    </div>
+  `;
+}
+
+function updateSyncBadge(st){
+  const b=document.getElementById('sync-badge');if(!b)return;
+  const map={connected:'✓ Synced',syncing:'↑ Syncing…',error:'⚠ Sync error',disconnected:'☁ Connect GitHub'};
+  b.textContent=map[st]||'☁ Connect GitHub';
+  b.className='sync-badge'+(st==='connected'?' connected':st==='syncing'?' syncing':st==='error'?' error':'');
+}
+
+function openGHModal(){
+  const c=GHSync.getCreds();
+  if(c){document.getElementById('gh-pat').value=c.pat||'';document.getElementById('gh-owner').value=c.owner||'';document.getElementById('gh-repo').value=c.repo||'';document.getElementById('gh-branch').value=c.branch||'main';}
+  document.getElementById('gh-disconnect-btn').style.display=GHSync.isConnected()?'inline-flex':'none';
+  document.getElementById('gh-modal-msg').textContent='';
+  if(GHSync.exportConfig){const cfg=GHSync.exportConfig();const inp=document.getElementById('gh-config-str');if(inp)inp.value=cfg||'';}
+  document.getElementById('gh-modal').classList.add('open');
+}
+function closeGHModal(){document.getElementById('gh-modal').classList.remove('open');}
+async function saveGHCreds(){
+  const pat=document.getElementById('gh-pat').value.trim();
+  const owner=document.getElementById('gh-owner').value.trim();
+  const repo=document.getElementById('gh-repo').value.trim();
+  const branch=document.getElementById('gh-branch').value.trim()||'main';
+  const msg=document.getElementById('gh-modal-msg');
+  if(!pat||!owner||!repo){msg.textContent='All fields required.';msg.className='gh-modal-msg err';return;}
+  msg.textContent='Testing…';msg.className='gh-modal-msg';
+  GHSync.saveCreds({pat,owner,repo,branch});
+  const r=await GHSync.testConnection();
+  if(r.ok){msg.textContent=r.msg;msg.className='gh-modal-msg ok';document.getElementById('gh-disconnect-btn').style.display='inline-flex';updateSyncBadge('connected');setTimeout(closeGHModal,1200);}
+  else{msg.textContent=r.msg;msg.className='gh-modal-msg err';GHSync.saveCreds(null);}
+}
+function disconnectGH(){
+  GHSync.saveCreds(null);
+  ['gh-pat','gh-owner','gh-repo','gh-config-str'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('gh-branch').value='';
+  document.getElementById('gh-disconnect-btn').style.display='none';
+  updateSyncBadge('disconnected');closeGHModal();
+}
+function copyGHConfig(){
+  if(!GHSync.exportConfig)return;
+  const cfg=GHSync.exportConfig();const msg=document.getElementById('gh-modal-msg');
+  if(!cfg){msg.textContent='Connect first to copy config.';msg.className='gh-modal-msg err';return;}
+  navigator.clipboard.writeText(cfg).then(()=>{msg.textContent='Copied!';msg.className='gh-modal-msg ok';setTimeout(()=>{msg.textContent='';},3000);});
+}
+function importGHConfig(){
+  if(!GHSync.importConfig)return;
+  const str=(document.getElementById('gh-config-str').value||'').trim();
+  const msg=document.getElementById('gh-modal-msg');
+  const c=GHSync.importConfig(str);
+  if(!c){msg.textContent='Invalid config string.';msg.className='gh-modal-msg err';return;}
+  document.getElementById('gh-pat').value=c.pat||'';
+  document.getElementById('gh-owner').value=c.owner||'';
+  document.getElementById('gh-repo').value=c.repo||'';
+  document.getElementById('gh-branch').value=c.branch||'main';
+  msg.textContent='Imported — click Test & Save to connect.';msg.className='gh-modal-msg ok';
+}
+
+function showPanel(name,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(name==='topics')renderTopics();
+  if(name==='ai')renderAI();
+  if(name==='exam')renderExam();
+  if(name==='resources')renderResources();
+}
+
+function renderAll(){updateStats();renderSchedule();broadcastStatus();}
+
+loadState().then(renderAll).catch(e=>{console.error('loadState failed:',e);renderAll();});
+</script>
+</body>
+</html>
