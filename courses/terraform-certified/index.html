@@ -313,7 +313,7 @@ const exam={"questions": 57, "minutes": 60, "passScore": "~70%", "cost": "$70", 
 
 let state={completed:[],scores:{},hours:{},completedAt:{},tasksDone:{},openDay:null,startDate:null,lastActivity:null,status:'not_started'};
 
-async function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)state={...state,...JSON.parse(s)};}catch(e){}if(GHSync.isConnected()){updateSyncBadge("syncing");const gh=await GHSync.fetchState(COURSE_ID);if(gh){state={...state,...gh};try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}}updateSyncBadge(gh?"connected":"error");}else{updateSyncBadge("disconnected");}}
+async function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)state={...state,...JSON.parse(s)};}catch(e){}if(GHSync.isConnected()){updateSyncBadge("syncing");const gh=await GHSync.fetchState(COURSE_ID);if(gh){state={...state,...gh};try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}}updateSyncBadge("connected");}else{updateSyncBadge("disconnected");}}
 function saveState(){
   state.lastActivity=Date.now();
   if(state.completed.length>0&&state.status==='not_started')state.status='in_progress';

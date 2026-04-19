@@ -534,7 +534,7 @@ async function loadState(){
     updateSyncBadge('syncing');
     const gh=await GHSync.fetchState(COURSE_ID);
     if(gh){state={...state,...gh};try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){}}
-    updateSyncBadge(gh?'connected':'error');
+    updateSyncBadge('connected'); // null means no file yet (first use), not an error
   }else{updateSyncBadge('disconnected');}
 }
 
