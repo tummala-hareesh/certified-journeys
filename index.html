@@ -218,7 +218,7 @@ nav {
       <a class="btn btn-ghost" href="https://github.com/certified-journeys" target="_blank">Browse on GitHub</a>
     </div>
     <div class="stats-row">
-      <div class="stat"><span class="stat-val" id="hs-total">6</span><span class="stat-label">Journeys</span></div>
+      <div class="stat"><span class="stat-val" id="hs-total">7</span><span class="stat-label">Journeys</span></div>
       <div class="stat"><span class="stat-val" id="hs-active">0</span><span class="stat-label">In progress</span></div>
       <div class="stat"><span class="stat-val" id="hs-done">0</span><span class="stat-label">Completed</span></div>
       <div class="stat"><span class="stat-val" id="hs-hours">0 h</span><span class="stat-label">Hours logged</span></div>
@@ -285,6 +285,7 @@ function render() {
   const done   = all.filter(x => x.p.status === 'completed').length;
   const hours  = all.reduce((a, x) => a + (x.p.totalHours || 0), 0);
 
+  document.getElementById('hs-total').textContent  = COURSES.length;
   document.getElementById('hs-active').textContent = inProg;
   document.getElementById('hs-done').textContent   = done;
   document.getElementById('hs-hours').textContent  = hours > 0 ? hours.toFixed(1) + ' h' : '0 h';

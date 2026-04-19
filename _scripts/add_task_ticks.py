@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Add per-task tick checkboxes + per-day progress bar to all 6 courses.
+Add per-task tick checkboxes + per-day progress bar to all 7 courses.
 
 Changes:
 1. CSS: replace task-bullet with task-tick; add task.done style; add task-progress bar

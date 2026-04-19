@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Add notes_by_day.md link to every day card in all 6 courses.
+Add notes_by_day.md link to every day card in all 7 courses.
 
 Category 1 — notebook (dlt, polars):
   nb-row already has notebook + Colab buttons → append notes link to that row

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Add GitHub sync to all 6 courses:
+Add GitHub sync to all 7 courses:
 1. CSS: sync badge + modal styles
 2. HTML: replace footer text; add modal + script tag before <script>
 3. JS: loadState → async; saveState → calls GHSync; new modal/badge functions; init → .then()

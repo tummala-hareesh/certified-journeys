@@ -1,5 +1,5 @@
 """
-Add missing GitHub sync modal functions + cross-device transfer UI to all 6 course files.
+Add missing GitHub sync modal functions + cross-device transfer UI to all 7 course files.
 Run from repo root: python3 _scripts/add_gh_modal_functions.py
 """
 import os, re

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Add clickable links to task items and resource pills across all 6 course trackers.
+Add clickable links to task items and resource pills across all 7 course trackers.
 - Resources become <a> anchors with real URLs
 - Key "Read / Take / Install" tasks get a small ↗ link icon
 - Two helper functions renderTask/renderRes are added to each file

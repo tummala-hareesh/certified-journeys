@@ -10,6 +10,7 @@ Free, open-source certification trackers for senior engineers and data professio
 
 | Course | Days | Notebooks | Provider | Cost |
 |---|---|---|---|---|
+| [Building with the Claude API](courses/claude-api-certified/) | 10 | 10 | Anthropic | Free |
 | [dlt (data load tool) Practitioner](courses/dlt-certified/) | 10 | 10 | dltHub | Free |
 | [Polars DataFrame Mastery](courses/polars-certified/) | 10 | 10 | Self-paced | Free |
 | [HashiCorp Terraform Associate (003)](courses/terraform-certified/) | 14 | — | HashiCorp | $70 |
